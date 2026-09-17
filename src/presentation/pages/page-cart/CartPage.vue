@@ -113,13 +113,9 @@ export default {
             wishList: [],
             activeTabIndex: -1,
             unselectedAmount: 0,
-            cState: 0,
 		};
 	},
     computed: {
-        hasInited() {
-            return this.$store.getters.hasInited;
-        },
         tabCartShimmerArray(){
             if(!this.loading) return [];
             if(this.activeTabIndex == 1) return [];
@@ -166,21 +162,6 @@ export default {
     watch: {
         activeTabIndex() {
             this.loading = true;
-        },
-        hasInited: {
-            immediate: true,
-            async handler(val) {
-                if (val) {
-                    if(this.cState == 1) return;
-                    this.cState = 1;
-                    this.initPage();
-                } else {
-                    if(this.cState == 2) return;
-                    this.cState = 2;
-                    await this.refreshMainData();
-                    this.$store.dispatch('setInited', true);
-                }
-            }
         },
     },
     methods: {
@@ -359,6 +340,13 @@ export default {
             this.activeTabIndex = 1;
         }
     },
+    async created() {
+        if (!this.$store.getters.hasInited) {
+            await this.refreshMainData();
+            this.$store.dispatch('setInited', true);
+        }
+        this.initPage();
+    }
 };
 </script>
 <style scoped lang="scss">

@@ -32,26 +32,15 @@ export default {
 		CollectionsContent,
 	},
 	mixins: [utility],
-	data() {
-		return {
-			loading: true,
-		};
-	},
 	computed: {
-		pgInited() {
+		hasInited() {
       return this.$store.getters.hasInited;
-    }
-	},
-	watch: {
-		pgInited: {
-      immediate: true,
-      handler(val) {
-        if (val) this.loading = false;
-      }
-    }
+    },
+		loading() {
+			return !this.hasInited;
+		}
 	},
 	created() {
-		if (!this.pgInited) this.loading = true;
 		window.addEventListener("resize",  this.resizeBannerHandler);
 	},
 	beforeUnmount() {

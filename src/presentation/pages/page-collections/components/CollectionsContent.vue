@@ -284,37 +284,12 @@ export default {
       isFetching: true,
       selectedParentCategory: "",
       showDesktopFilter: false,
-      initState: 0,
     };
   },
   watch: {
     keywords(val) {
       if (!val) this.searchProducts();
     },
-    svInited: {
-      immediate: true,
-      async handler(val) {
-        if(!val) {
-          if(this.initState == 1) return;
-          this.initState = 1;
-          try {
-            await this.refreshMainData(true)
-          } catch (error) {
-            console.error("Failed to refresh main data", error);
-          } finally {
-            this.$store.dispatch('setInited', true);
-          }
-        } else {
-          if(this.initState == 2) return;
-          this.initState = 2;
-          try {
-            await this.initData();
-          } finally {
-            this.loading = false;
-          }
-        }
-      }
-    }
   },
   computed: {
     parentArray(){
@@ -396,9 +371,6 @@ export default {
       if(endNumber > len) endNumber = len;
       return `Showing <b>${startNumber}-${endNumber}</b> of ${len} Products`;
     },
-    svInited() {
-      return this.$store.getters.hasInited;
-    }
   },
   methods: {
     setPageIndex(index){
@@ -737,11 +709,22 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     this.isDesktop = window.innerWidth >= 672;
     window.addEventListener("resize", this.resizeHandler);
     this.keywords = "";
     this.loading = true;
+    try {
+      if (!this.$store.getters.hasInited) {
+        await this.refreshMainData(true);
+        this.$store.dispatch("setInited", true);
+      }
+      await this.initData();
+    } catch (error) {
+      console.error("Failed to init collections", error);
+    } finally {
+      this.loading = false;
+    }
   },
   beforeUnmount(){
     window.removeEventListener("resize", this.resizeHandler);

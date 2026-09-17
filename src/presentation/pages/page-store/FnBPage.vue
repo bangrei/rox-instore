@@ -75,7 +75,6 @@ export default {
       pageNumber: 0,
       pageSize: 10,
       categoryId: null,
-      fState: 0,
     }
   },
   computed: {
@@ -104,36 +103,11 @@ export default {
       if(!this.categoryId) return [];
       return this.products.filter((p) => p.categories.map((c) => c.id).includes(this.categoryId));
     },
-    fInited() {
-      return this.$store.getters.hasInited;
-    }
   },
   watch: {
     selectedBrand(){
       this.fetchProducts();
     },
-    fInited: {
-      immediate: true,
-      async handler(val) {
-        if (val) {
-          if(this.fState == 2) return;
-          this.fState = 2;
-          if(this.foodBrands?.length){
-            if(this.$route?.params?.brandCode){
-              this.selectedBrand = this.foodBrands.find((b) => b.apiCode == this.$route.params.brandCode);
-            } else {
-              this.selectedBrand = this.foodBrands.find((b) => b.stores?.length > 0);
-            }
-          }
-          this.loading = false;
-        } else {
-          if(this.fState == 1) return;
-          this.fState = 1;
-          await this.refreshMainData(true)
-          this.$store.dispatch('setInited', true);
-        }
-      }
-    }
   },
   methods: {
     clickBrand(brand){
@@ -238,6 +212,17 @@ export default {
   },
   async created(){
     this.loading = true;
+    if (!this.$store.getters.hasInited) {
+      await this.refreshMainData(true);
+      this.$store.dispatch('setInited', true);
+    }
+    if(this.foodBrands?.length){
+      if(this.$route?.params?.brandCode){
+        this.selectedBrand = this.foodBrands.find((b) => b.apiCode == this.$route.params.brandCode);
+      } else {
+        this.selectedBrand = this.foodBrands.find((b) => b.stores?.length > 0);
+      }
+    }
   }
 }
 </script>
