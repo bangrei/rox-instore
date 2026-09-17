@@ -1793,20 +1793,13 @@ export default {
         carts = [...carts, ...parentCarts[k]];
       }
       return products.map((prd) => {
-        prd.cart = carts.find((cart) => {
-          return cart.product?.id == prd.id;
+        const cart = carts.find((item) => {
+          return item.product?.id == prd.id;
         });
-        if (prd.cart?.product?.cart) {
-          delete prd.cart?.product?.cart;
-        }
-        if (!isEmpty(prd.brands)) {
-          prd.brands?.forEach((brand) => {
-            brand.products?.forEach((p) => {
-              if (p.brands) p.brands.forEach((bb) => delete bb.products);
-            });
-          });
-        }
-        return prd;
+        return {
+          ...prd,
+          cart: cart || null,
+        };
       });
     },
     async retrieveCartDetails(cartId, outletCode) {

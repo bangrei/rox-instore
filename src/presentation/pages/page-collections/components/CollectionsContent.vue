@@ -589,16 +589,20 @@ export default {
         }
         this.isFetching = true;
         const res = await productService.retrieveProductsList(params);
-        let productsList = res?.products.map((prd) => {
-          prd.brands = res?.brands?.length ? res.brands?.filter((brand) => brand.apiCode == prd.brand) : [];
-          return prd;
+        let productsList = (res?.products || []).map((prd) => {
+          return {
+            ...prd,
+            brands: res?.brands?.length ? res.brands.filter((brand) => brand.apiCode == prd.brand) : [],
+          };
         });
         let resBrands = [];
         if(res?.brands){
           let selectedBrandsMap = selectedBrands.length > 0 ? selectedBrands.map((b) => b.apiCode) : [];
-          resBrands = res?.brands?.map((b) => {
-            b.clicked = selectedBrandsMap.includes(b.apiCode);
-            return b;
+          resBrands = res.brands.map((b) => {
+            return {
+              ...b,
+              clicked: selectedBrandsMap.includes(b.apiCode),
+            };
           })
         }
         this.products = productsList;
@@ -607,13 +611,13 @@ export default {
         this.pagesCount = res?.pageCount || 0;
         this.inStock = res?.inStock || 0;
         this.outStock = res?.outStock || 0;
-        this.products = productsList;
-        this.productsFiltered = productsList;
         this.brands = this.collectionType == 'brand' ? [] : resBrands;
         let cnames = payload?.categories?.map((it) => it.name) || [];
-        this.categories = (res?.categories || [])?.map((it) => {
-          it.clicked = cnames.includes(it.name);
-          return it;
+        this.categories = (res?.categories || []).map((it) => {
+          return {
+            ...it,
+            clicked: cnames.includes(it.name),
+          };
         });
         this.$store.dispatch("setCategories", res?.categories || []);
         this.$store.dispatch("setTags", res?.tags || []);
@@ -668,9 +672,11 @@ export default {
         const res = await productService.retrieveProductsList(params);
         let productsList = [];
         if(res?.products?.length > 0){
-          productsList = res?.products.map((prd) => {
-            prd.brands = res?.brands?.length ? res.brands?.filter((brand) => brand.apiCode == prd.brand) : [];
-            return prd;
+          productsList = res.products.map((prd) => {
+            return {
+              ...prd,
+              brands: res?.brands?.length ? res.brands.filter((brand) => brand.apiCode == prd.brand) : [],
+            };
           })
         }
         this.productCount = res?.productCount || 0;
@@ -706,7 +712,7 @@ export default {
       } finally {
         this.isFetching = false;
         this.$emit('initDone', this.selectedCategoryIds);
-      this.$emit('init-done', this.selectedCategoryIds);
+        this.$emit('init-done', this.selectedCategoryIds);
         if(this.isDesktop) this.showDesktopFilter = true;
       }
     }

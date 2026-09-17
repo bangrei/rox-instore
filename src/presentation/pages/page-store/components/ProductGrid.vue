@@ -156,7 +156,7 @@ export default {
 				this.productSize = this.isDesktop ? 8 : 4;
 				this.setCurrentProducts();
 			},
-			deep: true
+			immediate: true,
 		},
 		loading(val){
 			if(val) this.currentProducts = []
@@ -317,25 +317,37 @@ export default {
 		},
 		productsMap(products) {
 			if (isEmpty(products)) return [];
-			let categories = this.$store.getters.getCategories.map((n) => { return { id: n.id, name: n.name } });
+			let storeCategories = this.$store.getters.getCategories || [];
+			let categories = storeCategories.map((n) => { return { id: n.id, name: n.name } });
 			return products.map((it) => {
+				const productCats = Array.isArray(it.categories) ? it.categories : [];
 				let categoriesDisplay = categories.filter((n) => {
-					return it.categories.indexOf(n.id) > -1;
+					return productCats.includes(n.id) || productCats.some((c) => c === n.id || c?.id === n.id);
 				}).map((n) => { return n.name });
-				let brands = it.brands.map((b) => b.name);
-				it.brandNames = brands.join(' | ');
-				it.categoriesDisplay = categoriesDisplay.join(" | ");
-				it.favorite = it.favorite || this.isFavorite(it.id);
-				it.images = this.getImages(it);
-				return it;
+				let brands = (it.brands || []).map((b) => b.name);
+				return {
+					...it,
+					brandNames: brands.join(' | '),
+					categoriesDisplay: categoriesDisplay.join(" | "),
+					favorite: it.favorite || this.isFavorite(it.id),
+					images: this.getImages(it),
+				};
 			});
 		},
 		setCurrentProducts() {
-			if(this.moreButton && this.products.length > this.productSize){
-				let prd = this.products.slice(0,this.productSize);
-				return this.finalizeProducts(prd);
+			if (this._settingProducts) return;
+			this._settingProducts = true;
+			try {
+				if(this.moreButton && this.products.length > this.productSize){
+					let prd = this.products.slice(0,this.productSize);
+					return this.finalizeProducts(prd);
+				}
+				this.finalizeProducts(this.products);
+			} finally {
+				this.$nextTick(() => {
+					this._settingProducts = false;
+				});
 			}
-			this.finalizeProducts(this.products);
 		},
 		isFavorite(productId){
 			return this.isFavoriteProduct(productId)
@@ -407,7 +419,7 @@ export default {
 			if (!isEmpty(prd.image2Id)) images.push({ id: prd.image2Id });
 			if (!isEmpty(prd.image3Id)) images.push({ id: prd.image3Id });
 			if (!isEmpty(prd.images)) {
-				images = prd.images;
+				images = [...prd.images];
 				images.sort((a, b) => a.sortIndex - b.sortIndex);
 			}
 			if (isEmpty(images)) return "";
@@ -426,7 +438,7 @@ export default {
 						image: `${this.$store.getters.cloudinaryURL}${im.id}?width=300`
 					}
 				});
-				images.sort((a, b) => a.sortIndex - b.sortIndex);
+				images = [...images].sort((a, b) => a.sortIndex - b.sortIndex);
 			}
 			return images;
 		}

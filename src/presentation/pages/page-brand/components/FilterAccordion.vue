@@ -3,7 +3,7 @@
         <div class="page__accordion">
             <base-accordion v-if="brands.length" ref="accordionBrands" accordion-title="Brands" accordion-dark-header="true">
                 <div class="checkbox-wrapper">
-                    <div class="checkbox" v-for="(b, i) in brands" :key="i">
+                    <div class="checkbox" v-for="(b, i) in brandsFilter" :key="b.apiCode || i">
                         <input type="checkbox" v-model="b.clicked" :checked="b.clicked" @click="toggleFilterBrand(i)">
                         <span class="checkbox-label">{{ b.name }}</span>
                     </div>
@@ -210,7 +210,7 @@ export default {
             this.resetFilterPrice();
         },
         available() {
-            this.emitFiltered();
+            // Only emit when the user actually changes availability, not on setup.
         },
         categories: {
             handler(){
