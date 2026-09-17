@@ -677,7 +677,7 @@ export default {
   flex: 2;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   &.disabled {
     pointer-events: none;
     opacity: 0.5;
@@ -686,7 +686,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     background: $white;
     border: 1px solid $secondary-color-20;
     border-color: $secondary-color-20;
@@ -695,20 +695,20 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     background: $white;
     border: 1px solid $secondary-color-20;
     border-color: transparent;
-    padding: 24px;
+    padding-block: 20px;
   }
   .cart-total-info {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 20px;
     flex-wrap: wrap;
-    padding: 24px;
+    padding: 20px;
     border-top: 1px solid $secondary-color-20;
     font-weight: normal;
     font-family: 'Berthold Akzidenz Grotesk Medium', sans-serif;
@@ -716,7 +716,7 @@ export default {
   }
 }
 .express-checkout {
-  padding: 32px 24px;
+  padding: 32px 20px;
   border-radius: 12px;
   border: 1px solid $secondary-color-20;
   position: relative;
@@ -755,12 +755,12 @@ export default {
   }
 }
 .cart-wishlist {
-  padding: 24px;
+  padding: 20px;
   border-bottom: 1px solid $secondary-color-20;
   .wishlist-btn {
     padding-block: 12px;
-    padding-inline: 24px;
-    border-radius: 24px;
+    padding-inline: 20px;
+    border-radius: 20px;
     white-space: nowrap;
     border: 1px solid $main-red;
     outline: none;
@@ -791,7 +791,7 @@ export default {
   flex-direction: column;
   gap: 12px;
   border-top: 1px solid $secondary-color-20;
-  padding-inline: 24px;
+  padding-inline: 20px;
   .cart-sum-body {
     display: flex;
     flex-direction: column;
@@ -839,8 +839,8 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding-inline: 24px;
+  gap: 20px;
+  padding-inline: 20px;
 }
 .checkout-btn {
   width: 100%;
@@ -865,6 +865,7 @@ export default {
 }
 @media (min-width: 672px) {
   .cart-details-checkout {
+    padding-inline: 20px;
     border-radius: 12px;
     border: 1px solid $secondary-color-20;
     border-color: $secondary-color-20 !important;

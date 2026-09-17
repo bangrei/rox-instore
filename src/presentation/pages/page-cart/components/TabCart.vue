@@ -931,7 +931,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 24px;
+  padding-block: 20px;
   background: $white;
   border: 1px solid $secondary-color-20;
   border-color: transparent;
@@ -979,7 +979,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  padding: 24px;
+  padding-block: 20px;
   background: $white;
   border-bottom: 1px solid $secondary-color-20;
   white-space: nowrap;
@@ -1281,7 +1281,6 @@ export default {
 }
 @media (min-width: 672px) {
   .cart-header {
-    padding-inline: 0 !important;
     padding-bottom: 0 !important;
     background: transparent !important;
     border-bottom-color: transparent !important;
@@ -1301,6 +1300,7 @@ export default {
     }
   }
   .cart-outlet {
+    padding-inline: 20px;
     border-radius: 10px;
     border-color: $secondary-color-20;
   }

@@ -457,6 +457,7 @@ export default {
   .cart-wrapper {
     width: 100%;
     display: flex;
+    flex-direction: column;
     gap: 20px;
 
     .cart-product {
@@ -636,6 +637,11 @@ export default {
       font-size: 0.9em;
       font-family: 'Berthold Akzidenz Grotesk Medium';
     }
+  }
+}
+@media (min-width: 672px) {
+  .cart-wrapper {
+    flex-direction: row !important;
   }
 }
 </style>

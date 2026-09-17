@@ -476,7 +476,6 @@ export default {
         display: flex;
         flex-direction: column;
         .cart-tabs-wrapper {
-            padding-inline: 24px;
             padding-top: 32px;
             background: $white;
             display: flex;
@@ -527,7 +526,6 @@ export default {
             }
         }
         .cart-tabs-wrapper {
-            padding-inline: 0 !important;
             padding-top: 0 !important;
             background: transparent !important;
         }
