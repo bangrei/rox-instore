@@ -288,6 +288,7 @@ export default {
   },
   watch: {
     keywords(val) {
+      if (this.loading || this.isFetching) return;
       if (!val) this.searchProducts();
     },
   },
@@ -704,7 +705,8 @@ export default {
         }
       } finally {
         this.isFetching = false;
-        this.$emit('init-done', this.selectedCategoryIds);
+        this.$emit('initDone', this.selectedCategoryIds);
+      this.$emit('init-done', this.selectedCategoryIds);
         if(this.isDesktop) this.showDesktopFilter = true;
       }
     }

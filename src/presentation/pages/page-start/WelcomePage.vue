@@ -1,11 +1,11 @@
 <template>
-	<layout-variant-two id="welcome-page" :footer-white="true" :active-menu-index="1">
+	<layout-variant-two id="welcome-page" :footer-white="true" :active-menu-index="1" :show-loading-screen="false">
 		<template v-slot:body>
 			<div class="welcome-wrapper">
 				<div class="head-container">
 					<BannerSlider/>
 				</div>
-				<collections-content showParentCategories/>
+				<collections-content showParentCategories @initDone="onCollectionsReady"/>
 				<ContactUs/>
 			</div>
 		</template>
@@ -32,12 +32,19 @@ export default {
 		CollectionsContent,
 	},
 	mixins: [utility],
+	data() {
+		return {
+			collectionsReady: false,
+		};
+	},
 	computed: {
-		hasInited() {
-      return this.$store.getters.hasInited;
-    },
 		loading() {
-			return !this.hasInited;
+			return !this.collectionsReady;
+		}
+	},
+	methods: {
+		onCollectionsReady() {
+			this.collectionsReady = true;
 		}
 	},
 	created() {

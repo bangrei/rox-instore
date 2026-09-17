@@ -95,9 +95,10 @@ export default {
       let fbrands = this.brands.filter((it) => it.type == "FOOD");
       return fbrands.map((it) => {
         let brandBanner = it.custom.brandBanner;
-        // if(it.imageId) brandBanner = it.imageId;
-        it.bannerDisplay = brandBanner ? this.getImage(brandBanner, 'width=300') : '';
-        return it;
+        return {
+          ...it,
+          bannerDisplay: brandBanner ? this.getImage(brandBanner, 'width=300') : '',
+        };
       });
     },
     allBrandsActive() {

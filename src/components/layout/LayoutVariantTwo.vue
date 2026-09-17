@@ -31,7 +31,7 @@
 		<div class="sd-footer footer-white hidden" :class="{'auto': freeFooter, 'hidden': hideFooter}" v-if="hasFooterSlot">
 			<slot name="footer"></slot>
 		</div>
-		<div class="sd-base-loading-con" v-if="showLoadingScreen">
+		<div class="sd-base-loading-con" v-if="showLoadingScreen" @contextmenu.prevent>
 		<div class="sd-loading-con">
 			<div class="dot-overtaking"></div>
 			<p class="body-2-regular bold loading-text secondary-color-60">

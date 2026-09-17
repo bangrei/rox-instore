@@ -12,6 +12,9 @@ import { isEmpty } from "lodash";
 import moment from "moment-timezone";
 import router from "../../router";
 import initData from "@/init";
+
+let refreshMainDataInFlight = null;
+
 export default {
   methods: {
     defaultProductImages(prd) {
@@ -205,16 +208,24 @@ export default {
         arguments.length > 1 && arguments[1] !== undefined
           ? arguments[1]
           : function () {};
-      /*
-      let layer = await storeService.getLayer();
-      if(!layer.success) return;
-
-      let hq = false;
-      if(layer.type == 'HEADQUARTER') {
-        hq = true;
-        this.$store.dispatch("setHQ", true);
+      if (this.$store.getters.hasInited) {
+        callback();
+        return;
       }
-      */
+      if (refreshMainDataInFlight) {
+        await refreshMainDataInFlight;
+        callback();
+        return;
+      }
+      refreshMainDataInFlight = this.runRefreshMainData(skip);
+      try {
+        await refreshMainDataInFlight;
+      } finally {
+        refreshMainDataInFlight = null;
+      }
+      callback();
+    },
+    async runRefreshMainData(skip) {
       this.$store.getters.getCarts;
       let hq = true;
       this.$store.dispatch("setHQ", true);
@@ -273,7 +284,6 @@ export default {
         this.$store.dispatch("setInited", true);
       }
       this.$store.dispatch("setInitServer", true);
-      callback();
     },
     isJSON(data) {
       try {
