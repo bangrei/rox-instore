@@ -2,6 +2,7 @@ import store from "@/store";
 import axios from "axios";
 import router from "../../router";
 import { BFM_CONFIG, EUNOIA_CONFIG } from "../apiConfig";
+import { buildRequestKey, dedupeRequest } from "../requestDeduper";
 import CryptoJS from "crypto-js";
 
 const generateSignature = (payload) => {
@@ -61,14 +62,14 @@ export const EUNOIA_APIV4_CONNECTOR = (options) => {
   );
 
   const post = () => {
-    return new Promise((resolve, reject) => {
-      api
-        .post("/v4", params)
-        .then((resp) => {
-          resolve(resp.data);
-        })
-        .catch((err) => reject(err));
+    const key = buildRequestKey({
+      gateway: EUNOIA_CONFIG.gateway,
+      path: "/v4",
+      params,
     });
+    return dedupeRequest(key, () =>
+      api.post("/v4", params).then((resp) => resp.data)
+    );
   };
   const fileUpload = (form, payload) => {
     const sign = generateSignature(payload);
@@ -150,14 +151,14 @@ export const BFM_APIV4_CONNECTOR = (options) => {
   );
 
   const post = () => {
-    return new Promise((resolve, reject) => {
-      api
-        .post("/v4", params)
-        .then((resp) => {
-          resolve(resp.data);
-        })
-        .catch((err) => reject(err));
+    const key = buildRequestKey({
+      gateway: BFM_CONFIG.gateway,
+      path: "/v4",
+      params,
     });
+    return dedupeRequest(key, () =>
+      api.post("/v4", params).then((resp) => resp.data)
+    );
   };
   return {
     post,
