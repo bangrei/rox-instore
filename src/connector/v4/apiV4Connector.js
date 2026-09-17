@@ -32,6 +32,7 @@ export const EUNOIA_APIV4_CONNECTOR = (options) => {
   let signature = generateSignature(params);
   let api = axios.create({
     baseURL: EUNOIA_CONFIG.gateway,
+    timeout: 60000,
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${signature}`
@@ -120,6 +121,7 @@ export const BFM_APIV4_CONNECTOR = (options) => {
   let signature = generateSignature(params);
   const api = axios.create({
     baseURL: BFM_CONFIG.gateway,
+    timeout: 60000,
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${signature}`
