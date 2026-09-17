@@ -22,28 +22,13 @@ export default {
 		LayoutVariantTwo,
 		CollectionsContent
   },
-  data() {
-    return {
-      loading: true,
-    };
-  },
   computed: {
-    hasInited() {
-      return this.$store.getters.hasInited;
-    }
-  },
-  watch: {
-    hasInited: {
-      immediate: true,
-      handler(val) {
-        this.loading = !val;
-      }
+    loading() {
+      return !this.$store.getters.hasInited;
     }
   },
   methods: {
-    initDone() {
-      this.loading = false;
-    }
+    initDone() {}
   }
 };
 </script>

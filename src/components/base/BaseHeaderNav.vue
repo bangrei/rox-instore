@@ -155,7 +155,6 @@ export default {
             showAccount: false,
             carts: [],
             fetchingCart: true,
-            bsState: 0,
         };
     },
     mixins: [utility],
@@ -192,9 +191,6 @@ export default {
             let subtotal = this.carts.reduce((sum, item) => sum + item.accPrice, 0);
             return subtotal;
         },
-        bsInited() {
-            return this.$store.getters.hasInited;
-        }
     },
     methods: {
         openCheckout() {
@@ -361,16 +357,6 @@ export default {
         }
     },
     watch: {
-        bsInited: {
-            immediate: true,
-            handler(val) {
-                if (val) {
-                    if(this.bsState == 1) return;
-                    this.bsState = 1;
-                    this.initCarts();
-                }
-            }
-        },
         showSideBar(val) {
             if (val) this.openSideBar = true;
             else {
@@ -423,6 +409,11 @@ export default {
         let items = localStorage.getItem("search-items");
         if (items) this.searchItems = JSON.parse(items);
         document.body.addEventListener('click', this.eventHandler);
+        if (!this.$store.getters.hasInited) {
+            await this.refreshMainData(true);
+            this.$store.dispatch('setInited', true);
+        }
+        this.initCarts();
     },
     beforeUnmount(){
         document.body.removeEventListener('click', this.eventHandler);

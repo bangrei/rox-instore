@@ -399,30 +399,9 @@ export default {
             triggerOpenCart: false,
             fnbStoreAvailable: null,
             selectedVariant: null,
-            pdState: 0,
 		};
     },
     watch: {
-        pdInited: {
-            immediate: true,
-            async handler(val) {
-                if (val) {
-                    if(this.pdState == 2) return;
-                    this.pdState = 2;
-                    let variantClicked = this.$store.getters.getClickedVariant;
-                    if (!isEmpty(variantClicked)) {
-                        this.getProduct(variantClicked);
-                        return;
-                    }
-                    this.getProduct();
-                } else {
-                    if(this.pdState == 1) return;
-                    this.pdState = 1;
-                    await this.refreshMainData(true)
-                    this.$store.dispatch('setInited', true);
-                }
-            }
-        },
         startAnimate(val) {
             if (!val) return;
             this.triggerOpenCart = true;
@@ -765,9 +744,6 @@ export default {
             }
             return this.getStockStatus(this.availableInventory);
         },
-        pdInited() {
-            return this.$store.getters.hasInited;
-        }
     },
     methods: {
         selectFnBStore(store){
@@ -1721,12 +1697,22 @@ export default {
             this.isDesktop = window.innerWidth >= 672;
         }
     },
-	created() {
+	async created() {
         this.buyNow = false;
         this.loading = true;
         this.inited = false;
         this.isDesktop = window.innerWidth >= 672;
         window.addEventListener("resize",  this.resizeHandler);
+        if (!this.$store.getters.hasInited) {
+            await this.refreshMainData(true);
+            this.$store.dispatch('setInited', true);
+        }
+        let variantClicked = this.$store.getters.getClickedVariant;
+        if (!isEmpty(variantClicked)) {
+            this.getProduct(variantClicked);
+            return;
+        }
+        this.getProduct();
 	},
     beforeUnmount(){
         window.removeEventListener("resize",  this.resizeBannerHandler);

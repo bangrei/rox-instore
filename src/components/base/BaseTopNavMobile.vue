@@ -65,19 +65,6 @@ export default {
       brands: [],
       categories: [],
       showContent: false,
-      btState: 0,
-    }
-  },
-  watch: {
-    btInited: {
-      immediate: true,
-      handler(val) {
-        if (val) {
-          if(this.btState == 1) return;
-          this.btState = 1;
-          this.initNav();
-        }
-      }
     }
   },
   computed: {
@@ -91,9 +78,6 @@ export default {
     currentOutlet() {
       return this.$store.getters.getCurrentOutlet;
     },
-    btInited() {
-      return this.$store.getters.hasInited;
-    }
   },
   methods: {
     initNav(){
@@ -124,8 +108,13 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     document.body.addEventListener('click', this.handleClickOutside);
+    if (!this.$store.getters.hasInited) {
+      await this.refreshMainData(true);
+      this.$store.dispatch('setInited', true);
+    }
+    this.initNav();
   },
   beforeUnmount(){
     document.body.removeEventListener('click', this.handleClickOutside);

@@ -34,7 +34,6 @@ export default {
     return {
       collectionType: "",
       collectionName: "",
-      loading: false,
       selectedCategories: [],
     };
   },
@@ -92,21 +91,12 @@ export default {
       }
       return text;
     },
-    cpInited() {
-      return this.$store.getters.hasInited;
-    }
-  },
-  watch: {
-    cpInited: {
-      immediate: true,
-      handler(val) {
-        this.loading = !val;
-      }
+    loading() {
+      return !this.$store.getters.hasInited;
     }
   },
   methods: {
     initDone(categories) {
-      this.loading = false;
       this.selectedCategories = categories || [];
     }
   },

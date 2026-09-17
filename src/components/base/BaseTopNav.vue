@@ -84,7 +84,6 @@ export default {
       showBrands: false,
       isTablet: false,
       specialBrands: [],
-      btState: 0,
     }
   },
   computed: {
@@ -115,21 +114,6 @@ export default {
     currentOutlet() {
       return this.$store.getters.getCurrentOutlet;
     },
-    btInited() {
-      return this.$store.getters.hasInited;
-    }
-  },
-  watch: {
-    btInited: {
-      immediate: true,
-      handler(val) {
-        if (val) {
-          if(this.btState == 1) return;
-          this.btState = 1;
-          this.initNav();
-        }
-      }
-    }
   },
   methods: {
     brandImage(brand) {
@@ -173,11 +157,16 @@ export default {
       this.categories = this.mapProductCategories();
     },
   },
-  created() {
-    window.addEventListener('resize', this.initData);
+  async created() {
+    window.addEventListener('resize', this.initNav);
+    if (!this.$store.getters.hasInited) {
+      await this.refreshMainData(true);
+      this.$store.dispatch('setInited', true);
+    }
+    this.initNav();
   },
   beforeUnmount(){
-    window.removeEventListener('resize', this.initData);
+    window.removeEventListener('resize', this.initNav);
   }
 }
 </script>

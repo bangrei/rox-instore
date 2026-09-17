@@ -186,9 +186,6 @@ export default {
     appliedPromoCodes() {
       return this.$store.getters.getPromoCodes || [];
     },
-    cInited() {
-      return this.$store.getters.hasInited;
-    }
   },
   methods: {
     toggleSelectAll() {
@@ -863,22 +860,15 @@ export default {
       }
     }
   },
-  watch: {
-    cInited: {
-      immediate: true,
-      handler(val) {
-        if (val) {
-          if(this.inited) return;
-          this.inited = true;
-          this.initCarts();
-        }
-      }
-    },
-  },
-  created() {
+  async created() {
     this.loading = true;
     this.resize();
     window.addEventListener("resize", this.resize);
+    if (!this.$store.getters.hasInited) {
+      await this.refreshMainData(true);
+      this.$store.dispatch("setInited", true);
+    }
+    await this.initCarts();
   },
   beforeUnmount(){
     window.removeEventListener("resize", this.resize);
