@@ -157,9 +157,15 @@ export default {
       } */
       this.categories = this.mapProductCategories();
     },
+    onResizeNav() {
+      if (this._navResizeTimer) clearTimeout(this._navResizeTimer);
+      this._navResizeTimer = setTimeout(() => {
+        this.initNav();
+      }, 150);
+    },
   },
   async created() {
-    window.addEventListener('resize', this.initNav);
+    window.addEventListener('resize', this.onResizeNav);
     if (!this.$store.getters.hasInited) {
       await this.refreshMainData(true);
       this.$store.dispatch('setInited', true);
@@ -167,7 +173,8 @@ export default {
     this.initNav();
   },
   beforeUnmount(){
-    window.removeEventListener('resize', this.initNav);
+    window.removeEventListener('resize', this.onResizeNav);
+    if (this._navResizeTimer) clearTimeout(this._navResizeTimer);
   }
 }
 </script>

@@ -216,13 +216,13 @@ export default {
             handler(){
                 this.initCategories()
             },
-            deep: true
+            immediate: true,
         },
         brands: {
             handler(){
                 this.initBrands()
             },
-            deep: true,
+            immediate: true,
         },
         stockIn: {
             handler(){
@@ -242,19 +242,23 @@ export default {
             if (!isEmpty(this.brands)) {
                 this.brandsFilter = this.brands.map((it) => {
                     const isClicked = this.brandsFilter.find((b) => b.apiCode == it.apiCode)?.clicked;
-                    it.clicked = isClicked == true;
-                    return it;
+                    return {
+                        ...it,
+                        clicked: isClicked == true,
+                    };
                 }).sort((a, b) => a.name.localeCompare(b.name));
                 this.$nextTick(() => {
-                    if (!isEmpty(this.brands)) this.$refs.accordionBrands.isClosed = true;
+                    if (!isEmpty(this.brands) && this.$refs.accordionBrands) this.$refs.accordionBrands.isClosed = true;
                 })
             }
         },
         initCategories(){
             if (!isEmpty(this.categories)) {
-                let categories = [...this.categories].map((it) => {
-                    if(this.selectedCategories.includes(it.id)) it.clicked = true;
-                    return it;
+                let categories = this.categories.map((it) => {
+                    return {
+                        ...it,
+                        clicked: this.selectedCategories.includes(it.id),
+                    };
                 });
                 let cats = [];
                 for (let i = 0; i < categories.length; i++){

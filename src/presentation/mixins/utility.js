@@ -1689,15 +1689,14 @@ export default {
         brands = hq.headquarter.brand;
       }
       if (!isEmpty(brands)) {
-        brands.sort((a, b) => {
+        return [...brands].sort((a, b) => {
           return a.name.localeCompare(b.name);
-        });
-        return brands?.map((brand) => {
+        }).map((brand) => {
           let stores = [];
           for(let i = 0; i < hq.outlets.length; i++){
             stores = [
               ...stores, 
-              ...hq.outlets[i].stores.filter((s) => {
+              ...(hq.outlets[i].stores || []).filter((s) => {
                 return s.brandCode == brand.apiCode
               })?.map((s) => {
                 let isOpenToday = false;
@@ -1706,22 +1705,28 @@ export default {
                 let day = moment.tz(now, "Asia/Singapore").format("dddd").toUpperCase();
                 let date = moment.tz(now, "Asia/Singapore").format("YYYY-MM-DD");
                 let todayHour = hours?.find((h) => h.dayOfWeek == day);
+                let from = null;
+                let to = null;
+                let gap = false;
                 if(todayHour && (s.takeAway || s.delivery)){
-                  let from = moment.tz(`${date} ${todayHour.startTime}`, "Asia/Singapore");
-                  let to = moment.tz(`${date} ${todayHour.endTime}`, "Asia/Singapore");
+                  from = moment.tz(`${date} ${todayHour.startTime}`, "Asia/Singapore");
+                  to = moment.tz(`${date} ${todayHour.endTime}`, "Asia/Singapore");
                   if(now.isBetween(from, to, null, "[]")){
                     isOpenToday = true;
                   }
-                  s.gap = now.isBetween(from, to, null, "[]")
-                  s.from = from;
-                  s.to = to;
+                  gap = now.isBetween(from, to, null, "[]");
                 }
-                s.day = day;
-                s.date = date;
-                s.todayHour = todayHour
-                s.isOpenToday = isOpenToday;
-                s.now = now;
-                return s;
+                return {
+                  ...s,
+                  gap,
+                  from,
+                  to,
+                  day,
+                  date,
+                  todayHour,
+                  isOpenToday,
+                  now,
+                };
               })
             ];
           }

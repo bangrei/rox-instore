@@ -222,7 +222,7 @@ export default {
 			const el = this.$refs.etalaseCon;
 			if (!el || typeof ResizeObserver === 'undefined') return;
 			this.scrollNavObserver = new ResizeObserver(() => {
-				this.updateScrollNav();
+				window.requestAnimationFrame(() => this.updateScrollNav());
 			});
 			this.scrollNavObserver.observe(el);
 		},
