@@ -220,7 +220,12 @@ export default {
       this.$store.dispatch("setHQ", true);
       await this.refreshCustomerData();
       this.startCurrentLocation();
-      let response = await storeService.retrieveStores();
+      let response = { success: false };
+      try {
+        response = await storeService.retrieveStores();
+      } catch (error) {
+        console.error("Failed to retrieve stores", error);
+      }
       if (response.success) {
         if (!isEmpty(response.app)) {
           this.$store.dispatch(

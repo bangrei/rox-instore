@@ -51,7 +51,7 @@ export default {
     }
 	},
 	created() {
-		this.loading = true;
+		if (!this.pgInited) this.loading = true;
 		window.addEventListener("resize",  this.resizeBannerHandler);
 	},
 	beforeUnmount() {

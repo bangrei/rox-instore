@@ -297,8 +297,13 @@ export default {
         if(!val) {
           if(this.initState == 1) return;
           this.initState = 1;
-          await this.refreshMainData(true)
-          this.$store.dispatch('setInited', true);
+          try {
+            await this.refreshMainData(true)
+          } catch (error) {
+            console.error("Failed to refresh main data", error);
+          } finally {
+            this.$store.dispatch('setInited', true);
+          }
         } else {
           if(this.initState == 2) return;
           this.initState = 2;

@@ -1,0 +1,3 @@
+/v4  https://fe-staging.eunoia.asia/v4  200
+/eventReviews/*  https://fe-staging.eunoia.asia/eventReviews/:splat  200
+/*  /index.html  200
