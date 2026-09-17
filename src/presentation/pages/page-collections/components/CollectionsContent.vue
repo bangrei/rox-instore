@@ -751,7 +751,6 @@ export default {
 }
 .top-info {
   width: 100%;
-  padding-inline: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -764,6 +763,7 @@ export default {
   line-height: normal;
 	text-align: left;
 	font-family: 'Berthold Akzidenz Grotesk Medium', sans-serif;
+  padding-inline: 20px;
 }
 .parent-categories-con {
 	width: 100%;
@@ -772,7 +772,7 @@ export default {
   &:is(.show){
     display: flex;
 	  align-items: center;
-    padding-block: 20px;
+    padding: 20px;
   }
   &:not(.show){
     display: none;
@@ -1048,6 +1048,12 @@ export default {
 @media (min-width: 672px) {
   .top-info {
     padding-inline: 4%;
+  }
+  .title-text {
+    padding-inline: 0;
+  }
+  .parent-categories-con {
+    padding-inline: 0;
   }
   .pagination {
     width: fit-content !important;
