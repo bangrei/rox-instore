@@ -1,0 +1,7 @@
+@use 'base/_reset' as *;
+@use 'base/_typography' as *;
+@use 'base/_font-icon' as *;
+@use 'base/_global' as *;
+
+// to override default scss
+@use 'base/_custom' as *;

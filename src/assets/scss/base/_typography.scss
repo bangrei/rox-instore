@@ -1,0 +1,266 @@
+/* 
+	google font's weight
+		regular: 400
+		medium: 500
+		semiBold: 600
+		bold: 700
+*/
+// @import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;700&display=swap');
+@font-face {
+	font-family: 'Berthold Akzidenz Grotesk Medium';
+		src: url('assets/fonts/Berthold-Akzidenz-Grotesk-Medium.woff') format('opentype');
+		font-display: swap;
+	}
+	
+	@font-face {
+		font-family: 'Berthold Akzidenz Grotesk';
+		src: url('assets/fonts/Berthold-Akzidenz-Grotesk-Regular.woff') format('opentype');
+		font-display: swap;
+	}
+	
+	@font-face {
+	font-family: 'Akzidenz Grotesk Regular';
+	src: url('assets/fonts/AkzidenzGroteskBE-Regular.otf') format('opentype');
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Akzidenz Grotesk Super';
+	src: url('assets/fonts/AkzidenzGroteskBE-Super.otf') format('opentype');
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Akzidenz Grotesk SuperItalic';
+	src: url('assets/fonts/AkzidenzGrotesk-SuperItalic.otf') format('opentype');
+	font-display: swap;
+}
+
+/* fallback */
+@font-face {
+	font-family: 'Material Icons';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Material Icons'), local('Material-Icons'), url('assets/fonts/Material-Icons.woff2') format('woff2');
+	//src: url(https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');
+}
+
+/* fallback */
+@font-face {
+	font-family: 'Material Icons Outlined';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Material Icons Outlined'), local('Material-Icons-Outlined'), url('assets/fonts/Material-Icons-Outlined.woff2') format('woff2');
+	//src: url(https://fonts.gstatic.com/s/materialiconsoutlined/v109/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUcel5euIg.woff2) format('woff2');
+}
+
+/* fallback */
+@font-face {
+	font-family: 'Material Icons Round';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Material Icons Rounded'), local('Material-Icons-Rounded'), url('assets/fonts/Material-Icons-Rounded.woff2') format('woff2');
+	//src: url(https://fonts.gstatic.com/s/materialiconsround/v108/LDItaoyNOAY6Uewc665JcIzCKsKc_M9flwmPq_HTTw.woff2) format('woff2');
+}
+
+/* fallback */
+@font-face {
+	font-family: 'Material Icons Sharp';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Material Icons Sharp'), local('Material-Icons-Sharp'), url('assets/fonts/Material-Icons-Sharp.woff2') format('woff2');
+	//src: url(https://fonts.gstatic.com/s/materialiconssharp/v109/oPWQ_lt5nv4pWNJpghLP75WiFR4kLh3kvmvRImcycg.woff2) format('woff2');
+}
+
+/* fallback */
+@font-face {
+	font-family: 'Material Icons Two Tone';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Material Icons Two Tone'), local('Material-Icons-TwoTone'), url('assets/fonts/Material-Icons-TwoTone.woff2') format('woff2');
+	//src: url(https://fonts.gstatic.com/s/materialiconstwotone/v112/hESh6WRmNCxEqUmNyh3JDeGxjVVyMg4tHGctNCu0NjbrHg.woff2) format('woff2');
+}
+
+@function pixelToRem($pixelValue) {
+	$remValue: calc($pixelValue / 16) + rem;
+	@return $remValue;
+}
+
+body {
+	font-family: 'Berthold Akzidenz Grotesk', sans-serif;
+	font-display: swap;
+}
+
+.heading-1,
+.heading-2,
+.heading-3,
+.heading-4,
+.heading-5,
+.heading-6,
+.body-1-normal,
+.body-1-tight,
+.body-2-normal,
+.body-2-tight,
+.body-3-normal,
+.body-4-tight {
+	font-family: 'Berthold Akzidenz Grotesk', sans-serif;
+
+	&.regular {
+		font-weight: 400;
+	}
+
+	&.medium {
+		font-weight: 500;
+	}
+
+	&.bold {
+		font-weight: 700;
+	}
+}
+
+.heading-1 {
+	font-size: pixelToRem(36);
+	font-weight: 700;
+	line-height: pixelToRem(44);
+	letter-spacing: pixelToRem(0);
+}
+
+.heading-2 {
+	font-size: pixelToRem(32);
+	font-weight: 700;
+	line-height: pixelToRem(40);
+	letter-spacing: pixelToRem(0);
+}
+
+.heading-3 {
+	font-size: pixelToRem(28);
+	font-weight: 700;
+	line-height: pixelToRem(36);
+	letter-spacing: pixelToRem(0);
+}
+
+.heading-4 {
+	font-size: pixelToRem(20);
+	font-weight: 700;
+	line-height: pixelToRem(28);
+	letter-spacing: pixelToRem(0);
+}
+
+.heading-5 {
+	font-size: pixelToRem(16);
+	font-weight: 700;
+	line-height: pixelToRem(24);
+	letter-spacing: pixelToRem(0);
+}
+
+.heading-6 {
+	font-size: pixelToRem(14);
+	font-weight: 700;
+	line-height: pixelToRem(20);
+	letter-spacing: pixelToRem(0.2);
+}
+
+.body-1-tight {
+	font-size: pixelToRem(16);
+	line-height: pixelToRem(22);
+	letter-spacing: pixelToRem(0);
+}
+
+.body-1-normal {
+	font-size: pixelToRem(16);
+	line-height: pixelToRem(24);
+	letter-spacing: pixelToRem(0);
+}
+
+.body-2-tight {
+	font-size: pixelToRem(14);
+	line-height: pixelToRem(18);
+	letter-spacing: pixelToRem(0.2);
+}
+
+.body-2-normal {
+	font-size: pixelToRem(14);
+	line-height: pixelToRem(20);
+	letter-spacing: pixelToRem(0.2);
+}
+
+.body-3-tight {
+	font-size: pixelToRem(12);
+	line-height: pixelToRem(14);
+	letter-spacing: pixelToRem(0.4);
+}
+
+.body-3-normal {
+	font-size: pixelToRem(12);
+	line-height: pixelToRem(16);
+	letter-spacing: pixelToRem(0.4);
+}
+
+@media(min-width: 672px) {
+	.heading-1 {
+		font-size: pixelToRem(48);
+		line-height: pixelToRem(56);
+	}
+
+	.heading-2 {
+		font-size: pixelToRem(40);
+		line-height: pixelToRem(48);
+	}
+
+	.heading-3 {
+		font-size: pixelToRem(32);
+		line-height: pixelToRem(40);
+	}
+
+	.heading-4 {
+		font-size: pixelToRem(22);
+		line-height: pixelToRem(30);
+	}
+
+	.heading-5 {
+		font-size: pixelToRem(16);
+		line-height: pixelToRem(26);
+	}
+
+	.heading-6 {
+		font-size: pixelToRem(14);
+		line-height: pixelToRem(20);
+	}
+}
+
+@media(min-width: 1056px) {
+	.heading-1 {
+		font-size: pixelToRem(60);
+		line-height: pixelToRem(70);
+	}
+
+	.heading-2 {
+		font-size: pixelToRem(48);
+		line-height: pixelToRem(56);
+	}
+
+	.heading-3 {
+		font-size: pixelToRem(36);
+		line-height: pixelToRem(44);
+	}
+
+	.heading-4 {
+		font-size: pixelToRem(24);
+		line-height: pixelToRem(32);
+	}
+
+	.heading-5 {
+		font-size: pixelToRem(20);
+		line-height: pixelToRem(28);
+	}
+
+	.heading-6 {
+		font-size: pixelToRem(16);
+		line-height: pixelToRem(24);
+	}
+}

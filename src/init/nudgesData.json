@@ -1,0 +1,507 @@
+{
+  "success": true,
+  "nudges": [
+    {
+      "id": "b9f6c7736bef489c86b0ca3944cbcc3c",
+      "name": "Test Nudge (enhanced notification) - 9",
+      "type": "ARTICLE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1773621618000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 0,
+      "completionPoints": 0,
+      "description": "<p>Teaser Description</p>",
+      "externalLink": null,
+      "images": [
+        "SlSqRreF3HXj64sG"
+      ],
+      "tags": [
+        "AGT"
+      ],
+      "links": [],
+      "article": {
+        "title": "<p style=\"text-align: center;\"><strong>Title</strong></p>",
+        "bodies": [
+          {
+            "content": "<p>Body</p>",
+            "image": null
+          }
+        ]
+      },
+      "questionnaire": null,
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "f102f876a52f473aba3456dcb9f5250e",
+      "name": "How to Properly Pack your Bag for a Camping Trip 2",
+      "type": "ARTICLE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672908869000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 1,
+      "completionPoints": 0,
+      "description": "How to Properly Pack your Bag for a Camping Trip",
+      "externalLink": null,
+      "images": [
+        "vce3kw1qkyesh7qo9zmt"
+      ],
+      "tags": [
+        "Camping",
+        "Checklists"
+      ],
+      "links": [],
+      "article": {
+        "title": "<p style=\"text-align: center;\"><strong>How to Properly Pack your Bag for a Camping Trip</strong></p>",
+        "bodies": [
+          {
+            "content": "<p>&nbsp;</p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Choose the correct backpack</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"2\"><span style=\"font-weight: 400;\">Always make sure that you are using the correct size bag for the activity</span></li>\r\n</ol>\r\n</ol>\r\n</ol>\r\n<p><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Prepare a checklist and layout everything on the floor</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"2\"><span style=\"font-weight: 400;\">Before putting the items inside your backpack, scatter them on a flat surface so you can ensure that you bring everything from your checklist and not miss anything out.</span></li>\r\n</ol>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<p>&nbsp;</p>\r\n<p><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Pack the items according to weight and importance</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li><span style=\"font-weight: 400;\"> Small, &ldquo;Quick Access&rdquo; Items i.e.: first-aid kit, head lamp, light jacket, high calorie snacks, etc.&nbsp;</span></li>\r\n</ol>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<ol>\r\n<ol>\r\n<li><span style=\"font-weight: 400;\"> Heavy Weight Items i.e.: food, water, fuel, stove, etc.&nbsp;</span></li>\r\n</ol>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<ol>\r\n<ol>\r\n<li><span style=\"font-weight: 400;\"> Light Weight Items i.e.: rain gear, clothing, etc.&nbsp;</span></li>\r\n</ol>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<ol>\r\n<ol>\r\n<li><span style=\"font-weight: 400;\"> Medium Weight Items i.e.: tent , clothing, etc.&nbsp;</span></li>\r\n</ol>\r\n</ol>\r\n<p>&nbsp;</p>\r\n<ol>\r\n<ol>\r\n<li><span style=\"font-weight: 400;\"> Sleeping Bag</span></li>\r\n</ol>\r\n</ol>\r\n<p>&nbsp;</p>",
+            "image": null
+          }
+        ]
+      },
+      "questionnaire": null,
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "fa42023c1076499987c7f89d2cd3ab82",
+      "name": "How to Practice “Leave no Trace”",
+      "type": "ARTICLE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672908358000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 1,
+      "completionPoints": 0,
+      "description": "How to Practice “Leave no Trace”",
+      "externalLink": null,
+      "images": [
+        "o2pqekmq1masiajznmjt"
+      ],
+      "tags": [
+        "Skills"
+      ],
+      "links": [],
+      "article": {
+        "title": "<p style=\"text-align: center;\"><strong>How to Practice &ldquo;Leave no Trace&rdquo;</strong></p>",
+        "bodies": [
+          {
+            "content": "<p><strong>What is Leave no Trace? The general idea of Leave no Trace is to sustain the environment for generations to come while doing outdoor activities like camping or hiking&nbsp; by following these 7 principles.</strong></p>\r\n<p><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Plan Ahead and Prepare</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Do adequate research on the area you are visiting</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Always be prepared for any weather conditions</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Repackage food to minimize waste</span></li>\r\n</ul>\r\n</ul>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Travel and Camp on durable surfaces</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Camp on nearby water sources like lakes and streams</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Keep the campsite minimalistic and small</span></li>\r\n</ul>\r\n</ul>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Dispose of waste properly</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Deposit solid human waste inside catholes at least 6 to 8 inches deep and near the campsite</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Ensure that all trash and food are packed away when leaving the campsite</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">When washing dishes, make sure to use minimal amount of biodegradable soap&nbsp;&nbsp;</span></li>\r\n</ul>\r\n</ul>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Leave what you find</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Do not bring home any wildlife specimens</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Refrain from touching historical and natural structures in order to preserve them</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Do not build structures or dig trenches</span></li>\r\n</ul>\r\n</ul>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Minimize campfire impacts</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Keep the campfire small</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Always put out the campfire completely, and burn the wood and coal to ash and scatter them once cooled</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Use existing fire rings, fire pans, and mound fires</span></li>\r\n</ul>\r\n</ul>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Respect Wildlife</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Do not feed wild animals</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Do not follow wild animals as they can feel threatened or become startled</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">If you have your pets with you, strictly monitor them and avoid them interacting with wild animals</span></li>\r\n</ul>\r\n</ul>\r\n<p><br /><br /><br /></p>\r\n<ol>\r\n<ol>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Be considerate of others</span></li>\r\n</ol>\r\n</ol>\r\n<p><br /><br /><br /></p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Avoid producing loud noises</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Respect other visitors and treat them how you would like to be treated</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<ul>\r\n<ul>\r\n<li style=\"font-weight: 400;\" aria-level=\"1\"><span style=\"font-weight: 400;\">Always be courteous</span></li>\r\n</ul>\r\n</ul>\r\n<p>&nbsp;</p>",
+            "image": null
+          }
+        ]
+      },
+      "questionnaire": null,
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "a1ae05b3f841400a9a1361c7aef123d2",
+      "name": "Have you packed up all your gear for the CampWell Trip?",
+      "type": "QUESTIONNAIRE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672763194000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 0,
+      "completionPoints": 1,
+      "description": "Have you packed up all your gear for the CampWell Trip?",
+      "externalLink": null,
+      "images": [
+        "z9sk6jiudctiyukz5yq8"
+      ],
+      "tags": [
+        "Checklists"
+      ],
+      "links": [],
+      "article": null,
+      "questionnaire": {
+        "title": "Have you packed up all your gear for the CampWell Trip?",
+        "questions": [
+          {
+            "question": "Have you packed your tent?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1054,
+                "answer": "Yes",
+                "score": 1
+              },
+              {
+                "id": 1055,
+                "answer": "No",
+                "score": 0
+              }
+            ],
+            "tags": [
+              "Checklists"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          },
+          {
+            "question": "Have you packed a sleeping bag?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1056,
+                "answer": "Yes",
+                "score": 1
+              },
+              {
+                "id": 1057,
+                "answer": "No",
+                "score": 0
+              }
+            ],
+            "tags": [
+              "Checklists"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          },
+          {
+            "question": "Have you packed cooking utensils?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1058,
+                "answer": "Yes",
+                "score": 1
+              },
+              {
+                "id": 1059,
+                "answer": "No",
+                "score": 0
+              }
+            ],
+            "tags": [
+              "Checklists"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          },
+          {
+            "question": "Which of the following items have you packed in your medical kit?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1060,
+                "answer": "Bandages",
+                "score": 1
+              },
+              {
+                "id": 1061,
+                "answer": "Adhesive Tape",
+                "score": 1
+              },
+              {
+                "id": 1062,
+                "answer": "Scissors",
+                "score": 1
+              },
+              {
+                "id": 1063,
+                "answer": "Tweezers",
+                "score": 1
+              },
+              {
+                "id": 1064,
+                "answer": "Instant cold packs",
+                "score": 1
+              },
+              {
+                "id": 1065,
+                "answer": "Antiseptic wipes",
+                "score": 1
+              },
+              {
+                "id": 1066,
+                "answer": "Anti-itch creams",
+                "score": 1
+              },
+              {
+                "id": 1067,
+                "answer": "Pain Relievers",
+                "score": 1
+              },
+              {
+                "id": 1068,
+                "answer": "Blister bandages",
+                "score": 1
+              },
+              {
+                "id": 1069,
+                "answer": "Anti Histamine",
+                "score": 1
+              }
+            ],
+            "tags": [
+              "Checklists"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          }
+        ]
+      },
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "4af8c2ce09594406a9b337fb1d68bde9",
+      "name": "The Complete Camping Checklist",
+      "type": "ARTICLE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672762793000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 1,
+      "completionPoints": 0,
+      "description": "The Complete Camping Checklist",
+      "externalLink": null,
+      "images": [
+        "zdfxfo2vte6wy7lhrvzg"
+      ],
+      "tags": [
+        "Checklists"
+      ],
+      "links": [],
+      "article": {
+        "title": "<h2 style=\"text-align: center;\"><strong>The Complete Camping Checklist</strong></h2>",
+        "bodies": [
+          {
+            "content": "<p><strong>Going camping is an exciting and rewarding experience. But the key to success when camping is to make sure you&rsquo;re prepared for anything that might come your way. To help make your camping trip a success, here is a comprehensive camping checklist of all of the items you might need.</strong></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Tent and sleeping equipment: This is the most important part of your camping setup. Make sure you have a quality tent, sleeping bags, and pillows for everyone. If you&rsquo;re heading out for a multi-night trip, consider bringing an air mattress or cot to make sleeping much more comfortable.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Clothing and Footwear: Depending on the time of year and the climate you&rsquo;ll be camping in, make sure you have the right clothing and footwear. This includes hats, gloves, thick socks, and a good pair of boots. Don&rsquo;t forget to bring an extra set of clothes in case of rain or other inclement weather.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Cooking Supplies: Camping cooking supplies should also be a priority. Bring some quality pots, pans, and utensils, as well as a cutting board, paper towels, and any tools you might need. Don&rsquo;t forget to bring the fuel for your stove.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">First Aid Kit: Accidents can happen, so make sure you bring along a first aid kit, filled with the necessary supplies for any minor medical issues that might arise.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Lights: Make sure you&rsquo;re prepared for when the sun goes down by bringing flashlights, lanterns, and extra batteries.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Hygiene and Sanitation Supplies: Hygiene is important when camping, so make sure you bring some hand sanitiser, wet wipes, soap, a washcloth, a toothbrush, toothpaste, and any medications you might need.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Maps and Navigation Tools: Bring along a quality map and compass, as well as a GPS navigation device. These will help you stay on the right path if you decide to venture out on a hike or explore your surroundings.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Miscellaneous: Bring along a few miscellaneous items, such as bug spray, a multi-tool, and a water filter.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">By keeping this camping checklist handy, you&rsquo;ll be able to make sure you have everything you need for your next camping trip. A little bit of preparation can go a long way in ensuring your outing is a success.</span></p>",
+            "image": null
+          }
+        ]
+      },
+      "questionnaire": null,
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "0eb9c590530d48debd9b798021e35abb",
+      "name": "Proper Preparations for a Hike",
+      "type": "ARTICLE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672762304000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 1,
+      "completionPoints": 0,
+      "description": "Proper Preparations for a Hike",
+      "externalLink": null,
+      "images": [
+        "wbgszrjlkumlyxapval9"
+      ],
+      "tags": [
+        "Skills"
+      ],
+      "links": [],
+      "article": {
+        "title": "<h2 style=\"text-align: center;\"><strong>Proper Preparations for a Hike</strong></h2>",
+        "bodies": [
+          {
+            "content": "<p><span style=\"font-weight: 400;\">Before embarking on any hike, it is important to be well-prepared. Here are some tips to ensure a safe and enjoyable outing:</span></p>\r\n<ol>\r\n<li><span style=\"font-weight: 400;\"> Research the area you're hiking before departure - know the dangers and potential route changes that may await you. Take into account local weather patterns, wildlife activity and trail conditions to determine the safest time to go.</span></li>\r\n<li><span style=\"font-weight: 400;\"> Dress appropriately for the weather and terrain. Wear sturdy shoes with good traction. Bring plenty of food and water with you - remember to drink plenty of water to stay hydrated and pack energy snacks for when you're on the trail.</span></li>\r\n<li><span style=\"font-weight: 400;\"> Know the limitations of your own physical capabilities. Be realistic about your level of fitness and don't try to push yourself too far too fast. As with any physical activity, it's important to gradually build up your endurance to prevent injury. Consult with a physician if you have any questions about your health or fitness level before starting a strenuous workout program.</span></li>\r\n<li><span style=\"font-weight: 400;\"> Leave details of your hike itinerary with someone at home and make sure they know how and when to contact you in an emergency. This is especially important if you plan to go alone.</span></li>\r\n<li><span style=\"font-weight: 400;\"> Carry emergency supplies, such as a map and compass, flashlight and extra batteries, first aid kit, cell phone charger, water and food.</span></li>\r\n<li><span style=\"font-weight: 400;\"> Plan ahead and never set out without enough supplies and water to survive a night in the woods. A good rule of thumb is to bring twice as much as you think you'll need for your trek. Remember to bring rain gear and/or extra clothing to keep you warm and dry if necessary. Hiking can be very exhilarating but it can also be dangerous if you're not prepared.&nbsp;</span></li>\r\n<li><span style=\"font-weight: 400;\"> Have fun and stay alert at all times! Don't allow yourself to become distracted by all the sights and sounds around you. Take your time and enjoy your surroundings; you never know what interesting discoveries you might make during your adventure!</span></li>\r\n</ol>",
+            "image": null
+          }
+        ]
+      },
+      "questionnaire": null,
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "e4ff60c64c144b33a71ee43936ac5bc8",
+      "name": "Do you know how to choose the correct gear for outdoor trips in tropical climates?",
+      "type": "QUESTIONNAIRE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672761605000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 0,
+      "completionPoints": 1,
+      "description": "Do you know how to choose the correct gear for outdoor trips in tropical climates?",
+      "externalLink": null,
+      "images": [
+        "mfqinj6dykxxgox9whnn"
+      ],
+      "tags": [
+        "Gear Guides"
+      ],
+      "links": [],
+      "article": null,
+      "questionnaire": {
+        "title": "Do you know how to choose the correct gear for outdoor trips in tropical climates?",
+        "questions": [
+          {
+            "question": "How do you choose an optimal sleeping bag?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1033,
+                "answer": "Go for a synthetical version",
+                "score": 1
+              },
+              {
+                "id": 1034,
+                "answer": "Opt for a thin and lightweight version",
+                "score": 0
+              }
+            ],
+            "tags": [
+              "Gear Guides"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          },
+          {
+            "question": "What is the most important thing to consider when choosing a tent?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1035,
+                "answer": "The tent must be windproof",
+                "score": 0
+              },
+              {
+                "id": 1036,
+                "answer": "The tent must have a way to release humidity",
+                "score": 0
+              },
+              {
+                "id": 1037,
+                "answer": "The tent must be spacious to host all necessary utensils",
+                "score": 0
+              },
+              {
+                "id": 1038,
+                "answer": "The tent must have at least 10 pegs to stick in the floor",
+                "score": 1
+              }
+            ],
+            "tags": [
+              "Gear Guides"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          },
+          {
+            "question": "What is the most suitable material for your hiking water bottle?",
+            "image": null,
+            "answers": [
+              {
+                "id": 1039,
+                "answer": "Plastic",
+                "score": 0
+              },
+              {
+                "id": 1040,
+                "answer": "Stainless steel",
+                "score": 1
+              },
+              {
+                "id": 1041,
+                "answer": "Polyester",
+                "score": 0
+              }
+            ],
+            "tags": [
+              "Gear Guides"
+            ],
+            "minChoices": 1,
+            "maxChoices": 1,
+            "chosenAnswers": []
+          }
+        ]
+      },
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    },
+    {
+      "id": "71ded4ecd8e14075b6ec4bb55b8807f4",
+      "name": "The Skills you need to do outdoor camping in the Philippines",
+      "type": "ARTICLE",
+      "state": "AWARDED",
+      "stores": [],
+      "published": 1672759015000,
+      "validFrom": null,
+      "validTo": null,
+      "readingPoints": 1,
+      "completionPoints": 1,
+      "description": "The Skills you need to do outdoor camping in the Philippines",
+      "externalLink": null,
+      "images": [
+        "wxwdyegtskezbrkjrxvi"
+      ],
+      "tags": [
+        "Skills"
+      ],
+      "links": [],
+      "article": {
+        "title": "<h2 style=\"text-align: center;\"><strong>The Skills you need to do outdoor camping in the Philippines</strong></h2>",
+        "bodies": [
+          {
+            "content": "<p><strong>If you&rsquo;re planning a camping trip in the Philippines, there are certain skills you&rsquo;ll need to make sure you have a successful and enjoyable adventure. From planning out your route to knowing how to build a campfire, outdoors camping in the Philippines requires knowledge, preparation and practical skills.</strong></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Before you hit the road, make sure to have a sound plan and the right supplies. Make sure you know the terrain you&rsquo;ll be facing, the conditions of your designated campsite and the types of activities you&rsquo;ll be doing. That way, you can pack the right kind of gear, clothes, and supplies. Additionally, make sure to have a detailed map of the area and directions to your destination.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Additionally, you&rsquo;ll need a basic knowledge of first aid, as well as knowledge of how to survive in the wilderness. Make sure to bring the necessary supplies for first aid, like bandages, antiseptic wipes, medications, and a camping first aid kit. Additionally, you&rsquo;ll need to know how to build a fire, identify edible plants, and use a compass.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">And of course, you&rsquo;ll need to know how to set up and break down a campsite. A successful camping trip requires you to know how to properly set up a tent. Make sure you know proper tent setup for the conditions and terrain you&rsquo;ll be facing. Additionally, make sure you know how to properly pack and store your supplies, how to build a fire pit, and how to keep the campsite clean and safe.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Finally, the right attitude is key. Make sure to stay positive, enjoy yourself, and respect the nature around you. Be prepared to encounter wild animals, insects, and other items that can be uncomfortable or unsettling. Be aware of your surroundings, and ensure that you&rsquo;re being safe and responsible.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Camping in the Philippines can be an unforgettable and rewarding experience, but you&rsquo;ll need to have the right set of skills to make sure it&rsquo;s a success. From knowledge of first aid and wilderness survival, to proper tent setup and campfire building, these skills will help you navigate the outdoor world and have the most enjoyable experience possible.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Before you hit the road, make sure to have a sound plan and the right supplies. Make sure you know the terrain you&rsquo;ll be facing, the conditions of your designated campsite and the types of activities you&rsquo;ll be doing. That way, you can pack the right kind of gear, clothes, and supplies. Additionally, make sure to have a detailed map of the area and directions to your destination.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Additionally, you&rsquo;ll need a basic knowledge of first aid, as well as knowledge of how to survive in the wilderness. Make sure to bring the necessary supplies for first aid, like bandages, antiseptic wipes, medications, and a camping first aid kit. Additionally, you&rsquo;ll need to know how to build a fire, identify edible plants, and use a compass.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">And of course, you&rsquo;ll need to know how to set up and break down a campsite. A successful camping trip requires you to know how to properly set up a tent. Make sure you know proper tent setup for the conditions and terrain you&rsquo;ll be facing. Additionally, make sure you know how to properly pack and store your supplies, how to build a fire pit, and how to keep the campsite clean and safe.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Finally, the right attitude is key. Make sure to stay positive, enjoy yourself, and respect the nature around you. Be prepared to encounter wild animals, insects, and other items that can be uncomfortable or unsettling. Be aware of your surroundings, and ensure that you&rsquo;re being safe and responsible.</span></p>\r\n<p>&nbsp;</p>\r\n<p><span style=\"font-weight: 400;\">Camping in the Philippines can be an unforgettable and rewarding experience, but you&rsquo;ll need to have the right set of skills to make sure it&rsquo;s a success. From knowledge of first aid and wilderness survival, to proper tent setup and campfire building, these skills will help you navigate the outdoor world and have the most enjoyable experience possible.</span></p>",
+            "image": null
+          }
+        ]
+      },
+      "questionnaire": null,
+      "surprise": null,
+      "liked": false,
+      "shareToken": null,
+      "location": null,
+      "exclusiveContent": false
+    }
+  ],
+  "tags": [
+    "AGT",
+    "Camping",
+    "Checklists",
+    "Gear Guides",
+    "Skills"
+  ],
+  "pager": {
+    "count": 8,
+    "pageSize": 8,
+    "pageNumber": 0
+  }
+}

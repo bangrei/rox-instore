@@ -1,0 +1,50 @@
+{
+  "name": "rox",
+  "version": "1.2.117",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "serve-https": "vue-cli-service serve --https true --host 0.0.0.0",
+    "build-staging": "vue-cli-service build --mode staging",
+    "build-live": "vue-cli-service build --mode live",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@unhead/vue": "^1.11.16",
+    "axios": "^0.26.1",
+    "crypto-js": "^4.2.0",
+    "lodash": "^4.17.21",
+    "logrocket": "^3.0.1",
+    "moment-timezone": "^0.5.43",
+    "paymaya-js-sdk": "^2.0.1",
+    "swiper": "^8.4.7",
+    "vue": "^3.0.0",
+    "vue-barcode-reader": "^1.0.3",
+    "vue-inner-image-zoom": "^2.0.0",
+    "vue-moment": "^4.1.0",
+    "vue-qrcode-component": "^2.1.1",
+    "vue-router": "^4.0.0-0",
+    "vue3-carousel": "^0.3.1",
+    "vue3-google-login": "^2.0.26",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@types/lodash": "^4.17.10",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-pwa": "^5.0.8",
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-loader": "^8.2.5",
+    "eslint": "^7.5.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^8.0.1",
+    "prettier": "^2.2.1",
+    "sass": "^1.49.0",
+    "sass-loader": "^10.2.1",
+    "vue-loader": "^16.8.3"
+  }
+}

@@ -1,0 +1,64 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "userId": 101,
+            "name": "Alice"
+        },
+        {
+            "id": 2,
+            "userId": 102,
+            "name": "Bob"
+        },
+        {
+            "id": 3,
+            "userId": 103,
+            "name": "Carol"
+        }
+    ],
+    "questions": [
+        {
+            "id":"1",
+            "title": "What are your interest?",
+            "type": "multiple-ans",
+            "answers": [
+                {
+                    "title": "Reading",
+                    "imgUrl": "https://picsum.photos/200/200",
+                    "selectedAnswer":false
+                },
+                {
+                    "title": "Sports",
+                    "imgUrl": "https://picsum.photos/200/200",
+                    "selectedAnswer":true
+                },
+                {
+                    "title": "Health",
+                    "imgUrl": "https://picsum.photos/200/200",
+                    "selectedAnswer": true
+                }
+            ],
+            "status": "unanswered"
+        },
+        {
+            "id":"2",
+            "title": "What are your interest?",
+            "type": "single-ans",
+            "answers": [
+                {
+                    "title": "Reading",
+                    "imgUrl": "https://picsum.photos/200/200"
+                },
+                {
+                    "title": "Sports",
+                    "imgUrl": "https://picsum.photos/200/200"
+                },
+                {
+                    "title": "Health",
+                    "imgUrl": "https://picsum.photos/200/200"
+                }
+            ],
+            "status": "unanswered"
+        }
+    ]
+}
