@@ -57,8 +57,10 @@
             </div>
             <ul class="nav-dropdown-item-block-list permanent" v-if="foodBrands?.length > 0">
               <li v-for="brand in foodBrands" :key="brand.apiCode">
-                <img v-if="brand.bannerDisplay" :src="brand.bannerDisplay" width="200" height="200" :alt="brand.name" />
-                <router-link class="brand-name" :to="'/shop/fnb/' + brand.apiCode">{{ brand.name }} </router-link>
+                <router-link class="brand-name" :to="'/shop/fnb/' + brand.apiCode">
+                  <img v-if="brand.bannerDisplay" :src="brand.bannerDisplay" width="200" height="200" :alt="brand.name" />
+                  {{ brand.bannerDisplay ? '' : brand.name }}
+                </router-link>
               </li>
             </ul>
           </div>
@@ -95,6 +97,7 @@ export default {
       let fbrands = this.brands.filter((it) => it.type == "FOOD");
       return fbrands.map((it) => {
         let brandBanner = it.custom.brandBanner;
+        if(it.imageId) brandBanner = it.imageId;
         return {
           ...it,
           bannerDisplay: brandBanner ? this.getImage(brandBanner, 'width=300') : '',
