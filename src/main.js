@@ -126,7 +126,7 @@ document.body.addEventListener("click", (e) => {
   let el = e.target;
   if (!(el instanceof Element)) return;
 
-  const blockTitle = el.closest(".nav-dropdown-item-block-title");
+  const blockTitle = el.closest(".nav-dropdown-item-block-title-trigger");
   if (blockTitle) {
     const block = blockTitle.closest(".nav-dropdown-item-block");
     const list = block?.querySelector(".nav-dropdown-item-block-list");

@@ -33,7 +33,9 @@
           <div class="nav-dropdown-item-block">
             <div class="nav-dropdown-item-block-title">
               <router-link :to="itemLink('category', cat.name)">{{ cat.name }}</router-link> 
-              <i v-if="cat.hasChildren" class="material-icons nav-trigger">chevron_right</i>
+              <div v-if="cat.hasChildren" class="nav-dropdown-item-block-title-trigger">
+                <i class="material-icons nav-trigger">chevron_right</i>
+              </div>
             </div>
             <ul class="nav-dropdown-item-block-list">
               <li v-for="(item, index) in cat.children" :key="index">
