@@ -125,9 +125,9 @@ export default {
 						{
 							default: () => {
 								return h(BaseIcon, {
-									class: "sd-icon-btn-md sd-icon-btn-ghost accordion__header__toggle",
+									class: `sd-icon-btn-md sd-icon-btn-ghost accordion__header__toggle ${this.isDark ? "dark" : ""}`,
 									iconName: this.togglerState,
-									iconSize: "lg",
+									iconSize: "md",
 									onClick: this.toggleAccordion,
 									style: "padding: 16px",
 								});
@@ -202,10 +202,10 @@ export default {
 		&__toggle {
 			grid-area: toggle;
 			padding: 0 !important;
-			&:not(.dark){
+			&:is(.dark){
 				color: $white;
 			}
-			&:is(.dark){
+			&:not(.dark){
 				color: $secondary-color-70;
 			}
 		}

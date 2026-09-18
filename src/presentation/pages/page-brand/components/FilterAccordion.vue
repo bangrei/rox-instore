@@ -12,8 +12,8 @@
             </base-accordion>
             <base-accordion v-if="categoriesFilter.length" ref="accordionCategories" accordion-title="Category" accordion-dark-header="true">
                 <div class="checkbox-wrapper">
-                    <div class="checkbox" v-for="(b, i) in categoriesFilter" :key="i">
-                        <input type="checkbox" v-model="b.clicked" :checked="b.clicked" @click="toggleFilterCategory(i)">
+                    <div class="checkbox" v-for="(b, i) in categoriesFilter" :key="b.id || b.name || i">
+                        <input type="checkbox" :checked="b.clicked" @click.prevent="toggleFilterCategory(i)">
                         <span class="checkbox-label">{{ b.name }}</span>
                     </div>
                 </div>
@@ -202,6 +202,20 @@ export default {
             outStock: 0,
         };
     },
+    computed: {
+        storeCategories() {
+            return this.$store.getters.getCategories || [];
+        },
+        categorySource() {
+            if (Array.isArray(this.categories) && this.categories.length) {
+                return this.categories;
+            }
+            if (Array.isArray(this.storeCategories) && this.storeCategories.length) {
+                return this.storeCategories;
+            }
+            return this.categoriesFromProducts();
+        },
+    },
     watch: {
         rangeFrom() {
             this.resetFilterPrice();
@@ -212,15 +226,25 @@ export default {
         available() {
             // Only emit when the user actually changes availability, not on setup.
         },
-        categories: {
-            handler(){
-                this.initCategories()
+        categorySource: {
+            handler() {
+                this.initCategories();
             },
             immediate: true,
         },
+        selectedCategories: {
+            handler() {
+                this.initCategories();
+            },
+        },
+        products: {
+            handler() {
+                this.initCategories();
+            },
+        },
         brands: {
-            handler(){
-                this.initBrands()
+            handler() {
+                this.initBrands();
             },
             immediate: true,
         },
@@ -238,6 +262,26 @@ export default {
         }
     },
     methods: {
+        categoriesFromProducts() {
+            const products = this.products || [];
+            const byId = new Map((this.storeCategories || []).map((c) => [c.id, c]));
+            const seen = new Set();
+            const out = [];
+            for (let p = 0; p < products.length; p++) {
+                const list = products[p]?.categories || [];
+                for (let i = 0; i < list.length; i++) {
+                    const entry = list[i];
+                    let cat = null;
+                    if (entry && typeof entry === "object") cat = entry;
+                    else cat = byId.get(entry);
+                    const name = cat?.name;
+                    if (!name || seen.has(name)) continue;
+                    seen.add(name);
+                    out.push(cat);
+                }
+            }
+            return out;
+        },
         initBrands(){
             if (!isEmpty(this.brands)) {
                 this.brandsFilter = this.brands.map((it) => {
@@ -253,47 +297,39 @@ export default {
             }
         },
         initCategories(){
-            if (!isEmpty(this.categories)) {
-                let categories = this.categories.map((it) => {
-                    return {
-                        ...it,
-                        clicked: this.selectedCategories.includes(it.id),
-                    };
+            const source = Array.isArray(this.categorySource) ? this.categorySource : [];
+            if (!source.length) return;
+            const selectedIds = this.selectedCategories || [];
+            const prev = this.categoriesFilter || [];
+            const cats = [];
+            const seen = new Set();
+            for (let i = 0; i < source.length; i++) {
+                const it = source[i];
+                if (!it) continue;
+                const name = it.name || it.categoryName || it.title;
+                if (name == null || seen.has(name)) continue;
+                seen.add(name);
+                const wasClicked = prev.find((c) => c.id == it.id || c.name == name)?.clicked;
+                cats.push({
+                    ...it,
+                    name,
+                    clicked: wasClicked == true || selectedIds.includes(it.id),
                 });
-                let cats = [];
-                for (let i = 0; i < categories.length; i++){
-                    let one = categories[i];
-                    let exists = cats?.find((c) => c.name == one.name);
-                    if (!exists) cats.push(one);
-                }
-                /*
-                let parents = this.mapProductCategories();
-                cats = cats.filter((c) => {
-                    let hasParent = parents.find((p) => p.name.toLowerCase() == c.name.toLowerCase());
-                    if (hasParent) return false;
-                    let hasSub = parents.find((p) => p.subCategories?.filter((s) => s.toLowerCase() == c.name.toLowerCase()).length > 0);
-                    if (hasSub) return false;
-                    let hasChildren = parents.find((p) => {
-                        return p.children?.filter((s) => {
-                            return s.items.filter((n) => n.toLowerCase() == c.name.toLowerCase()).length > 0;
-                        }).length > 0;
-                    });
-                    if (hasChildren) return false;
-                    return true;
-                })
-                */
-                if (!isEmpty(this.selectedCategories)) {
-                    let ctx = [];
-                    for (let i = 0; i < cats.length; i++){
-                        if (cats[i].clicked) ctx.push(i);
-                    }
-                    this.selectedCategoryIndexes = ctx;
-                }
-                this.categoriesFilter = cats?.sort((a,b) => a.name.localeCompare(b.name));
-                this.$nextTick(() => {
-                    if (!isEmpty(this.selectedCategories)) this.$refs.accordionCategories.isClosed = true;
-                })
             }
+            cats.sort((a, b) => String(a?.name || "").localeCompare(String(b?.name || "")));
+            if (!isEmpty(selectedIds)) {
+                const ctx = [];
+                for (let i = 0; i < cats.length; i++) {
+                    if (cats[i].clicked) ctx.push(i);
+                }
+                this.selectedCategoryIndexes = ctx;
+            }
+            this.categoriesFilter = cats;
+            this.$nextTick(() => {
+                if (this.categoriesFilter.length && this.$refs.accordionCategories) {
+                    this.$refs.accordionCategories.isClosed = true;
+                }
+            });
         },
         setAvailability(val) {
             if (val == this.available) this.available = 0;
@@ -357,7 +393,10 @@ export default {
             let ix = this.selectedCategoryIndexes.indexOf(index);
             if (ix >= 0) this.selectedCategoryIndexes.splice(ix, 1);
             else this.selectedCategoryIndexes.push(index);
-            // this.emitFiltered();
+            this.categoriesFilter = this.categoriesFilter.map((p, i) => {
+                if (i == index) return { ...p, clicked: !p.clicked };
+                return p;
+            });
         },
         toggleFilterPrice(index) {
             let ix = this.selectedPriceIndexes.indexOf(index);
@@ -436,13 +475,22 @@ export default {
         window.addEventListener('resize', () => {
             this.isDesktop = window.innerWidth >= 672;
         });
+        this.initCategories();
+        this.initBrands();
         setTimeout(() => {
-            this.$refs.accordionPrice.isClosed = true;
-            this.$refs.accordionRange.isClosed = true;
-            if (!this.hideAvailability) {
+            if (this.$refs.accordionPrice) this.$refs.accordionPrice.isClosed = true;
+            if (this.$refs.accordionRange) this.$refs.accordionRange.isClosed = true;
+            if (this.$refs.accordionCategories && this.categoriesFilter.length) {
+                this.$refs.accordionCategories.isClosed = true;
+            }
+            if (!this.hideAvailability && this.$refs.accordionInventory) {
                 this.$refs.accordionInventory.isClosed = true;
             }
         }, 500);
+    },
+    mounted() {
+        this.initCategories();
+        this.initBrands();
     }
 };
 </script>
