@@ -32,7 +32,8 @@
           v-for="cat in categories" :key="cat.name">
           <div class="nav-dropdown-item-block">
             <div class="nav-dropdown-item-block-title">
-              {{ cat.name }} <i v-if="cat.hasChildren" class="material-icons nav-trigger">chevron_right</i>
+              <router-link :to="itemLink('category', cat.name)">{{ cat.name }}</router-link> 
+              <i v-if="cat.hasChildren" class="material-icons nav-trigger">chevron_right</i>
             </div>
             <ul class="nav-dropdown-item-block-list">
               <li v-for="(item, index) in cat.children" :key="index">
@@ -130,7 +131,11 @@ export default {
         if (it.toUpperCase() == it) return it;
         return it.toLowerCase();
       });
-      if (type == "brand") names = [name];
+      if (type == "brand") {
+        const brand = this.brands.find((it) => it.apiCode == name);
+        if(brand.type == "FOOD") return `/shop/fnb/${name}`;
+        names = [name];
+      }
       return `/collections/${type}/${names.join('-')}`;
     },
     isActiveBrand(item) {
@@ -443,6 +448,13 @@ export default {
       }
       &:not(.in-column):hover{
         opacity: 0.7;
+      }
+      .nav-trigger {
+        font-size: 18px;
+      }
+      a {
+        text-decoration: none;
+        color: $secondary-color-80;
       }
     }
     .nav-dropdown-item-block-list {
