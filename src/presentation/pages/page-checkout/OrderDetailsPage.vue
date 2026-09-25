@@ -19,7 +19,7 @@
 								<div :class="['track-item', {'active' : statusIndex == 3, 'passed': statusIndex > 3}]">
 									In Transit
 								</div>
-								<div :class="['track-item', {'active' : statusIndex == 4, 'passed': statusIndex > 4}]">
+								<div :class="['track-item', {'active' : statusIndex == 4, 'passed': statusIndex >= 4}]">
 									Completed
 								</div>
 							</div>
@@ -198,7 +198,17 @@ export default {
 			let pm = Array.from(payments).filter((value, index, self) =>
 				index === self.findIndex((t) => t.trackingId === value.trackingId && t.status === value.status)
 			);
-			return isEmpty(pm) ? "Unpaid" : (pm[0].type.replaceAll("_", " "));
+      if(isEmpty(pm)) return "Unpaid";
+      const card = pm[0].creditCardToken;
+      if(!isEmpty(card)){
+        let cardNames = [];
+        if(pm.paymentDisplay) cardNames.push(pm.paymentDisplay);
+        if(card.cardType) cardNames.push(card.cardType)
+        if(card.maskedAccountNumber) cardNames.push(`****${card.maskedAccountNumber}`);
+        if(cardNames?.length > 0) return cardNames.join(' ');
+      }
+      if(pm.paymentDisplay) return pm.paymentDisplay;
+			return pm[0].type.replaceAll("_", " ");
 		},
 		products() {
       if (isEmpty(this.order)) return [];
@@ -254,6 +264,11 @@ export default {
 		orderStatusDisplay() {
 			if (isEmpty(this.order)) return "";
 			let status = this.order.orders[0].status;
+      let collectAtStore = false;
+      for(let i = 0; i < this.order.orders.length; i++){
+        if(this.order.orders[i].collectAtStore) collectAtStore = true;
+      }
+      if(collectAtStore) return 'Picked up';
       if(!status) return "Unknown";
       return status.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 		},
