@@ -51,7 +51,7 @@
             <i class="material-icons filter-icon">chevron_right</i>
           </div>
           <span :class="['product-length', {'loading': loading, 'is-fetching': isFetching}]">
-            {{ isFetching ? 'Fetching...' : (productCount + ' results') }} 
+            {{ isFetching ? 'We are searching the products you are looking for' : (productCount + ' product' + (productCount> 1 ?'s':'') + ' found') }}  
             {{ keySubmitted && isFetching ? ` for ${keySubmitted}` : "" }}
           </span>
           <div class="filter-wrapper">
