@@ -32,7 +32,7 @@
 								<div class="order-number-wrapper">
 									<span class="number">Invoice {{ orderNumber }}</span>
 									<!-- <router-link class="order-link" :to="'/receipt/' + orderNumber">See Invoice</router-link> -->
-                   <button class="order-link" @click="toggleShowInvoice">See Invoice</button>
+                  <button class="order-link" @click="toggleShowInvoice">See Invoice</button>
 								</div>
 								<div class="order-number-wrapper">
 									<span>Time Placed</span>
@@ -53,7 +53,7 @@
                 <div class="product-wrapper" v-for="(item, i) in ord.items" :key="i">
                   <div class="product">
                     <div class="product-img">
-                      <img v-lazy="item.imageDisplay" :alt="item.productName" />
+                      <img :src="item.imageDisplay" :alt="item.productName" />
                     </div>
                     <div class="product-info">
                       <span class="product-brand">{{ item.brand.name }}</span>
@@ -161,8 +161,8 @@
 <script>
 import LayoutVariantTwo from "@/components/layout/LayoutVariantTwo.vue";
 import utility from "@/presentation/mixins/utility.js";
-import isEmpty from "lodash/isEmpty";
-import dayjs from "@/utils/dayjs";
+import { isEmpty } from "lodash";
+import moment from "moment-timezone";
 import { getOrder, getInventory } from "@/connector/v4/productConnector";
 import SuggestedProducts from "../page-product/components/SuggestedProducts.vue";
 import ReceiptContent from "./components/ReceiptContent.vue";
@@ -183,9 +183,9 @@ export default {
       booking: null,
       order: null,
 			showCancellation: false,
-      showInvoice: false,
-      loadingInvoice: true,
       reorderingIds: [],
+      showInvoice: false,
+      loadingInvoice: true
     };
   },
   watch: {},
@@ -202,12 +202,12 @@ export default {
       const card = pm[0].creditCardToken;
       if(!isEmpty(card)){
         let cardNames = [];
-        if(pm[0].paymentDisplay) cardNames.push(pm[0].paymentDisplay);
+        if(pm.paymentDisplay) cardNames.push(pm.paymentDisplay);
         if(card.cardType) cardNames.push(card.cardType)
         if(card.maskedAccountNumber) cardNames.push(`****${card.maskedAccountNumber}`);
         if(cardNames?.length > 0) return cardNames.join(' ');
       }
-      if(pm[0].paymentDisplay) return pm[0].paymentDisplay;
+      if(pm.paymentDisplay) return pm.paymentDisplay;
 			return pm[0].type.replaceAll("_", " ");
 		},
 		products() {
@@ -227,7 +227,7 @@ export default {
     },
 		orderDate() {
 			if (isEmpty(this.order)) return "";
-			return dayjs(this.order.placeTime).tz('Asia/Singapore').format('DD MMM YYYY HH:mm A');
+			return moment.tz(this.order.placeTime, 'Asia/Singapore').format('DD MMM YYYY HH:mm A');
 		},
 		outletEtaDate(){
 			if(isEmpty(this.order)) return "";
@@ -439,7 +439,7 @@ export default {
 				if (store) eta = placeTime + ((store.transitTime + store.kitchenPrepTime + store.bufferTime) * 360);
 			}
 			if(!eta) return "";
-			return dayjs(eta).tz('Asia/Singapore').format('DD MMM YYYY HH:mm A');
+			return moment.tz(eta, 'Asia/Singapore').format('DD MMM YYYY HH:mm A');
 		},
 		validOrder(order){
 			if(order.orders) return order.orders;
