@@ -202,12 +202,12 @@ export default {
       const card = pm[0].creditCardToken;
       if(!isEmpty(card)){
         let cardNames = [];
-        if(pm.paymentDisplay) cardNames.push(pm.paymentDisplay);
+        if(pm[0].paymentDisplay) cardNames.push(pm[0].paymentDisplay);
         if(card.cardType) cardNames.push(card.cardType)
         if(card.maskedAccountNumber) cardNames.push(`****${card.maskedAccountNumber}`);
         if(cardNames?.length > 0) return cardNames.join(' ');
       }
-      if(pm.paymentDisplay) return pm.paymentDisplay;
+      if(pm[0].paymentDisplay) return pm[0].paymentDisplay;
 			return pm[0].type.replaceAll("_", " ");
 		},
 		products() {
