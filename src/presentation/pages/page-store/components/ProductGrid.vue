@@ -462,6 +462,7 @@ export default {
 	.loading-container {
 		width: 100%;
 		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
 		gap: 20px;
 		.loading-item {
 			width: 100%;
