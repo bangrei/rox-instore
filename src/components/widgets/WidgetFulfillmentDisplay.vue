@@ -2,42 +2,15 @@
   <div class="cart-options">
     <div class="cart-fulfillment-title">
       <span>Fulfillment Options</span>
-      <i class="material-icons" v-if="!isFnBOrders" @click="toggleFulfillmentModal">chevron_right</i>
+      <!-- <i class="material-icons" v-if="!isFnBOrders" @click="toggleFulfillmentModal">chevron_right</i> -->
     </div>
     <div class="cart-fulfillment-wrapper">
-      <!-- <div class="cart-fulfillment-icon">
-        <span class="material-icons-outlined">{{
-          dineType == "RETAIL_DELIVERY" ? "local_shipping" : "hail"
-        }}</span>
-      </div> -->
       <div class="cart-fulfillment-content">
         <div class="inline-info">
           <span class="inline-info-text">
-            <i class="material-icons-outlined">{{
-              dineType == "RETAIL_DELIVERY" ? "local_shipping" : "hail"
-            }}</i>
+            <i class="material-icons-outlined">hail</i>
             {{ dineTypeDisplay }}
           </span>
-          
-          <!-- <div class="free-text selectable" 
-            v-if="dineType == 'RETAIL_DELIVERY'" 
-            @click="toggleModal()"
-          >
-            <span>{{ !isEmpty(selectedAddress) ? 'Change' : 'Select' }} address</span>
-            <span class="material-icons-outlined">drive_file_rename_outline</span>
-          </div> -->
-          <span class="free-text" v-if="dineType !== 'RETAIL_DELIVERY'">Free</span>
-         
-        </div>
-        <div class="selected-address-con"
-          @click="toggleModal()"
-          v-if="!isEmpty(selectedAddress) && dineType == 'RETAIL_DELIVERY'">
-          <span class="selected-address-name">{{ selectedAddress.name }}</span>
-          <span class="selected-address-desc">{{ selectedAddress.string }}</span>
-        </div>
-        <div v-else-if="dineType == 'RETAIL_DELIVERY'" class="selected-address-con" 
-          @click="toggleModal()">
-          <span class="selected-address-desc text-no-address">Address is not selected yet..</span>
         </div>
       </div>
     </div>
@@ -265,7 +238,7 @@ import moment from 'moment-timezone';
 import { homeService } from "@/bloc/services";
 import utility from "@/presentation/mixins/utility.js";
 import { isEmpty } from "lodash";
-import { getDeliveryRegions } from "../../connector/v4/productConnector";
+// import { getDeliveryRegions } from "../../connector/v4/productConnector";
 export default {
   name: "WidgetFulfillmentDisplay",
   mixins: [utility],
@@ -311,6 +284,7 @@ export default {
       regionsDropdownList: [],
       isDestroyed: false,
       fetchingAddress: false,
+      defaultRegion: "Metro Manila",
     };
   },
   computed: {
@@ -319,11 +293,7 @@ export default {
       return this.$store.getters.getDineType;
     },
     dineTypeDisplay() {
-      let type = this.dineType;
-      // let isMultipleOutlets = this.mapCartOutlets().length > 1;
-      // let atStore = isMultipleOutlets ? "outlets" : "store";
-      if (type !== "RETAIL_DELIVERY") return `Pick up Instore`;
-      return "Delivery to my address";
+      return "Pick up Instore";
     },
     stores() {
       return this.mapCartOutlets().reduce(
@@ -661,6 +631,52 @@ export default {
       if (!event.target.closest(".dropdown-component")) {
         self.showRegions = false;
       }
+    },
+    initDefaultAddress(){
+      if(!this.isOrderOmisell()) return;
+      let parentCarts = this.$store.getters.getCarts || {};
+      let carts = [];
+      for(let k in parentCarts){
+        carts = [...carts, ...parentCarts[k]]
+      }
+      let selectedCarts = carts?.filter((cx) => cx.checked == true);
+      let fnbCarts = this.cartsBrandType(selectedCarts, "FOOD");
+      if(fnbCarts?.length) return;
+      if(!selectedCarts?.length) return;
+      let index = 0;
+      let lastIndex = selectedCarts.length - 1;
+      const exec = async () => {
+        this.processing = true;
+        /*
+        const oneCart = selectedCarts[index];
+        const outletAddress = oneCart.outletStore?.address;
+        const storeCart = oneCart.outletStore.stores.find((s) => s.id == oneCart.storeId);
+        const address = {
+          ...(storeCart?.address ? storeCart.address : outletAddress),
+          ...{region: this.defaultRegion}
+        };
+        */
+        const address = {
+          line1: "R.O.X. Bonifacio Highstreet, 7th Ave, Taguig, Metro Manila, Fort Bonifacio",
+          city: "Taguig City",
+          region: this.defaultRegion,
+          postalCode: "1635",
+          countryCode: "PH"
+        }
+        this.$emit('change-address', (res) => {
+          this.processing = false;
+          if (!res.success) {
+            if(index == lastIndex) return;
+            index++;
+            return exec();
+          }
+          this.selectedAddress = address;
+          this.$store.dispatch("setDeliveryAddress", address);
+          this.showAddresses = true;
+          this.toggleModal();
+        }, address, index == lastIndex ? true : false);
+      }
+      exec();
     }
   },
   beforeUnmount() {
@@ -677,11 +693,13 @@ export default {
     }
     this.clickFulfillmentOption(this.$store.getters.getDineType);
     this.savedAddresses = [];
+    /*
     let res = await getDeliveryRegions();
     if (res.success) {
       this.regionsDropdownList = res.regions || [];
     }
     this.regions = this.regionsDropdownList;
+    */
     if (this.isLoggedIn()) {
       let customer = this.$store.getters.getCustomer;
       this.savedAddresses = customer.addresses;
@@ -694,6 +712,9 @@ export default {
         }).sort((a,b) => (a.name || a.string).localeCompare((b.name || b.string)));
       }
       window.addEventListener("click", this.dropDownClickHandler);
+    }
+    if(!this.selectedAddress){
+      this.initDefaultAddress();
     }
   }
 };

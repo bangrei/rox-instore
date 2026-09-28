@@ -629,6 +629,7 @@ export default {
             let self = this;
             let callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : () => { };
             let address = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : () => null;
+            let showError = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : () => true;
             this.$store.dispatch("setDeliveryAddress", address);
             self.processing = true;
             let parent = self.$store.getters.getCarts;
@@ -651,7 +652,7 @@ export default {
                     self.processing = false;
                     remakeCarts();
                     self.$store.dispatch("setDeliveryAddress", null);
-                    if (error.message) self.showNotification("alert", "error_outline", `Something went wrong! ${error.message}`);
+                    if (error.message && showError) self.showNotification("alert", "error_outline", `Something went wrong! ${error.message}`);
                     callback(error);
                 }, false, true, parent[outletCode], outletCode);
             }
