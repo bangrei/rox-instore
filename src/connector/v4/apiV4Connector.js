@@ -5,12 +5,46 @@ import { BFM_CONFIG, EUNOIA_CONFIG } from "../apiConfig";
 import { buildRequestKey, dedupeRequest } from "../requestDeduper";
 import CryptoJS from "crypto-js";
 
+const REQUEST_TIMEOUT_MS = 60000;
+const TIMEOUT_RETRY_LIMIT = 2;
+
 const generateSignature = (payload) => {
   const signature = CryptoJS
       .HmacSHA256(JSON.stringify(payload), process.env.VUE_APP_SIGNATURE_KEY)
       .toString();
   return signature;
 }
+
+const isTimeoutError = (error) => {
+  if (!error) return false;
+  if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") return true;
+  return String(error.message || "").toLowerCase().includes("timeout");
+};
+
+const attachResponseInterceptors = (api) => {
+  api.interceptors.response.use(
+    (response) => {
+      if (response.data.code && response.data.code === -3) {
+        store.dispatch("clearSession");
+        router.push({ name: "LoginPage" });
+        return Promise.reject("Session Expired");
+      }
+      return response;
+    },
+    (error) => {
+      const config = error.config;
+      if (!config || !isTimeoutError(error)) {
+        return Promise.reject(error);
+      }
+      config.__timeoutRetryCount = config.__timeoutRetryCount || 0;
+      if (config.__timeoutRetryCount >= TIMEOUT_RETRY_LIMIT) {
+        return Promise.reject(error);
+      }
+      config.__timeoutRetryCount += 1;
+      return api.request(config);
+    }
+  );
+};
 
 export const EUNOIA_APIV4_CONNECTOR = (options) => {
   let params = {
@@ -33,33 +67,14 @@ export const EUNOIA_APIV4_CONNECTOR = (options) => {
   let signature = generateSignature(params);
   let api = axios.create({
     baseURL: EUNOIA_CONFIG.gateway,
-    timeout: 60000,
+    timeout: REQUEST_TIMEOUT_MS,
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${signature}`
     },
   });
 
-  // Add a response interceptor
-  api.interceptors.response.use(
-    (response) => {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-
-      // fail code in BFM => -3
-      if (response.data.code && response.data.code === -3) {
-        store.dispatch("clearSession");
-        router.push({ name: "LoginPage" });
-        return Promise.reject("Session Expired");
-      }
-      return response;
-    },
-    (error) => {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      return Promise.reject(error);
-    }
-  );
+  attachResponseInterceptors(api);
 
   const post = () => {
     const key = buildRequestKey({
@@ -122,33 +137,14 @@ export const BFM_APIV4_CONNECTOR = (options) => {
   let signature = generateSignature(params);
   const api = axios.create({
     baseURL: BFM_CONFIG.gateway,
-    timeout: 60000,
+    timeout: REQUEST_TIMEOUT_MS,
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${signature}`
     },
   });
 
-  // Add a response interceptor
-  api.interceptors.response.use(
-    (response) => {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-
-      // fail code in BFM => -3
-      if (response.data.code && response.data.code === -3) {
-        store.dispatch("clearSession");
-        router.push({ name: "LoginPage" });
-        return Promise.reject("Session Expired");
-      }
-      return response;
-    },
-    (error) => {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      return Promise.reject(error);
-    }
-  );
+  attachResponseInterceptors(api);
 
   const post = () => {
     const key = buildRequestKey({
