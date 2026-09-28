@@ -361,7 +361,6 @@ import moment from 'moment-timezone';
 import ProductVariants from "./components/ProductVariants.vue";
 import ProductCarousel from "./components/ProductCarousel.vue";
 import SuggestedProducts from "./components/SuggestedProducts.vue";
-import { withAbContext } from "@/lib/abTest";
 
 export default {
 	name: "ProductDetails",
@@ -1078,11 +1077,11 @@ export default {
             // let draft = cartId ? false : true;
             this.testOrder(false, function () {
                 if(!updateProduct) {
-                    window.dataLayer.push(withAbContext({
+                    window.dataLayer.push({
                         event: "add_to_cart",
                         item_id: self.product.id,
                         item_name: self.product.name
-                    }));
+                    });
                 }
                 self.processing = false;
                 parentCarts = self.$store.getters.getCarts;
@@ -1472,12 +1471,12 @@ export default {
                 }
                 if(!prd) prd = products.find((p) => p.id == productId);
 
-                window.dataLayer.push(withAbContext({
+                window.dataLayer.push({
                     event: "view_item",
                     item_id: productId,
                     item_name: !isEmpty(prd) ? prd.name : "",
                     page_location: window.location.href
-                }));
+                });
                 
                 this.banners = [];
                 if (!isEmpty(prd)) {
