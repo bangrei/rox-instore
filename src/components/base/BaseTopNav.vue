@@ -1,9 +1,9 @@
 <template>
   <div class="base-top-nav-list">
     <router-link :to="allBrands" :class="['top-nav-item bold']">Shop Now</router-link>
-    <div class="top-nav-item with-trigger" v-if="brands.length > 0">
-      <span class="nav-trigger">Brands</span>
-      <div class="nav-dropdown wide">
+    <div class="top-nav-item with-trigger" v-if="(brands.length > 0 && inited) || !inited">
+      <span :class="['nav-trigger', {'disabled': !inited}]">Brands</span>
+      <div class="nav-dropdown wide" v-if="inited">
         <div class="nav-dropdown-item special">
           <div class="special-container">
             <!-- <div class="special-content">
@@ -25,8 +25,8 @@
         </div>
       </div>
     </div>
-    <div class="top-nav-item with-trigger" v-if="categories.length > 0">
-      <span class="nav-trigger">Category</span>
+    <div class="top-nav-item with-trigger" v-if="(categories.length > 0 && inited) || !inited">
+      <span :class="['nav-trigger', {'disabled': !inited}]">Category</span>
       <div class="nav-dropdown wide in-column">
         <div class="nav-dropdown-category" 
           v-for="cat in categories" :key="cat.name">
@@ -90,6 +90,7 @@ export default {
       showBrands: false,
       isTablet: false,
       specialBrands: [],
+      inited: false,
     }
   },
   computed: {
@@ -180,6 +181,9 @@ export default {
     if (!this.$store.getters.hasInited) {
       await this.refreshMainData(true);
       this.$store.dispatch('setInited', true);
+      this.inited = true;
+    } else {
+      this.inited = true;
     }
     this.initNav();
   },
@@ -257,6 +261,10 @@ export default {
   & * {
     text-decoration: none;
     color: $secondary-color-90;
+  }
+  &:is(.disabled){
+    pointer-events: none;
+    color: $secondary-color-50;
   }
 }
 .nav-dropdown {
