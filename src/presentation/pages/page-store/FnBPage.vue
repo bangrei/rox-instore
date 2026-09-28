@@ -310,6 +310,7 @@ export default {
     align-items: center;
     i {
       color: $white !important;
+      font-size: 1.2em !important;
     }
   }
   .breadcrumb-item {
