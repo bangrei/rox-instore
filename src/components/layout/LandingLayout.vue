@@ -13,7 +13,7 @@
                 width="70"
                 height="50"
                 alt="rxc logo"
-                :src="require('@/assets/images/rox-logo-2025.jpeg')"
+                :src="require('@/assets/images/rox-logo-2026.png')"
             />
             <slot name="content"></slot>
         </div>

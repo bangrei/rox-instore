@@ -21,7 +21,7 @@
           />
           <img
             v-else
-            :src="require('@/assets/images/rox-logo-2025.jpeg')"
+            :src="require('@/assets/images/rox-logo-2026.png')"
             :alt="prd.name"
           />
         </div>
@@ -346,7 +346,7 @@ export default {
         background: $primary-color-10 !important;
         &::before {
           content: "";
-          background-image: url("@/assets/images/rox-logo-2025.jpeg");
+          background-image: url("@/assets/images/rox-logo-2026.png");
           background-position: center;
           background-repeat: no-repeat;
           width: 75px;

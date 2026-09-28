@@ -107,9 +107,9 @@ export default {
 	watch: {},
     computed: {
         getEventImage() {
-            if (isEmpty(this.event)) return require('@/assets/images/rox-logo-2025.jpeg');;
+            if (isEmpty(this.event)) return require('@/assets/images/rox-logo-2026.png');;
             let banners = this.event.banners;
-            if (isEmpty(banners)) return require('@/assets/images/rox-logo-2025.jpeg');
+            if (isEmpty(banners)) return require('@/assets/images/rox-logo-2026.png');
             return this.$store.getters.cloudinaryURL + banners[0].id;
 
         },

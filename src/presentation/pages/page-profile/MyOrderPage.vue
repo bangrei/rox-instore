@@ -395,7 +395,7 @@ export default {
           items: it.items.map((n) => {
             return {
               ...n,
-              imageDisplay: !isEmpty(n.banners) ? n.banners[0] : require('@/assets/images/rox-logo-2025.jpeg')
+              imageDisplay: !isEmpty(n.banners) ? n.banners[0] : require('@/assets/images/rox-logo-2026.png')
             }
           }),
         });

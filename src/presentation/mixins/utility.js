@@ -1,11 +1,11 @@
 import { eventService, homeService, storeService, productService } from "@/bloc/services";
 import { EUNOIA_CONFIG } from "@/connector/apiConfig";
 import {
-  getCart,
-  getFavorites,
-  getInventory,
-  getMenu,
-  postOutletOrder,
+    getCart,
+    getFavorites,
+    getInventory,
+    getMenu,
+    postOutletOrder,
 } from "@/connector/v4/productConnector";
 import { getPromotions } from "@/connector/v4/storeConnector.js";
 import { isEmpty } from "lodash";
@@ -73,8 +73,8 @@ export default {
         images = [
           {
             index: 0,
-            thumbnail: require("@/assets/images/rox-logo-2025.jpeg"),
-            image: require("@/assets/images/rox-logo-2025.jpeg"),
+            thumbnail: require("@/assets/images/rox-logo-2026.png"),
+            image: require("@/assets/images/rox-logo-2026.png"),
           },
         ];
       }
@@ -709,11 +709,11 @@ export default {
         images.sort((a, b) => a.sortIndex - b.sortIndex);
         img = images[0].id;
       }
-      if (!img) return require("@/assets/images/rox-logo-2025.jpeg");
+      if (!img) return require("@/assets/images/rox-logo-2026.png");
       return this.$store.getters.cloudinaryURL + img + "?width=250";
     },
     getImage(image, prop) {
-      if (!image) return require("@/assets/images/rox-logo-2025.jpeg");
+      if (!image) return require("@/assets/images/rox-logo-2026.png");
       if (!prop) return `${this.$store.getters.cloudinaryURL}${image}`;
       return `${this.$store.getters.cloudinaryURL}${image}?${prop}`;
     },

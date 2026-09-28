@@ -4,18 +4,18 @@
         <router-link to="/" class="desktop-logo">
             <img
                 width="90"
-                height="50"
+                height="30"
                 alt="rxc logo"
-                :src="require('@/assets/images/rox-logo-2025.jpeg')"
+                :src="require('@/assets/images/rox-logo-2026.png')"
             />
         </router-link>
         <base-top-nav/>
         <router-link to="/" class="router-nav mobile-logo">
             <img class="mobile-logo"
                 width="90"
-                height="50"
+                height="30"
                 alt="rxc logo"
-                :src="require('@/assets/images/rox-logo-2025.jpeg')"
+                :src="require('@/assets/images/rox-logo-2026.png')"
             />
         </router-link>
         <div class="header-nav-part right">
@@ -600,7 +600,7 @@ export default {
     .desktop-logo {
         display: none;
     }
-    .mobile-logo {
+    .mobile-logo img {
         object-fit: contain;
     }
     .header-nav {
@@ -755,9 +755,14 @@ export default {
         .desktop-logo {
             display: block;
             min-width: 70px;
-            object-fit: contain;
+            max-width: 120px;
             margin-right: 12px;
             text-decoration: none;
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
         }
         .mobile-logo {
             display: none !important;

@@ -23,7 +23,7 @@
 		</div>
 		<div class="nudge-image">
 			<img v-if="nudge.image" :src="nudge.image" :class="{'aligned': aligned}"/>
-			<img v-else :src="require('@/assets/images/rox-logo-2025.jpeg')" :class="{'aligned': aligned}"/>
+			<img v-else :src="require('@/assets/images/rox-logo-2026.png')" :class="{'aligned': aligned}"/>
 		</div>
 		<div class="nudge-card-footer-con">
 			<div class="footer-desc-con">

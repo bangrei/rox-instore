@@ -117,7 +117,7 @@ export default {
         images.sort((a, b) => a.sortIndex - b.sortIndex);
         img = images[0].id;
       }
-      if (!img) return require("@/assets/images/rox-logo-2025.jpeg");
+      if (!img) return require("@/assets/images/rox-logo-2026.png");
       return this.$store.getters.cloudinaryURL + img + "?width=250";
     },
     async fetchWishList() {

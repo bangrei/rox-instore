@@ -368,7 +368,6 @@ export default {
 		display: grid;
 		grid-template-columns: 0px 1fr !important;
 		background: #EEEAE6;
-		padding-top: 115px;
 		.side-left {
 			min-width: 0px !important;
 			max-width: 0px !important;
@@ -385,7 +384,6 @@ export default {
 		width: 100%;
 		display: grid;
 		grid-template-columns: 80px 1fr;
-		padding-top: 115px;
 		.side-left {
 			min-width: 80px;
 		}

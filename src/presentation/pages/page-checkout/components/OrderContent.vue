@@ -457,7 +457,7 @@ export default {
 
                             &::before {
                                 content: "";
-                                background-image: url("@/assets/images/rox-logo-2025.jpeg");
+                                background-image: url("@/assets/images/rox-logo-2026.png");
                                 background-position: center;
                                 background-repeat: no-repeat;
                                 width: 40px;

@@ -24,7 +24,7 @@ export const metaManager = () => {
     },
     {
       property: "og:image",
-      content: require("@/assets/images/rox-logo-2025.jpeg"),
+      content: require("@/assets/images/rox-logo-2026.png"),
     },
     {
       property: "og:url",

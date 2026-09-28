@@ -2,8 +2,19 @@
   <layout-variant-two :active-menu-index="1" :footer-red="true">
     <template v-slot:body>
       <div class="fnb-container">
-        <div class="brand-banner" v-if="selectedBrand?.custom?.brandBanner">
-          <img :src="getImage(selectedBrand.custom.brandBanner,'width=750')" :alt="selectedBrand.name"/>
+        <div class="brand-banner">
+          <picture>
+            <source
+              type="image/webp"
+              :srcset="fnbBanner.srcset"
+              sizes="100vw"
+            />
+            <img
+              :src="fnbBanner.fallback"
+              alt="R.O.X Food & Beverage"
+              loading="eager"
+            />
+          </picture>
         </div>
         <div class="breadcrumbs">
           <router-link class="breadcrumb-link" to="/">Home <i class="material-icons">chevron_right</i></router-link> 
@@ -48,7 +59,7 @@
             </div>
           </div>
         </div>
-        <base-empty-product-state v-if="!loading && !productsDisplay?.length"/>
+        <base-empty-product-state :is-dark="true" v-if="!loading && !productsDisplay?.length"/>
       </div>
     </template>
     <template v-slot:footer>
@@ -75,6 +86,16 @@ export default {
       pageNumber: 0,
       pageSize: 10,
       categoryId: null,
+      fnbBanner: {
+        srcset: `
+          ${require('@/assets/bannerslider/banner-fnb-480w.webp')} 480w,
+          ${require('@/assets/bannerslider/banner-fnb-768w.webp')} 768w,
+          ${require('@/assets/bannerslider/banner-fnb-1200w.webp')} 1200w,
+          ${require('@/assets/bannerslider/banner-fnb-1600w.webp')} 1600w,
+          ${require('@/assets/bannerslider/banner-fnb-1920w.webp')} 1920w
+        `,
+        fallback: require('@/assets/bannerslider/banner-fnb-1600w.webp')
+      },
     }
   },
   computed: {
@@ -147,7 +168,7 @@ export default {
 				images.sort((a, b) => a.sortIndex - b.sortIndex);
 			}
       if(images?.length) return {images, imagesCount: images.length};
-      return {images: [{image: require('@/assets/images/rox-logo-2025.jpeg')}], imagesCount: 0}
+      return {images: [{image: require('@/assets/images/rox-logo-2026.png')}], imagesCount: 0}
 		},
     displayPrice(prd) {
       if (isEmpty(prd.variants)) return this.currency(prd.originalPrice);
@@ -218,10 +239,12 @@ export default {
     }
     if(this.foodBrands?.length){
       if(this.$route?.params?.brandCode){
-        this.selectedBrand = this.foodBrands.find((b) => b.apiCode == this.$route.params.brandCode);
+        this.selectedBrand = this.foodBrands?.find((b) => b.apiCode == this.$route.params.brandCode);
       } else {
-        this.selectedBrand = this.foodBrands.find((b) => b.stores?.length > 0);
+        this.selectedBrand = this.foodBrands?.find((b) => b.stores?.length > 0);
       }
+    } else {
+      this.loading = false;
     }
   }
 }
@@ -255,12 +278,12 @@ export default {
 }
 .brand-banner {
   width: 100%;
-  aspect-ratio: 5/1.5;
   overflow: hidden;
-  img {
+  picture, img {
     width: 100%;
     aspect-ratio: inherit;
     object-fit: cover;
+    display: block;
   }
 }
 .empty-content {
@@ -454,6 +477,11 @@ export default {
         font-size: 2em !important;
       }
     }
+  }
+}
+@media (max-width: 672px) {
+  .brand-banner {
+    aspect-ratio: 5/1.5;
   }
 }
 @media (min-width: 672px) {

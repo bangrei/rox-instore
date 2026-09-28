@@ -29,7 +29,7 @@
 					@click="seeProductDetails(prd)">
 					<span class="cart-marker material-icons-outlined" v-if="prd.cart">assignment_turned_in</span>
 					<img v-if="prd.images.length > 0" :src="prd.images[0].image" :alt="prd.name"/>
-					<img v-else :src="require('@/assets/images/rox-logo-2025.jpeg')" :alt="prd.name"/>
+					<img v-else :src="require('@/assets/images/rox-logo-2026.png')" :alt="prd.name"/>
 				</div>
 				<div class="etalase-content" v-if="!imageOnly">
 					<router-link :to="getProductLink(prd)" class="router-link label">{{ prd.brandNames }}</router-link>
@@ -866,10 +866,10 @@ export default {
 	}
 	@media (min-width: 672px) and (max-width: 1024px) {
 		.loading-container {
-			grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
 		}
 		.etalase-con {
-			grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
 		}
 	}
 	    

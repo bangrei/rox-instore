@@ -33,18 +33,18 @@
           <div class="nav-dropdown-item-block">
             <div class="nav-dropdown-item-block-title">
               <router-link :to="itemLink('category', cat.name)">{{ cat.name }}</router-link> 
-              <div v-if="cat.hasChildren" class="nav-dropdown-item-block-title-trigger">
+              <!-- <div v-if="cat.hasChildren" class="nav-dropdown-item-block-title-trigger">
                 <i class="material-icons nav-trigger">chevron_right</i>
-              </div>
+              </div> -->
             </div>
-            <ul class="nav-dropdown-item-block-list">
+            <!-- <ul class="nav-dropdown-item-block-list">
               <li v-for="(item, index) in cat.children" :key="index">
                 <router-link :to="itemLink('category', [cat.name,item.name].join(' '))">{{ item.name }}</router-link>
               </li>
               <li v-for="(it, ix) in cat.itemsOnly" :key="'only-'+ix">
                 <router-link :to="itemLink('category', [cat.name, it].join(' '))">{{ it }}</router-link>
               </li>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </div>
@@ -55,7 +55,8 @@
         <div class="nav-dropdown-category">
           <div class="nav-dropdown-item-block">
             <div class="nav-dropdown-item-block-title in-column">
-              <span>Food & Beverages</span>
+              <span v-if="foodBrands?.length > 0">Food & Beverages</span>
+              <router-link v-else to="/shop/fnb" class="nav-dropdown-item-block-title">Food & Beverages</router-link>
               <a :href="peakpursuitsLink" class="nav-dropdown-item-block-title">Events</a>
             </div>
             <ul class="nav-dropdown-item-block-list permanent" v-if="foodBrands?.length > 0">

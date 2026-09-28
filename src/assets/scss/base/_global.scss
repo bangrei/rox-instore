@@ -27,6 +27,7 @@ body {
   top: 0;
   z-index: 9999;
   background: $white;
+  border-bottom: 1px solid #ececec;
 }
 .breadcrumb-link {
   text-decoration: none;
@@ -200,13 +201,6 @@ body {
 }
 
 @media (min-width: 672px) {
-  .sd-header {
-    position: fixed;
-    top: 0;
-    z-index: 9999;
-    background: #EEEAE6;
-  }
-
   .header-con {
     color: $secondary-color-90;
     padding-inline: 4%;

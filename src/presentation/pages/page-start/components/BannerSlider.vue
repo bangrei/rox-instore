@@ -1,10 +1,10 @@
 <template>
-  <div class="banner-slider-wrapper">
+  <div class="banner-slider-x">
     <swiper 
       :modules="modules" 
       :slides-per-view="1" 
-      :loop="true" 
-      :autoplay="{ delay: 5000000 }" 
+      :loop="banners.length > 1" 
+      :autoplay="{ delay: 5000 }" 
       :pagination="{
         clickable: true,
         el: '.swiper-pagination',
@@ -48,36 +48,41 @@ export default {
       banners: [
         {
           srcset: `
-            ${require('@/assets/bannerslider/banner-1-480w.webp')} 480w,
-            ${require('@/assets/bannerslider/banner-1-768w.webp')} 768w,
-            ${require('@/assets/bannerslider/banner-1-1200w.webp')} 1200w,
-            ${require('@/assets/bannerslider/banner-1-1600w.webp')} 1600w,
-            ${require('@/assets/bannerslider/banner-1-1920w.webp')} 1920w
+            ${require('@/assets/bannerslider/banner-home-480w.webp')} 480w,
+            ${require('@/assets/bannerslider/banner-home-768w.webp')} 768w,
+            ${require('@/assets/bannerslider/banner-home-1200w.webp')} 1200w,
+            ${require('@/assets/bannerslider/banner-home-1600w.webp')} 1600w,
+            ${require('@/assets/bannerslider/banner-home-1920w.webp')} 1774w
           `,
-          fallback: require('@/assets/bannerslider/banner-1-1600w.webp')
-        },
-        {
-          srcset: `
-            ${require('@/assets/bannerslider/banner-2-480w.webp')} 480w,
-            ${require('@/assets/bannerslider/banner-2-768w.webp')} 768w,
-            ${require('@/assets/bannerslider/banner-2-1200w.webp')} 1200w,
-            ${require('@/assets/bannerslider/banner-2-1600w.webp')} 1600w,
-            ${require('@/assets/bannerslider/banner-2-1920w.webp')} 1920w
-          `,
-          fallback: require('@/assets/bannerslider/banner-2-1600w.webp')
-        },
-        {
-          srcset: `
-            ${require('@/assets/bannerslider/banner-3-480w.webp')} 480w,
-            ${require('@/assets/bannerslider/banner-3-768w.webp')} 768w,
-            ${require('@/assets/bannerslider/banner-3-1200w.webp')} 1200w,
-            ${require('@/assets/bannerslider/banner-3-1600w.webp')} 1600w,
-            ${require('@/assets/bannerslider/banner-3-1920w.webp')} 1920w
-          `,
-          fallback: require('@/assets/bannerslider/banner-3-1600w.webp')
+          fallback: require('@/assets/bannerslider/banner-home-1600w.webp')
         },
       ]
     };
   }
 };
 </script>
+<style scoped lang="scss">
+.banner-slider-x {
+  width: 100%;
+  position: relative;
+  .banner-slider {
+    width: 100%;
+    height: 100%;
+  }
+  .swiper-slide, picture, img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+@media (max-width: 672px) {
+  .banner-slider-x {
+    aspect-ratio: 5/1.5;
+  }
+  .banner-slider {
+    aspect-ratio: 5/1.5;
+  }
+  .swiper-slide, picture, img {
+    aspect-ratio: 5/1.5;
+  }
+}
+</style>

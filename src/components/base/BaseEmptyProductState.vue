@@ -1,5 +1,5 @@
 <template>
-  <div class="empty-wrapper">
+  <div :class="['empty-wrapper', {'dark': isDark}]">
     <img :src="require('@/assets/images/product-empty-state.png')"/>
     <label>Oops! No products found</label>
     <span v-if="isFilter">No products match your current filter. Please try different keywords or filters.</span>
@@ -12,7 +12,11 @@ export default {
     isFilter: {
       type: Boolean,
       default: false,
-    }
+    },
+    isDark: {
+      type: Boolean,
+      default: false,
+    },
   }
 }
 </script>
@@ -33,6 +37,12 @@ export default {
     font-family: 'Berthold Akzidenz Grotesk Medium', sans-serif;
     font-size: 24px;
     line-height: 38px;
+  }
+  &:is(.dark){
+    color: $white !important;
+    label {
+      color: $white !important;
+    }
   }
 }
 </style>

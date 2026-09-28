@@ -4,7 +4,7 @@
       <i class="material-icons icon-trigger">menu</i>
     </div>
     <div :class="['base-top-nav-mobile-content', {'active': showContent}]">
-      <router-link to="/shop/products" :class="['top-nav-item']">All</router-link>
+      <router-link to="/shop/products" :class="['top-nav-item']">Shop Now</router-link>
       <div class="list-groups">
         <input type="checkbox" class="list-groups-trigger" data-label="Brands"/>
         <div class="list-group-items">
@@ -90,6 +90,9 @@ export default {
       this.categories = this.mapProductCategories();
     },
     itemLink(item) {
+      if(item.type == "FOOD"){
+        return `/shop/fnb/${item.apiCode}`
+      }
       return `/collections/brand/${item.apiCode}`
     },
     categoryLink(item) {

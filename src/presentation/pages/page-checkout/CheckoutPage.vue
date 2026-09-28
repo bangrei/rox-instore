@@ -1934,7 +1934,7 @@ export default {
         getBookingImage(){
             if(isEmpty(this.booking)) return;
             let img = this.booking.selectedSession.image || (this.booking.details.banners?.length ? this.booking.details.banners[0].id : null);
-            if(!img) return require('@/assets/images/rox-logo-2025.jpeg');
+            if(!img) return require('@/assets/images/rox-logo-2026.png');
             return this.$store.getters.cloudinaryURL + img;
         },
         hasPromoPrice(cart) {
@@ -2670,7 +2670,7 @@ export default {
                             &::before {
                                 content: "no image";
                                 color: $secondary-color-50;
-                                background-image: url("@/assets/images/rox-logo-2025.jpeg");
+                                background-image: url("@/assets/images/rox-logo-2026.png");
                                 background-position: center;
                                 background-repeat: no-repeat;
                                 width: 40px;

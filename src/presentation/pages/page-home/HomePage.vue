@@ -9,7 +9,7 @@
 								width="35"
 								height="35"
 								alt="rox logo"
-								:src="require('@/assets/images/rox-logo-2025.jpeg')"
+								:src="require('@/assets/images/rox-logo-2026.png')"
 							/>
 						</div>
 						<base-store-header v-if="isDesktop"

@@ -1,7 +1,7 @@
 <template>
     <layout-variant-two :show-loading-screen="loading" active-menu-index="0" :open-cart="triggerOpenCart" :footer-red="true">
         <template v-slot:body>
-            <div class="product-page">
+            <div :class="['product-page', {'bopis': !isFoodBrand}]">
                 <div class="product-breadcrumbs" v-show="!loading">
                     <router-link to="/shop" class="breadcrumbs-nav">Home</router-link>
                     <router-link v-if="isFoodBrand" to="/shop/fnb" class="breadcrumbs-nav">Food & Beverage</router-link>
@@ -100,10 +100,10 @@
                             class="product-accordion" 
                             accordionTitle="Features" 
                             :noBorder="true"
-                            isDark>
+                            :is-dark="isFoodBrand">
                             <div class="accordion-content" v-html="productDesc"></div>
                         </base-accordion>
-                        <base-accordion ref="stockAccordion" isDark class="product-accordion" :accordionTitle="isFnB ? 'Outlet Information' : 'Inventory Status'">
+                        <base-accordion ref="stockAccordion" :is-dark="isFoodBrand" class="product-accordion" :accordionTitle="isFnB ? 'Outlet Information' : 'Inventory Status'">
                             <div class="accordion-content">
                                 <div class="stock-item" v-if="isFnB">
                                     <span class="stock-icon material-icons-outlined">location_on</span>
@@ -230,7 +230,7 @@
                         <button :class="['middle',{'processing': processing && !buyNow}]" @click="productAdded()">{{ isEditProductCart ? 'Update' : 'Add to' }} cart {{ productPrice }}</button>
                     </div>
                 </div>
-                <suggested-products v-if="product" :productsList="[product]"/>
+                <suggested-products v-if="product" :is-dark="isFoodBrand" :productsList="[product]"/>
             </div>
             <base-modal :show="showVariants">
                 <template v-slot:header>
@@ -361,6 +361,7 @@ import moment from 'moment-timezone';
 import ProductVariants from "./components/ProductVariants.vue";
 import ProductCarousel from "./components/ProductCarousel.vue";
 import SuggestedProducts from "./components/SuggestedProducts.vue";
+import { withAbContext } from "@/lib/abTest";
 
 export default {
 	name: "ProductDetails",
@@ -555,8 +556,8 @@ export default {
             if (isEmpty(this.variantImages)) {
                 if(isEmpty(this.banners)){
                     return [{
-                        image: require('@/assets/images/rox-logo-2025.jpeg'),
-                        thumbnail: require('@/assets/images/rox-logo-2025.jpeg'),
+                        image: require('@/assets/images/rox-logo-2026.png'),
+                        thumbnail: require('@/assets/images/rox-logo-2026.png'),
                         index: 0,
                         sortIndex: 0
                     }]
@@ -1077,11 +1078,11 @@ export default {
             // let draft = cartId ? false : true;
             this.testOrder(false, function () {
                 if(!updateProduct) {
-                    window.dataLayer.push({
+                    window.dataLayer.push(withAbContext({
                         event: "add_to_cart",
                         item_id: self.product.id,
                         item_name: self.product.name
-                    });
+                    }));
                 }
                 self.processing = false;
                 parentCarts = self.$store.getters.getCarts;
@@ -1471,12 +1472,12 @@ export default {
                 }
                 if(!prd) prd = products.find((p) => p.id == productId);
 
-                window.dataLayer.push({
+                window.dataLayer.push(withAbContext({
                     event: "view_item",
                     item_id: productId,
                     item_name: !isEmpty(prd) ? prd.name : "",
                     page_location: window.location.href
-                });
+                }));
                 
                 this.banners = [];
                 if (!isEmpty(prd)) {
@@ -1732,6 +1733,73 @@ export default {
         background: $brown-dark;
         color: $white;
         aspect-ratio: 5/2.5;
+        &:is(.bopis){
+            background: $white !important;
+            .product-breadcrumbs {
+                color: $secondary-color-50;
+                .breadcrumbs-nav {
+                    color: $secondary-color-80 !important;
+                }
+            }
+            .product-label {
+                color: $main-red !important;
+            }
+            .product-sublabel,
+            .product-price,
+            .wishlist-button {
+                color: $secondary-color-80 !important;
+            }
+            .product-actions {
+                .product-increment {
+                    color: $secondary-color-80 !important;
+                    &:not(.disabled){
+                        background: $secondary-color-20 !important;
+                    }
+                    &:is(.disabled){
+                        background: $secondary-color-10 !important;
+                    }
+                }
+                input {
+                    color: $secondary-color-80 !important;
+                    background: $secondary-color-10 !important;
+                }
+            }
+            .product-button {
+                &:not(.disabled){
+                    background: $main-red !important;
+                    color: $white !important;
+                    &:is(.add-to-cart) {
+                        border-color: $dark-color-2 !important;
+                        color: $white !important;
+                        background: $dark-color-2 !important;
+                    }
+                }
+            }
+            .accordion-content {
+                color: $secondary-color-80 !important;
+                .stock-item {
+                    color: $secondary-color-80 !important;
+                    .stock-icon {
+                        color: $secondary-color-80 !important;
+                    }
+                }
+                .stock-elem {
+                    color: $secondary-color-80 !important;
+                    .elem-location {
+                        color: $dark-color-1 !important;
+                    }
+                    .elem-label {
+                        color: $dark-color-3 !important;
+                    }
+                }
+                .stock-button {
+                    color: $main-red !important;
+                    &:not(.disabled):hover {
+                        color: $primary-color-60 !important;
+                    }
+                }
+            }
+        }
     }
     .close-btn {
         cursor: pointer;

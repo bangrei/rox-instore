@@ -6,7 +6,7 @@
                 width="90"
                 height="50"
                 alt="rxc logo"
-                :src="require('@/assets/images/rox-logo-2025.jpeg')"
+                :src="require('@/assets/images/rox-logo-2026.png')"
             />
         </router-link>
         <base-fnb-top-nav :products="products"/>
@@ -15,7 +15,7 @@
                 width="90"
                 height="50"
                 alt="rxc logo"
-                :src="require('@/assets/images/rox-logo-2025.jpeg')"
+                :src="require('@/assets/images/rox-logo-2026.png')"
             />
         </router-link>
         <div class="header-nav-part right">

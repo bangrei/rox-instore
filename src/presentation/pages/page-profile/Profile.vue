@@ -143,7 +143,7 @@
                     <div class="qr-code">
                         <qr-code :text="qrText"></qr-code>
                     </div>
-                    <img class="logo-footer" width="90" height="50" alt="rxc logo" :src="require('@/assets/images/rox-logo-2025.jpeg')">
+                    <img class="logo-footer" width="90" height="50" alt="rxc logo" :src="require('@/assets/images/rox-logo-2026.png')">
                 </div>
                 <div :class="['avatars-modal', {'active': showNudges}]">
                     <span @click="toggleNudges(false)" class="close-modal">&times;</span>
@@ -445,14 +445,14 @@ export default {
             })
         },
         nudgeAvatar(nudge){
-            if(!nudge?.image) return require('@/assets/images/rox-logo-2025.jpeg');
+            if(!nudge?.image) return require('@/assets/images/rox-logo-2026.png');
             return nudge.image;
         },
         tagAvatar(tag){
-            if(!tag) return require('@/assets/images/rox-logo-2025.jpeg');
+            if(!tag) return require('@/assets/images/rox-logo-2026.png');
             let nudges = homeService.getValidNudges(tag.nudges);
             let nudge = nudges.find((it) => it.image != '');
-            if(!nudge) return require('@/assets/images/rox-logo-2025.jpeg');
+            if(!nudge) return require('@/assets/images/rox-logo-2026.png');
             return nudge.image;
         },
         async saveAvatar(){

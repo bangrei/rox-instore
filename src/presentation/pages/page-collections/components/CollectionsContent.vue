@@ -51,7 +51,7 @@
             <i class="material-icons filter-icon">chevron_right</i>
           </div>
           <span :class="['product-length', {'loading': loading, 'is-fetching': isFetching}]">
-            {{ isFetching ? 'We are searching the products you are looking for' : (productCount + ' product' + (productCount> 1 ?'s':'') + ' found') }}  
+            {{ isFetching ? 'We are searching the products you are looking for' : (productCount + ' product' + (productCount> 1 ?'s':'') + ' found') }} 
             {{ keySubmitted && isFetching ? ` for ${keySubmitted}` : "" }}
           </span>
           <div class="filter-wrapper">
@@ -767,7 +767,7 @@ export default {
 }
 .parent-categories-con {
 	width: 100%;
-	gap: 10px;
+	gap: 20px;
 	overflow-x: auto;
   &:is(.show){
     display: flex;
@@ -1053,7 +1053,7 @@ export default {
     padding-inline: 0;
   }
   .parent-categories-con {
-    padding-inline: 0;
+    padding-inline: 0px !important;
   }
   .pagination {
     width: fit-content !important;
@@ -1092,6 +1092,26 @@ export default {
         }
       }
     }
+  }
+}
+@media (min-width: 672px) and (max-width: 1024px) {
+  .top-info {
+    padding-inline: 0 !important;
+  }
+  .title-text {
+    padding-inline: 20px !important;
+  }
+  .parent-categories-con {
+    padding-inline: 20px !important;
+  }
+  .pagination {
+    padding-inline: 20px !important;
+  }
+  .top-head {
+    padding: 20px !important;
+  }
+  .main-container {
+    padding: 20px !important;
   }
 }
 </style>

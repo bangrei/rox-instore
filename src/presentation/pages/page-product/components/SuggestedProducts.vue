@@ -1,5 +1,5 @@
 <template>
-  <div class="div-con">
+  <div :class="['div-con', {'dark': isDark}]">
     <span class="label-suggested" v-if="products.length > 0">You Might Also Like</span>
     <product-grid v-if="products.length > 0" 
       :products="products" 
@@ -21,6 +21,10 @@ export default {
     productsList: {
       type: Array,
       default: () => []
+    },
+    isDark: {
+      type: Boolean,
+      default: false
     }
   },
   data(){
@@ -71,6 +75,11 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    &:not(.dark){
+      .label-suggested {
+        color: $main-red !important;
+      }
+    }
   }
   .label-suggested {
     display: block;
