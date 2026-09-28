@@ -14,17 +14,17 @@
 									Order Placed
 								</div>
 								<div :class="['track-item', {'active' : statusIndex == 2, 'passed': statusIndex > 2}]">
-									Waiting fo courier
+									Preparing
 								</div>
 								<div :class="['track-item', {'active' : statusIndex == 3, 'passed': statusIndex > 3}]">
-									In Transit
+									Ready for Pickup
 								</div>
 								<div :class="['track-item', {'active' : statusIndex == 4, 'passed': statusIndex >= 4}]">
-									Completed
+									Picked Up
 								</div>
 							</div>
 							<div class="order-status-con">
-								<p class="order-status-display">{{ orderStatusDisplay }}</p>
+								<p  v-if="!isDeliveryOrder || (isDeliveryOrder && isCancelled)" class="order-status-display">{{ orderStatusDisplay }}</p>
 								<div class="eta-con">
 									<small>{{ isDeliveryOrder ? 'Arrival Estimation' : 'Pickup Instore'}}</small>
 									<span>{{ outletEtaDate }}</span>
@@ -245,14 +245,21 @@ export default {
 		},
 		statusIndex() {
 			if (isEmpty(this.order)) return 0;
+      if(isEmpty(this.order.orders)) return 0;
 			let status = this.order.orders[0].status;
+      if(status == "COMPLETED" && this.order.orders[0].collectAtStore == true){
+        return 4;
+      }
 			switch (status) {
 				case "COMPLETED":
-					return 4;
 				case "READY":
-				case "PREPARATION":
-				case "QUEUED":
+        case "READYFORPICKUP":
+        case "IN_TRANSIT":
 					return 3;
+				case "PACKING":
+				case "PREPARING":
+				case "QUEUED":
+				case "PREPARATION":
 				case "ASSIGNING_DRIVER":
 					return 2;
 				case "PLACED":
@@ -261,6 +268,12 @@ export default {
 					return 0;
 			}
 		},
+    isCancelled(){
+      if (isEmpty(this.order)) return false;
+      if (isEmpty(this.order.orders)) return false;
+			let status = this.order.orders[0].status;
+      return status == "CANCELED" || status == "CANCELLED";
+    },
 		orderStatusDisplay() {
 			if (isEmpty(this.order)) return "";
 			let status = this.order.orders[0].status;
