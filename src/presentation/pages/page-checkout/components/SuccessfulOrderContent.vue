@@ -28,7 +28,7 @@
                                     <div class="order-number-wrapper">
                                         <div class="order-number-label">Order Summary</div>
                                         <small class="order-number-sublabel">
-                                            Present your Order No. to the merchant to claim your order.
+                                            Present your Order No. to the cashier to claim your order.
                                         </small>
                                         <div class="order-number-value">
                                             <span>Order No. {{ one.number }}</span>
@@ -64,15 +64,19 @@
             </div>
             <div class="shipping-container" v-if="isDeliveryOrder">
                 <div class="shipping-wrapper">
-                    <div class="shipping-label">
+                    <!-- <div class="shipping-label">
                         <span class="material-icons-outlined">{{ isDeliveryOrder ? 'local_shipping' : 'hail' }}</span>
                         <span>{{ isDeliveryOrder ? 'Deliver to my address' : orderTypeDisplay }}</span>
+                    </div> -->
+                    <div class="shipping-label">
+                        <span class="material-icons-outlined">hail</span>
+                        <span>Pick up at</span>
                     </div>
                     <span class="shipping-address" v-if="isDeliveryOrder">{{ deliveryAddressString }}</span>
-                    <div class="eta-content">
+                    <!-- <div class="eta-content">
                         <span>{{ isDeliveryOrder ? 'Delivery ' : 'Fulfillment ' }} estimate by {{ outletEtaDate }}</span>
                         <small>Fullfiled by <b>{{ outletName }}</b></small>
-                    </div>
+                    </div> -->
                     <div class="payment-accordion">
                         <input type="checkbox" checked>
                         <div class="payment-accordion-title">
