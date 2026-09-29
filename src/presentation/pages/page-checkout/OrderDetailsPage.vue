@@ -247,20 +247,16 @@ export default {
 			if (isEmpty(this.order)) return 0;
       if(isEmpty(this.order.orders)) return 0;
 			let status = this.order.orders[0].status;
-      if(status == "COMPLETED" && this.order.orders[0].collectAtStore == true){
-        return 4;
-      }
+			if(status == "COMPLETED"){ return this.order.orders[0].collectAtStore == true ? 4 : 3; }
 			switch (status) {
-				case "COMPLETED":
 				case "READY":
-        case "READYFORPICKUP":
-        case "IN_TRANSIT":
-					return 3;
 				case "PACKING":
 				case "PREPARING":
 				case "QUEUED":
 				case "PREPARATION":
 				case "ASSIGNING_DRIVER":
+				case "READYFORPICKUP":
+				case "IN_TRANSIT":
 					return 2;
 				case "PLACED":
 					return 1;
