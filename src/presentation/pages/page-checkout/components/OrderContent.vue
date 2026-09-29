@@ -35,23 +35,12 @@
             </div>
         </div>
         
-        <div class="row__with-logo" v-if="!isEmpty(orderPayments)">
-            <div class="row-content">
-                <div class="row-label">Paid With</div>
-                <div class="row-text" v-for="(pm,i) in orderPayments" :key="i">
-                    <div class="row-logo">
-                        <img :src="pm.logo" v-if="pm.logo"/>
-                    </div>
-                    <span>{{ pm.type.replaceAll("_"," ") }}</span>
-                    <span class="refunded" v-if="pm.refunded">REFUNDED</span>
-                </div>
-            </div>
-        </div>
-        <div class="row" v-else>
+        <div class="row__with-logo">
             <div class="row-content">
                 <div class="row-label">Payment</div>
                 <div class="row-text">
-                    <span>CASH {{ isOmisell ? 'ON DELIVERY' : '' }}</span>
+                    <div class="row-logo"></div>
+                    <span>{{ paidWith }}</span>
                 </div>
             </div>
         </div>
@@ -136,6 +125,30 @@ export default {
 	},
 	watch: {},
 	computed: {
+        isDeliveryOrder() {
+            return ["DELIVERY", "RETAIL_DELIVERY"].includes(this.orderType);
+        },
+        paidWith() {
+			if (isEmpty(this.order)) return;
+			if (isEmpty(this.orderPayments)) return this.isDeliveryOrder ? "Cash On Delivery" : "Cash";
+			let payments = new Set([...this.orderPayments]);
+			let pm = Array.from(payments).filter((value, index, self) =>
+				index === self.findIndex((t) => t.trackingId === value.trackingId && t.status === value.status)
+			);
+            if(isEmpty(pm)) return "Unpaid";
+            let isrefunded = this.orderPayments.filter((it) => it.refunded).length > 0;
+            if(isrefunded) return "Refunded";
+            const card = pm[0].creditCardToken;
+            if(!isEmpty(card)){
+                let cardNames = [];
+                if(pm[0].paymentDisplay) cardNames.push(pm[0].paymentDisplay);
+                if(card.cardType) cardNames.push(card.cardType)
+                if(card.maskedAccountNumber) cardNames.push(`****${card.maskedAccountNumber}`);
+                if(cardNames?.length > 0) return cardNames.join(' ');
+            }
+            if(pm[0].paymentDisplay) return pm[0].paymentDisplay;
+            return pm[0].type.replaceAll("_", " ");
+        },
         orderTypeDisplay(){
             if(isEmpty(this.order)) return "";
             if(this.isOmisell) return "Delivery";
@@ -596,7 +609,7 @@ export default {
                 }
 
                 .row-label {
-                    margin-left: 42px;
+                    margin-left: 36px;
                 }
                 .row-text {
                     display: flex;
@@ -604,7 +617,7 @@ export default {
                     gap: 12px;
 
                     .row-logo {
-                        width: 30px;
+                        width: 24px;
                     }
                 }
             }

@@ -25,14 +25,15 @@
 							</div>
 							<div class="order-status-con">
 								<p  v-if="!isDeliveryOrder || (isDeliveryOrder && isCancelled)" class="order-status-display">{{ orderStatusDisplay }}</p>
-								<div class="eta-con">
+								<div class="eta-con" v-if="!isDeliveryOrder">
 									<small>{{ isDeliveryOrder ? 'Arrival Estimation' : 'Pickup Instore'}}</small>
 									<span>{{ outletEtaDate }}</span>
 								</div>
+                <div v-else style="min-height: 10px;"></div>
 								<div class="order-number-wrapper">
 									<span class="number">Invoice {{ orderNumber }}</span>
 									<!-- <router-link class="order-link" :to="'/receipt/' + orderNumber">See Invoice</router-link> -->
-                  <button class="order-link" @click="toggleShowInvoice">See Invoice</button>
+                  <button class="order-link" @click="toggleShowInvoice">See Order Details</button>
 								</div>
 								<div class="order-number-wrapper">
 									<span>Time Placed</span>
@@ -78,8 +79,8 @@
               </div>
             </div>
           </div>
-          <div class="order-info-wrapper">
-            <div class="order-info">
+          <div class="order-info-wrapper" style="margin-block: auto;">
+            <div class="order-info" style="display:none !important;">
               <div class="order-info-header" style="margin-bottom: 10px">
                 <span class="order-label">Fulfillment Info</span>
               </div>
@@ -259,6 +260,7 @@ export default {
 				case "IN_TRANSIT":
 					return 2;
 				case "PLACED":
+        case "CONFIRMED":
 					return 1;
 				default:
 					return 0;
