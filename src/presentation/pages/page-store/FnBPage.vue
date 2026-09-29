@@ -432,6 +432,9 @@ export default {
         background: $blue-powder;
         img {
           object-fit: contain;
+          transform: scale(0.5);
+          -webkit-transform: scale(0.5);
+          opacity: 0.5;
         }
       }
     }

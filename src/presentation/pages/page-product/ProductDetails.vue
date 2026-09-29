@@ -36,6 +36,7 @@
                                 :banners="bannersAndVariantImages" 
                                 :isDesktop="isDesktop"
                                 :description="productDesc"
+                                :use-placeholder="usePlaceholderImage"
                                 v-if="inited && !isEmpty(bannersAndVariantImages)"
                             />
                         </div>
@@ -172,6 +173,7 @@
                                 :isDesktop="isDesktop"
                                 :isFood="true"
                                 :description="productDesc"
+                                :use-placeholder="usePlaceholderImage"
                                 v-if="inited && !isEmpty(bannersAndVariantImages)"
                             />
                         </div>
@@ -550,6 +552,18 @@ export default {
         },
         variant(){
             return this.variants.find((it) => { return it.selected });
+        },
+        usePlaceholderImage(){
+            if(isEmpty(this.banners) && isEmpty(this.variantImages)){
+                return true;
+            }
+            if (isEmpty(this.variantImages)) {
+                return isEmpty(this.banners);
+            }
+            if (isEmpty(this.banners)) {
+                return isEmpty(this.variantImages);
+            }
+            return false;
         },
         bannersAndVariantImages() {
             if (isEmpty(this.variantImages)) {

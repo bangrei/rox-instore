@@ -15,6 +15,10 @@ const props = defineProps({
   isFood: {
     type: Boolean,
     default: false
+  },
+  usePlaceholder: {
+    type: Boolean,
+    default: false
   }
 });
 const currentSlide = ref(props.banners.length > 0 ? props.banners[0].index : 0)
@@ -97,7 +101,7 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div :class="['carousel-container', {'desktop': props.isDesktop}]">
-    <div :class="['carousel-wrapper', {'desktop': props.isDesktop, 'food' : props.isFood}]">
+    <div :class="['carousel-wrapper', {'desktop': props.isDesktop, 'food' : props.isFood, 'use-placeholder': props.usePlaceholder}]">
       <Carousel v-bind="galleryConfig" v-model="currentSlide">
         <Slide v-for="banner in props.banners" :key="banner.index">
           <img :src="banner.image" alt="Gallery Image" class="gallery-image" />
@@ -134,9 +138,25 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  & > * {
+  &:is(.food) > * {
     background-color: $blue-powder;
-    // border: 1px solid $secondary-color-10;
+  }
+  &:is(.use-placeholder) {
+    &:is(.food) > * {
+      img {
+        transform: scale(0.5);
+        -webkit-transform: scale(0.5);
+        opacity: 0.5;
+      }
+    }
+    &:not(.food) > * {
+      background-color: $primary-color-10;
+      img {
+        transform: scale(0.5);
+        -webkit-transform: scale(0.5);
+        opacity: 0.5;
+      }
+    }
   }
   img {
     height: auto !important;

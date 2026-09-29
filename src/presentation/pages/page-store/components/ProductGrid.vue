@@ -685,7 +685,6 @@ export default {
 				}
 
 				&.no-image {
-					background: $secondary-color-10 !important;
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -697,6 +696,7 @@ export default {
 
 					img {
 						transform: scale(0.5);
+						-webkit-transform: scale(0.5);
 						opacity: 0.5;
 					}
 				}
