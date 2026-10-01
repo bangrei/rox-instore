@@ -282,7 +282,7 @@ export default {
         case "RETURNED":
           return "Returned";
         case "RETURN_IN_PROGRESS": 
-          return "Returning";
+          return "Return In Progress";
         default:
           return "Picked Up";
       }
@@ -905,6 +905,7 @@ export default {
 		padding-top: 16px;
 		color: $secondary-color-50;
 		font-size: 0.9em;
+    line-height: normal;
 		&:first-child {
 			border-image: linear-gradient(to right, $white 50%, $secondary-color-30 50%);
 			border-image-slice: 1;
@@ -955,7 +956,7 @@ export default {
 			color: $main-red !important;
 			&::before {
 				color: $main-red !important;
-				content: "check_circle" !important;
+				content: "radio_button_checked" !important;
 			}
 		}
 	}
