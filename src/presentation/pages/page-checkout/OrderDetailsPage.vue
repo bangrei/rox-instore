@@ -1,14 +1,14 @@
 <template>
-  <layout-variant-two :show-loading-screen="loading">
+  <layout-variant-two :show-loading-screen="false">
     <template v-slot:body>
       <div class="order-container">
-        <div class="order-content">
+        <div :class="['order-content', {'shimmer': loading}]">
           <div class="order-info-wrapper">
             <div class="nav" @click="goBack">
               <i class="material-icons">arrow_back</i>
               Order Details
             </div>
-						<div :class="['order-info', {'tracker': isDeliveryOrder, 'instore': !isDeliveryOrder}]">
+						<div :class="['order-info head', {'tracker': isDeliveryOrder, 'instore': !isDeliveryOrder}]">
 							<div class="order-track" v-if="isDeliveryOrder">
 								<div :class="['track-item', {'active' : statusIndex == 1, 'passed': statusIndex > 1}]">
 									Order Placed
@@ -42,7 +42,7 @@
 							</div>
 							
 						</div>
-            <div class="order-info" v-if="!isEmpty(order)">
+            <div class="order-info">
               <div class="order-card" v-for="(ord, o) in groupedOrders" :key="o">
                 <div class="order-info-header">
                   <span class="order-label">Product Details</span>
@@ -289,6 +289,7 @@ export default {
     },
 		orderStatusDisplay() {
 			if (isEmpty(this.order)) return "";
+      if(this.loading) return "";
 			let status = this.order.orders[0].status;
       if(this.isDeliveryOrder) return "";
       let collectAtStore = false;
@@ -726,11 +727,16 @@ export default {
       });
       this.testOrder(false, () => {
         this.stopReorderingId(currentId);
+        let products = this.$store.getters.getProducts || [];
+        products.push(product);
+        this.$store.dispatch("setProducts", products);
         this.showNotification("success", "done", `Added into cart`);
-        document.querySelector(".nav-cart-trigger").click();
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
+        this.$nextTick(() => {
+          document.querySelector(".nav-cart-trigger").click();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
         });
       }, (err) => {
         this.stopReorderingId(currentId);
@@ -745,6 +751,7 @@ export default {
       this.orderNumber = this.$route.params.number;
       if (!this.$store.getters.hasInited) {
         await this.refreshMainData();
+        this.$store.dispatch("setInited", true);
       }
       await this.fetchOrder();
     } catch (error) {
@@ -808,7 +815,6 @@ export default {
   flex-direction: column;
   gap: 24px;
   padding-block: 32px;
-  padding-inline: 24px;
 }
 .nav {
   display: flex;
@@ -827,6 +833,24 @@ export default {
   display: flex;
   gap: 24px;
   flex-direction: column;
+  padding-inline: 20px;
+  &:is(.shimmer) {
+    opacity: 0.5;
+    pointer-events: none;
+    .order-info {
+      background: $secondary-color-20 !important;
+      border-color: $secondary-color-20 !important;
+      & * {
+        display: none !important;
+      }
+      &:is(.head) {
+        min-height: 175px;
+      }
+      &:not(.head) {
+        min-height: 250px;
+      }
+    }
+  }
 }
 .order-info-wrapper {
   flex: 1;
@@ -1172,11 +1196,11 @@ export default {
 }
 @media (min-width: 672px) {
   .order-container {
-    padding-inline: 7%;
     background: $secondary-color-10;
     aspect-ratio: 3/2;
   }
   .order-content {
+    padding-inline: 4%;
     flex-direction: row !important;
   }
   .order-info {

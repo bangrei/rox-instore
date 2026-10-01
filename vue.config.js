@@ -21,17 +21,17 @@ module.exports = {
     themeColor: "#FFFFFF",
     name: "Recreational Outdoor Exchange",
     iconPaths: {
-      faviconSVG: "img/icons/rox-favicon-latest.png",
-      favicon32: "img/icons/rox-favicon-latest.png",
-      favicon16: "img/icons/rox-favicon-latest.png",
-      appleTouchIcon: "img/icons/rox-favicon-latest.png",
-      maskIcon: "img/icons/rox-favicon-latest.png",
-      msTileImage: "img/icons/rox-favicon-latest.png",
+      faviconSVG: "img/icons/rox-favicon-2026.png",
+      favicon32: "img/icons/rox-favicon-2026.png",
+      favicon16: "img/icons/rox-favicon-2026.png",
+      appleTouchIcon: "img/icons/rox-favicon-2026.png",
+      maskIcon: "img/icons/rox-favicon-2026.png",
+      msTileImage: "img/icons/rox-favicon-2026.png",
     },
     manifestOptions: {
       icons: [
         {
-          src: "img/icons/rox-favicon-latest.png",
+          src: "img/icons/rox-favicon-2026.png",
           sizes: "36x36",
           type: "image/png",
           density: "1",
