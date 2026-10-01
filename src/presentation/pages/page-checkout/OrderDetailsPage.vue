@@ -19,17 +19,17 @@
 								<div :class="['track-item', {'active' : statusIndex == 3, 'passed': statusIndex > 3}]">
 									Ready for Pickup
 								</div>
-								<div :class="['track-item', {'active' : statusIndex == 4, 'passed': statusIndex >= 4}]">
-									Picked Up
+								<div :class="['track-item', {'active' : statusIndex == 4, 'passed': statusIndex >= 4, 'cancelled': statusIndex == -1}]">
+									{{ finalProgressLabel }}
 								</div>
 							</div>
 							<div class="order-status-con">
-								<p  v-if="!isDeliveryOrder || (isDeliveryOrder && isCancelled)" class="order-status-display">{{ orderStatusDisplay }}</p>
+								<p  v-if="orderStatusDisplay" class="order-status-display">{{ orderStatusDisplay }}</p>
+                <div v-else style="min-height: 10px;"></div>
 								<div class="eta-con" v-if="!isDeliveryOrder">
 									<small>{{ isDeliveryOrder ? 'Arrival Estimation' : 'Pickup Instore'}}</small>
 									<span>{{ outletEtaDate }}</span>
 								</div>
-                <div v-else style="min-height: 10px;"></div>
 								<div class="order-number-wrapper">
 									<span class="number">Invoice {{ orderNumber }}</span>
 									<!-- <router-link class="order-link" :to="'/receipt/' + orderNumber">See Invoice</router-link> -->
@@ -248,8 +248,14 @@ export default {
 			if (isEmpty(this.order)) return 0;
       if(isEmpty(this.order.orders)) return 0;
 			let status = this.order.orders[0].status;
-			if(status == "COMPLETED"){ return this.order.orders[0].collectAtStore == true ? 4 : 3; }
+			if(status == "COMPLETED"){ 
+        return this.order.orders[0].collectAtStore == true ? 4 : 3;
+      }
 			switch (status) {
+        case "CANCELLED":
+        case "RETURNED":
+        case "RETURN_IN_PROGRESS":
+          return -1;
 				case "READY":
 				case "PACKING":
 				case "PREPARING":
@@ -266,15 +272,25 @@ export default {
 					return 0;
 			}
 		},
-    isCancelled(){
-      if (isEmpty(this.order)) return false;
-      if (isEmpty(this.order.orders)) return false;
+    finalProgressLabel(){
+      if (isEmpty(this.order)) return "Picked Up";
+      if (isEmpty(this.order.orders)) return "Picked Up";
 			let status = this.order.orders[0].status;
-      return status == "CANCELED" || status == "CANCELLED";
+      switch (status) {
+        case "CANCELLED":
+          return "Cancelled";
+        case "RETURNED":
+          return "Returned";
+        case "RETURN_IN_PROGRESS": 
+          return "Returning";
+        default:
+          return "Picked Up";
+      }
     },
 		orderStatusDisplay() {
 			if (isEmpty(this.order)) return "";
 			let status = this.order.orders[0].status;
+      if(this.isDeliveryOrder) return "";
       let collectAtStore = false;
       for(let i = 0; i < this.order.orders.length; i++){
         if(this.order.orders[i].collectAtStore) collectAtStore = true;
@@ -928,10 +944,17 @@ export default {
 				content: "radio_button_checked" !important;
 			}
 		}
-		&.passed {
+		&.passed:not(.cancelled) {
 			color: $main-blue;
 			&::before {
 				color: $main-blue;
+				content: "check_circle" !important;
+			}
+		}
+    &.cancelled {
+			color: $main-red !important;
+			&::before {
+				color: $main-red !important;
 				content: "check_circle" !important;
 			}
 		}
