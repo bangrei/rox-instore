@@ -11,7 +11,7 @@
                     <div class="profile-account">
                         <div class="profile-avatar modal-trigger" @click="toggleAvatars(true)">
                             <img v-if="currentAvatar" :src="require('@/assets/avatars/' + currentAvatar + '.png')" width="120" height="120"/>
-                            <span v-else class="material-icons-outlined">person</span>
+                            <span v-else-if="!loading" class="material-icons-outlined">person</span>
                         </div>
                         <div class="profile-account-content">
                             <div class="profile-name">{{ customerFullname }} <i @click="toggleForm(true)" class="material-icons modal-trigger">edit</i></div>
