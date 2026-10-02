@@ -1,7 +1,7 @@
 <template>
-	<layout-variant-two :show-loading-screen="loading">
+	<layout-variant-two :show-loading-screen="false">
 		<template v-slot:body>
-            <div class="profile-container" v-if="!isEmpty(customer) && !loading">
+            <div :class="['profile-container', {'shimmer': loading}]">
                 <div class="profile-account-wrapper">
                     <div class="profile-label">
                         <span class="home-link">Home</span>
@@ -15,7 +15,7 @@
                         </div>
                         <div class="profile-account-content">
                             <div class="profile-name">{{ customerFullname }} <i @click="toggleForm(true)" class="material-icons modal-trigger">edit</i></div>
-                            <div class="profile-email">{{ customer.email }}</div>
+                            <div class="profile-email">{{ loading ? ' ' : customer?.email }}</div>
                             <div class="account-actions">
                                 <span class="account-registered">{{ membershipDateInfo }}</span>
                                 <span @click="toggleQR(true)" class="account-widget material-icons modal-trigger">qr_code</span>
@@ -395,6 +395,7 @@ export default {
 			return `#${this.customer?.id}`;
 		},
         customerFullname() {
+            if(this.loading) return "";
             if(isEmpty(this.customer)) return;
             let names = [];
             if(this.customer.firstName) names.push(this.customer.firstName);
@@ -407,6 +408,7 @@ export default {
             return this.customer.interests.split(',');
         },
         membershipDateInfo() {
+            if(this.loading) return "";
             if (isEmpty(this.customer?.registeredDate)) return moment().format("MMM DD, YYYY");
             let date = moment(this.customer.registeredDate).format("MMM DD, YYYY");
             return date;
@@ -664,11 +666,12 @@ export default {
                 await this.refreshCustomerData();
             }
 			await this.setCustomerDetail();
-            this.fetchTags();
 		} catch (error) {
-			this.loading = false;
 			this.showNotification("alert", "error_outline", error);
-		}
+		} finally {
+            this.loading = false;
+            this.fetchTags();
+        }
 	},
     mounted(){
         this.isDestroyed = false;
@@ -930,6 +933,78 @@ export default {
     justify-content: flex-start;
     flex-direction: column;
     min-height: 100vh;
+    &:is(.shimmer){
+        .profile-account-wrapper {
+            pointer-events: none;
+            .profile-avatar {
+                border: 0 !important;
+                transition: all 1s;
+                -webkit-transition: all 1s;
+                animation: fetchingAnim 1s ease-in-out infinite;
+                -webkit-animation: fetchingAnim 1s ease-in-out infinite;
+            }
+            .profile-name {
+                display: block;
+                min-width: 150px;
+                min-height: 24px;
+                border-radius: 999px;
+                transition: all 1s;
+                -webkit-transition: all 1s;
+                animation: fetchingAnim 1s ease-in-out infinite;
+                -webkit-animation: fetchingAnim 1s ease-in-out infinite;
+                & .modal-trigger {
+                    display: none;
+                }
+            }
+            .profile-email {
+                display: block;
+                min-width: 200px;
+                margin-top: 10px;
+                min-height: 12px;
+                border-radius: 999px;
+                transition: all 1s;
+                -webkit-transition: all 1s;
+                animation: fetchingAnim 1s ease-in-out infinite;
+                -webkit-animation: fetchingAnim 1s ease-in-out infinite;
+            }
+            .account-actions {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 10px;
+                width: 100%;
+                text-decoration: none;
+                .account-widget {
+                    border-color: transparent;
+                    color: transparent;
+                    display: block;
+                    min-width: 34px;
+                    max-width: 34px;
+                    min-height: 34px;
+                    max-height: 34px;
+                    border-radius: 999px;
+                    transition: all 1s;
+                    -webkit-transition: all 1s;
+                    animation: fetchingAnim 1s ease-in-out infinite;
+                    -webkit-animation: fetchingAnim 1s ease-in-out infinite;
+                }
+                .account-registered {
+                    border-color: transparent;
+                    color: transparent;
+                    display: block;
+                    min-width: 150px;
+                    min-height: 34px;
+                    max-height: 34px;
+                    border-radius: 999px;
+                    transition: all 1s;
+                    -webkit-transition: all 1s;
+                    animation: fetchingAnim 1s ease-in-out infinite;
+                    -webkit-animation: fetchingAnim 1s ease-in-out infinite;
+                }
+            }
+        }
+    }
 }
 .profile-label {
     text-align: left;
@@ -1051,9 +1126,6 @@ export default {
             gap: 4px;
             i {
                 font-size: 16px !important;
-            }
-            &:is(.pull-right){
-                margin-left: auto;
             }
             &:is(.outlined){
                 border-color: $main-red;
@@ -1252,8 +1324,12 @@ export default {
 }
 @media (min-width: 672px) {
     .profile-account-wrapper {
+        .profile-label {
+            padding-inline: 4% !important;
+        }
         .profile-account {
             gap: 32px;
+            padding-inline: 4% !important;
             .profile-name {
                 font-size: 2em !important;
             }
@@ -1265,10 +1341,14 @@ export default {
             .account-registered {
                 padding: 8px 24px;
                 font-size: 15px !important;
+                &:is(.pull-right){
+                    margin-left: auto;
+                }
             }
         }
     }
     .profile-features {
+        padding-inline: 4% !important;
         .profile-item {
             border: 1px solid $secondary-color-20;
             background: $white;

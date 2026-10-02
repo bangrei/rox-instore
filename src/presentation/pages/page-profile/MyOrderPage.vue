@@ -3,7 +3,7 @@
     <template v-slot:body>
       <div :class="['container', {'empty': !loading && isEmpty(objects)}]">
         <div class="container__nav">
-          <h1><i class="material-icons-outlined">arrow_back</i>Order Center</h1>
+          <h1 @click="goBack"><i class="material-icons-outlined">arrow_back</i>Order Center</h1>
           <ul class="tabs">
             <li @click="showAll()" :class="{ active: activeIndex == 0 }">
               All
