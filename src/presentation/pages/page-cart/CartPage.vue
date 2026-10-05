@@ -253,12 +253,14 @@ export default {
             });
         },
         async onCartLoaded(carts) {
+            let callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
             let self = this;
             // this.carts = carts;
             this.$store.dispatch('setInited', true);
             if(isEmpty(carts)) {
                 self.carts = carts;
                 this.loading = false;
+                callback();
                 return;
             }
             let mappedCarts = this.rebuildCarts(carts);
@@ -280,7 +282,9 @@ export default {
             self.proceedCarts(mappedCarts, () => {
                 self.carts = carts;
                 this.loading = false;
+                callback();
             }, (error) => {
+                callback();
                 if(!isEmpty(error?.promoCodes)) {
                     let parentCarts = self.$store.getters.getCarts || {};
                     let promoCodesError = error?.promoCodes.map((c) => c.code);

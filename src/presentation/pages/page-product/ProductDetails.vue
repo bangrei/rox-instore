@@ -1,5 +1,5 @@
 <template>
-    <layout-variant-two :show-loading-screen="loading" active-menu-index="0" :open-cart="triggerOpenCart" :footer-red="true">
+    <layout-variant-two :show-loading-screen="loading" :active-menu-index="0" :open-cart="triggerOpenCart" :footer-red="true">
         <template v-slot:body>
             <div :class="['product-page', {'bopis': !isFoodBrand}]">
                 <div class="product-breadcrumbs" v-show="!loading">
@@ -347,7 +347,7 @@
             </base-modal>
         </template>
         <template v-slot:footer>
-			<base-side-nav v-if="!loading" active-index="0"/>
+			<base-side-nav v-if="!loading" :active-index="0"/>
 		</template>
     </layout-variant-two>
 </template>
@@ -1108,6 +1108,9 @@ export default {
                     ...parentCarts,
                     [outletCode]:carts
                 });
+                let currentProducts = self.$store.getters.getProducts || [];
+                currentProducts.push(self.product);
+                self.$store.dispatch("setProducts", currentProducts);
                 if (self.buyNow) {
                     return self.$router.push({ name: "CheckoutPage" });
                 }

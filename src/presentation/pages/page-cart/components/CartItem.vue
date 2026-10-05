@@ -55,7 +55,7 @@
           </select>
         </div>
         <div :class="['cart-qty-input', {'loading': loading}]" data-label="Quantity" v-if="!cart.freeProduct && !displayOnly">
-          <input type="number" min="1" :max="maxQty" v-model="cartQty"/>
+          <input type="number" min="1" :max="maxQty" v-model.number="cartQty"/>
           <!-- <select name="cart-qty" v-model="cartQty">
             <option v-for="mq in maxQtyOptions" :value="mq.value" :key="mq.key">{{ mq.value }}</option>
           </select> -->
@@ -123,30 +123,22 @@ export default {
       showModal: false,
       variantId: null,
       modifierGroups: [],
+      initialized: false,
+      suppressQtyWatch: false,
+      suppressVariantWatch: false,
+      qtyRequestId: 0,
     };
   },
   watch: {
-    cartQty: {
-      handler: debounce(function(val){
-        if(!this.enabledInventory || this.isFnBProduct) return;
-        if(val > this.maxQty) {
-          this.cartQty = this.prevQty;
-          this.showNotification("warning", "error_outline", `Exceeded the max. available stock is not allowed!`);
-          return;
-        }
-        this.prevQty = val;
-        this.changeQty(val);
-      }, 500),
-      immediate: false,
+    cartQty(val) {
+      if (this.suppressQtyWatch || !this.initialized) return;
+      this.queueQtyChange(val);
     },
     async variantId() {
+      if (!this.initialized || this.suppressVariantWatch) return;
+      await this.loadInventory();
+      if (!this.initialized || this.suppressVariantWatch) return;
       this.$emit('change-variant', this.cart, this.variant, this.inventory);
-    },
-    cart: {
-      handler(){
-        //
-      },
-      deep: true
     }
   },
   computed: {
@@ -251,12 +243,51 @@ export default {
       }
       return modifiers.join(", ");
     },
-    async changeQty(qty) {
-      this.allowChangeQty = false;
-      await this.$emit('change-qty', qty, this.cart, (cart) => {
-        this.cartQty = cart.quantity;
+    assignCartQty(qty, cancelPending = true) {
+      const next = Number(qty);
+      this.suppressQtyWatch = true;
+      if (cancelPending && this.queueQtyChange) this.queueQtyChange.cancel();
+      this.cartQty = Number.isFinite(next) && next > 0 ? next : (this.prevQty || 1);
+      this.prevQty = this.cartQty;
+      this.$nextTick(() => {
+        this.suppressQtyWatch = false;
       });
-      this.allowChangeQty = true;
+    },
+    commitQtyChange(val) {
+      if (this.suppressQtyWatch || !this.initialized) return;
+      if (!this.enabledInventory || this.isFnBProduct) return;
+      const qty = Number(val);
+      if (!Number.isFinite(qty) || qty < 1) {
+        this.assignCartQty(this.prevQty || this.cart.quantity || 1);
+        return;
+      }
+      if (qty > this.maxQty) {
+        this.assignCartQty(this.prevQty);
+        this.showNotification("warning", "error_outline", `Exceeded the max. available stock is not allowed!`);
+        return;
+      }
+      if (qty === Number(this.prevQty)) return;
+      this.prevQty = qty;
+      this.changeQty(qty);
+    },
+    changeQty(qty) {
+      this.allowChangeQty = false;
+      this.loading = true;
+      const requestId = this.qtyRequestId + 1;
+      this.qtyRequestId = requestId;
+      const finish = (nextQty) => {
+        if (this.isUnmounted || requestId !== this.qtyRequestId) return;
+        this.assignCartQty(nextQty, false);
+        this.loading = false;
+        this.allowChangeQty = true;
+      };
+      try {
+        this.$emit('change-qty', qty, this.cart, (cart) => {
+          finish(cart?.quantity ?? this.cart?.quantity ?? qty);
+        });
+      } catch (error) {
+        finish(this.cart?.quantity ?? this.prevQty);
+      }
     },
     removeCart() {
       this.showModal = false;
@@ -264,12 +295,12 @@ export default {
     },
     async plusCart() {
       this.$emit('plus', this.cart, (cart) => {
-        this.cartQty = cart.quantity
+        this.assignCartQty(cart.quantity, false);
       });
     },
     async minusCart() {
       this.$emit('minus', this.cart, (cart) => {
-        this.cartQty = cart.quantity
+        this.assignCartQty(cart.quantity, false);
       });
     },
     async toggleWishlist() {
@@ -291,26 +322,44 @@ export default {
         variant: this.cart.variant?.id,
         time: parseInt(moment().format('x'))
       });
-    }
-  },
-  async created() {
-    try {
-      this.allowChangeQty = false;
-      this.variantId = this.cart.variant ? this.cart.variant.id : null;
-      if(this.enabledInventory){
-        let res = await getInventory(this.cart.outletStore.apiCode, this.cart.product.id);
-        if (res?.success) {
-          this.inventory = res.inventories.find((inv) => inv.store.id == this.cart.storeId);
-          if(this.variant) this.inventory = res.inventories.find((inv) => inv.variant?.id == this.variant.id);
-          this.maxQty = this.enabledInventory ? this.inventory?.stock || 0 : this.cart.quantity;
-        }
+    },
+    async loadInventory() {
+      if (!this.enabledInventory) return;
+      let res = await getInventory(this.cart.outletStore.apiCode, this.cart.product.id);
+      if (res?.success) {
+        this.inventory = res.inventories.find((inv) => inv.store.id == this.cart.storeId);
+        if (this.variant) this.inventory = res.inventories.find((inv) => inv.variant?.id == this.variant.id);
+        this.maxQty = this.inventory?.stock || 0;
       }
-      this.cartQty = this.cart.quantity;
-      this.$emit('cart-inventory', this.cart, this.inventory);
-    } finally {
-      this.allowChangeQty = true;
-      this.loading = false;
-    }
+    },
+    async initCart() {
+      try {
+        this.allowChangeQty = false;
+        this.suppressVariantWatch = true;
+        this.variantId = this.cart.variant ? this.cart.variant.id : null;
+        await this.loadInventory();
+        this.assignCartQty(this.cart.quantity);
+        this.$emit('cart-inventory', this.cart, this.inventory);
+      } finally {
+        this.allowChangeQty = true;
+        this.loading = false;
+        this.initialized = true;
+        this.$nextTick(() => {
+          this.suppressVariantWatch = false;
+        });
+      }
+    },
+  },
+  created() {
+    this.isUnmounted = false;
+    this.queueQtyChange = debounce((val) => {
+      this.commitQtyChange(val);
+    }, 500);
+    this.initCart();
+  },
+  beforeUnmount() {
+    this.isUnmounted = true;
+    if (this.queueQtyChange) this.queueQtyChange.cancel();
   },
 };
 </script>

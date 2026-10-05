@@ -280,12 +280,12 @@ export default {
         });
         return {
           ...o,
-          key: Math.random(30),
+          key: o.apiCode,
           checked: true,
           carts: cartsList?.map((crt) => {
             return {
               ...crt,
-              key: Math.random(20)
+              key: `${crt.id}-${crt.freeProduct || "item"}`
             }
           }),
           isOmisell: o?.enableOmisellIntegration == true && o.stores.filter((s) => s.delivery).length > 0
@@ -459,8 +459,9 @@ export default {
         }
       } finally {
         self.loading = false;
-        self.$emit('cart-loaded', self.carts);
-        self.setOutletsList();
+        self.$emit('cart-loaded', self.carts, () => {
+          self.setOutletsList();
+        });
       }
     },
     async updateQty(qty, cart, callback = undefined) {
@@ -868,7 +869,7 @@ export default {
       await this.refreshMainData(true);
       this.$store.dispatch("setInited", true);
     }
-    await this.initCarts();
+    this.initCarts();
   },
   beforeUnmount(){
     window.removeEventListener("resize", this.resize);
