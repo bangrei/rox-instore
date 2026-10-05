@@ -22,8 +22,8 @@
             </li>
           </ul>
           <div class="button-group">
-            <button @click="showOrders('delivery')" :class="{'active': orderType == 'delivery'}">Delivery</button>
-            <button @click="showOrders('pickup')" :class="{'active': orderType == 'pickup'}">In-store Pickup</button>
+            <button @click="showOrders('delivery')" :class="{'active': orderType == 'delivery'}">Retail Orders</button>
+            <button @click="showOrders('pickup')" :class="{'active': orderType == 'pickup'}">F&B Orders</button>
             <button @click="showOrders('event')" :class="{'active': orderType == 'event'}">Events</button>
           </div>
           <div class="content">

@@ -26,10 +26,10 @@
 							<div class="order-status-con">
 								<p  v-if="orderStatusDisplay" class="order-status-display">{{ orderStatusDisplay }}</p>
                 <div v-else style="min-height: 10px;"></div>
-								<div class="eta-con" v-if="!isDeliveryOrder">
+								<!-- <div class="eta-con" v-if="!isDeliveryOrder">
 									<small>{{ isDeliveryOrder ? 'Arrival Estimation' : 'Pickup Instore'}}</small>
 									<span>{{ outletEtaDate }}</span>
-								</div>
+								</div> -->
 								<div class="order-number-wrapper">
 									<span class="number">Invoice {{ orderNumber }}</span>
 									<!-- <router-link class="order-link" :to="'/receipt/' + orderNumber">See Invoice</router-link> -->
