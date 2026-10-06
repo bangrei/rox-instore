@@ -37,17 +37,17 @@ export default {
       return Promise.reject(error);
     }
   },
-  retrieveOrders: async () => {
+  retrieveOrders: async (payload) => {
     try {
-      let result = await getOrders();
+      let result = await getOrders(payload);
       return Promise.resolve(result);
     } catch (error) {
       return Promise.reject(error);
     }
   },
-  retrieveBookings: async () => {
+  retrieveBookings: async (payload) => {
     try {
-      let result = await getBookings();
+      let result = await getBookings(payload);
       return Promise.resolve(result);
     } catch (error) {
       return Promise.reject(error);

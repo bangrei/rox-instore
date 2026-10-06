@@ -56,18 +56,20 @@ export const getPromotions = async (outletCode, promoCode) => {
   }
 };
 
-export const getOrders = async () => {
+export const getOrders = async (payload) => {
   try {
+    let params = {
+      authToken: store.getters.getEunoiaToken,
+      sortOrder: "DESC",
+      pageSize: 100,
+    }
+    if(payload) params = {...params, ...payload}
     let code = "hq$" + EUNOIA_CONFIG.brandCode;
     const path = `/orders/${code}`;
     const { post } = EUNOIA_APIV4_CONNECTOR({
       target: path,
       requestMethod: "GET",
-      payload: {
-        authToken: store.getters.getEunoiaToken,
-        pageSize: 100,
-        sortOrder: "DESC",
-      }
+      payload: params
     });
     const data = await post();
     return Promise.resolve(data);
@@ -76,18 +78,20 @@ export const getOrders = async () => {
   }
 };
 
-export const getBookings = async () => {
+export const getBookings = async (payload) => {
   try {
+    let params = {
+      authToken: store.getters.getEunoiaToken,
+      sortOrder: "DESC",
+      pageSize: 100,
+    }
+    if(payload) params = {...params, ...payload}
     let code = "hq$" + EUNOIA_CONFIG.brandCode;
     const path = `/orders/${code}/ticket`;
     const { post } = EUNOIA_APIV4_CONNECTOR({
       target: path,
       requestMethod: "GET",
-      payload: {
-        authToken: store.getters.getEunoiaToken,
-        pageSize: 100,
-        sortOrder: "DESC",
-      }
+      payload: params
     });
     const data = await post();
     return Promise.resolve(data);

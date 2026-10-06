@@ -1,32 +1,22 @@
 <template>
-  <layout-variant-two :show-loading-screen="loading" :overflow-hidden="true">
+  <layout-variant-two :show-loading-screen="false" :overflow-hidden="true">
     <template v-slot:body>
-      <div :class="['container', {'empty': !loading && isEmpty(objects)}]">
+      <div :class="['container', {'empty': !loading && isEmpty(objects), 'preloader': loading}]">
         <div class="container__nav">
           <h1 @click="goBack"><i class="material-icons-outlined">arrow_back</i>Order Center</h1>
           <ul class="tabs">
-            <li @click="showAll()" :class="{ active: activeIndex == 0 }">
-              All
-            </li>
-            <li @click="filterOrders(1)" :class="{ active: activeIndex == 1 }">
-              In Progress
-            </li>
-            <li @click="filterOrders(2)" :class="{ active: activeIndex == 2 }">
-              Complete
-            </li>
-            <li @click="filterOrders(3)" :class="{ active: activeIndex == 3 }">
-              Return
-            </li>
-            <li @click="filterOrders(4)" :class="{ active: activeIndex == 4 }">
-              Cancel
+            <li v-for="status in statuses" :key="status.value"
+              @click="filterOrders(status.value)" :class="{ active: activeIndex == status.value }">
+              {{ status.label }}
             </li>
           </ul>
           <div class="button-group">
-            <button @click="showOrders('delivery')" :class="{'active': orderType == 'delivery'}">Retail Orders</button>
-            <button @click="showOrders('pickup')" :class="{'active': orderType == 'pickup'}">F&B Orders</button>
+            <button @click="showOrders('retail')" :class="{'active': orderType == 'retail'}">Retail Orders</button>
+            <button @click="showOrders('food')" :class="{'active': orderType == 'food'}">F&B Orders</button>
             <button @click="showOrders('event')" :class="{'active': orderType == 'event'}">Events</button>
           </div>
-          <div class="content">
+          <div class="content" ref="orderContent">
+            <MyOrderShimmer :loading="loading"/>
             <div
               class="order__item"
               :class="{ active: isCurrentActive(obj) }"
@@ -144,7 +134,9 @@
                 </div>
               </div>
             </div>
-            <div class="order__item" v-if="isEmpty(objects) && !loading">No data found..</div>
+            <div class="order__item" v-if="isEmpty(objects) && !loading && !loadingMore">No data found..</div>
+            <div ref="loadSentinel" class="load-sentinel"></div>
+            <MyOrderShimmer :loading="loadingMore"/>
           </div>
         </div>
       </div>
@@ -162,12 +154,14 @@ import utility from "@/presentation/mixins/utility.js";
 import { isEmpty } from "lodash";
 import moment from "moment-timezone";
 import { getInventory } from "@/connector/v4/productConnector";
+import MyOrderShimmer from "./components/MyOrderShimmer.vue";
 
 export default {
   name: "MyOrderPage",
   mixins: [utility],
   components: {
     LayoutVariantTwo,
+    MyOrderShimmer,
   },
   data() {
     return {
@@ -178,25 +172,103 @@ export default {
       currentReceipt: null,
       objects: [],
       orderType: "",
+      pageIndex: 0,
+      rowsLimit: 10,
+      ordersTotal: 0,
+      eventsTotal: 0,
+      loadingMore: false,
+      ordersReachedEnd: false,
+      bookingsReachedEnd: false,
+      ordersPage: 0,
+      bookingsPage: 0,
+      listRequestId: 0,
     };
   },
   watch: {
-    activeIndex() {
-      this.currentReceipt = null;
-      this.objects = [];
-      setTimeout(() => {
+    async activeIndex() {
+      if(this.loading) return;
+      const requestId = ++this.listRequestId;
+      try {
+        this.loading = true;
+        this.pageIndex = 0;
+        this.currentReceipt = null;
+        this.objects = [];
+        if(this.orderType == "event"){
+          await this.retrieveMyBookings(false, requestId);
+        } else if(["retail","food"].includes(this.orderType)){
+          await this.retrieveMyOrders(false, requestId);
+        } else {
+          await this.retrieveMyOrders(false, requestId);
+          await this.retrieveMyBookings(false, requestId);
+        }
+        if (requestId !== this.listRequestId) return;
         this.setObjects();
-      }, 50);
+      } catch (error) {
+        if (requestId === this.listRequestId) {
+          this.showNotification("alert", "error_outline", error);
+          this.setObjects();
+        }
+      } finally {
+        if (requestId === this.listRequestId) {
+          this.loading = false;
+          this.$nextTick(() => this.maybeLoadMore());
+        }
+      }
     },
     orderType() {
+      if(this.loading) return;
       this.currentReceipt = null;
       this.objects = [];
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.setObjects();
-      }, 50);
+        this.maybeLoadMore();
+      });
     },
   },
-  computed: {},
+  computed: {
+    statuses(){
+      return [
+        { label: "All", value: 0 },
+        { label: "In Progress", value: 1 },
+        { label: "Complete", value: 2 },
+        { label: "Return", value: 3 },
+        { label: "Cancel", value: 4 },
+      ];
+    },
+    selectedStatus(){
+      let stats = [];
+      let completed = ["COMPLETED"];
+      let canceled = ["CANCELLED"];
+      let returned = ["RETURNED","RETURN_IN_PROGRESS"];
+      let inprogress = ["DRAFT","ACTIVE"];
+      switch(this.activeIndex){
+        case 1: return inprogress;
+        case 2: return completed;
+        case 3: return returned;
+        case 4: return canceled;
+      }
+      return stats;
+    },
+    ordersTotalPages(){
+      if(this.ordersTotal > 0) return Math.ceil(this.ordersTotal / this.rowsLimit);
+      return 0;
+    },
+    eventsTotalPages(){
+      if(this.eventsTotal > 0) return Math.ceil(this.eventsTotal / this.rowsLimit);
+      return 0;
+    },
+    hasMoreOrders() {
+      if (this.orderType == "event") return false;
+      return this.orders.length < this.ordersTotal;
+    },
+    hasMoreBookings() {
+      if (["retail", "food"].includes(this.orderType)) return false;
+      return this.bookings.length < this.eventsTotal;
+    },
+    hasMore() {
+      return this.hasMoreOrders || this.hasMoreBookings;
+    },
+  },
   methods: {
     showObj(obj, index) {
       let isViewMore = obj.viewMore;
@@ -207,7 +279,8 @@ export default {
     },
     setObjects() {
       let items = [];
-      let orders = this.orders.map((it) => {
+      const expanded = new Set(this.objects.filter((obj) => obj.viewMore).map((obj) => obj.number));
+      let orders = [...this.orders].map((it) => {
         let statusClass = "progress";
         let orderStatus = it.orders[0].status;
         let isInprogress = true;
@@ -270,6 +343,9 @@ export default {
             }
           }
         }
+        if(it.orders[0].collectAtStore && orderStatus == "COMPLETED") {
+          orderStatus = "Picked Up";
+        }
         let item = {
           status: orderStatus,
           statusDisplay: orderStatus.toLowerCase().split("_").join(" "),
@@ -279,7 +355,7 @@ export default {
           canceled: isCanceled,
           refunded: isRefunded,
           type: it.type,
-          group: it.orders.some((n) => ["RETAIL_DELIVERY", "DELIVERY"].includes(n.type)) ? "delivery" : "pickup",
+          group: it.orders.some((n) => ["RETAIL"].includes(n.brand?.type)) ? "retail" : "food",
           placeTime: it.placeTime,
           date: moment
             .tz(it.placeTime, "Asia/Singapore")
@@ -291,7 +367,7 @@ export default {
           rows: [],
           countOrders: 0,
           omisellOrder: false,
-          viewMore: false,
+          viewMore: expanded.has(it.number),
           discounts: discounts,
           extraCharges: extraCharges
         };
@@ -326,7 +402,7 @@ export default {
         return item;
       });
       let now = parseInt(moment.tz(moment(), "Asia/Singapore").format("x"));
-      let bookings = this.bookings.map((it) => {
+      let bookings = [...this.bookings].map((it) => {
         let statusDisplay = "Confirmed";
         let statusClass = "progress";
         let isInprogress = true;
@@ -389,7 +465,7 @@ export default {
           rows: [],
           countOrders: it.items.length,
           omisellOrder: false,
-          viewMore: false,
+          viewMore: expanded.has(it.number),
         };
         item.rows.push({
           items: it.items.map((n) => {
@@ -422,11 +498,11 @@ export default {
           break;
       }
       switch (this.orderType) {
-        case "delivery":
-          items = [...items.filter((it) => it.group == "delivery")];
+        case "retail":
+          items = [...items.filter((it) => it.group == "retail")];
           break;
-        case "pickup":
-          items = [...items.filter((it) => it.group == "pickup")];
+        case "food":
+          items = [...items.filter((it) => it.group == "food")];
           break;
         case "event":
           items = [...items.filter((it) => it.group == "event")];
@@ -458,46 +534,71 @@ export default {
       this.currentReceipt = order;
       document.querySelector('.container__wrapper').scrollTop = 0;
     },
-    showAll() {
-      if (this.activeIndex == 0) return;
-      this.activeIndex = 0;
-    },
     filterOrders(index) {
+      if(this.loading) return;
       if (this.activeIndex == index) return;
       this.activeIndex = index;
     },
     showOrders(type) {
+      if(this.loading) return;
       if (this.orderType == type) {
         this.orderType = "";
         return
       };
       this.orderType = type;
     },
-    async retrieveMyOrders() {
-      this.orders = [];
-      let json = await storeService.retrieveOrders();
-      if (!json.success) return;
-      this.orders = json.orders;
+    async retrieveMyOrders(append = false, requestId = null) {
+      const token = requestId == null ? this.listRequestId : requestId;
+      const pageNumber = append ? this.ordersPage + 1 : 0;
+      if (!append) {
+        this.orders = [];
+        this.ordersPage = 0;
+        this.ordersTotal = 0;
+      }
+      let json = await storeService.retrieveOrders({
+        pageNumber,
+        pageSize: this.rowsLimit,
+        orderStatuses: this.selectedStatus,
+      });
+      if (token !== this.listRequestId) return;
+      const nextOrders = json?.orders || [];
+      if (json?.pager?.count != null) this.ordersTotal = json.pager.count;
+      const existingNumbers = new Set(this.orders.map((order) => order.number));
+      const freshOrders = append ? nextOrders.filter((order) => !existingNumbers.has(order.number)) : nextOrders;
+      this.orders = append ? [...this.orders, ...freshOrders] : freshOrders;
+      this.ordersPage = pageNumber;
+      this.pageIndex = pageNumber;
     },
-    async retrieveMyBookings() {
-      this.bookings = [];
-      let json = await storeService.retrieveBookings();
-      if (!json.success) return;
-      this.bookings = json.orders;
-      if (!isEmpty(this.bookings)) {
-        let json = await eventService.getEvents();
-        let events = json?.events;
-        this.bookings = this.bookings.map((it) => {
+    async retrieveMyBookings(append = false, requestId = null) {
+      const token = requestId == null ? this.listRequestId : requestId;
+      const pageNumber = append ? this.bookingsPage + 1 : 0;
+      if (!append) {
+        this.bookings = [];
+        this.bookingsPage = 0;
+        this.eventsTotal = 0;
+      }
+      let json = await storeService.retrieveBookings({
+        pageNumber,
+        pageSize: this.rowsLimit,
+      });
+      if (token !== this.listRequestId) return;
+      let nextBookings = json?.orders || [];
+      if (json?.pager?.count != null) this.eventsTotal = json.pager.count;
+      if (!isEmpty(nextBookings)) {
+        let eventsJson = await eventService.getEvents();
+        if (token !== this.listRequestId) return;
+        let events = eventsJson?.events || [];
+        nextBookings = nextBookings.map((it) => {
           let items = it.items.map((item) => {
             let event = events.find((e) => {
-              return e.sessions.some((s) => {
+              return e.sessions?.some((s) => {
                 return s.name == item.ticket.session && e.name == item.ticket.event;
               })
             });
             let banners = event?.banners;
             return {
               ...item,
-              banners: banners?.sort((a,b) => a.sortIndex - b.sortIndex).map((b) => {
+              banners: banners?.sort((a,b) => a.sortIndex - b.sortIndex)?.map((b) => {
                 return this.getImage(b.id)
               }),
               event: event,
@@ -509,6 +610,75 @@ export default {
           }
         });
       }
+      const existingNumbers = new Set(this.bookings.map((booking) => booking.number));
+      const freshBookings = append ? nextBookings.filter((booking) => !existingNumbers.has(booking.number)) : nextBookings;
+      this.bookings = append ? [...this.bookings, ...freshBookings] : freshBookings;
+      this.bookingsPage = pageNumber;
+      this.pageIndex = pageNumber;
+    },
+    async loadMore() {
+      if (this.loading || this.loadingMore || !this.hasMore) return;
+      const requestId = this.listRequestId;
+      this.loadingMore = true;
+      try {
+        const tasks = [];
+        if (this.hasMoreOrders) tasks.push(this.retrieveMyOrders(true, requestId));
+        if (this.hasMoreBookings) tasks.push(this.retrieveMyBookings(true, requestId));
+        if (!tasks.length) return;
+        await Promise.all(tasks);
+        if (requestId !== this.listRequestId) return;
+        this.setObjects();
+      } catch (error) {
+        if (requestId === this.listRequestId) {
+          this.showNotification("alert", "error_outline", error);
+          this.setObjects();
+        }
+      } finally {
+        if (requestId === this.listRequestId) {
+          this.loadingMore = false;
+          this.$nextTick(() => this.maybeLoadMore());
+        } else {
+          this.loadingMore = false;
+        }
+      }
+    },
+    listScrollParent() {
+      const sentinel = this.$refs.loadSentinel;
+      if (!sentinel) return null;
+      let parent = sentinel.parentElement;
+      while (parent && parent !== document.body && parent !== document.documentElement) {
+        const style = window.getComputedStyle(parent);
+        if (/(auto|scroll)/.test(style.overflowY) && parent.scrollHeight > parent.clientHeight + 8) {
+          return parent;
+        }
+        parent = parent.parentElement;
+      }
+      return null;
+    },
+    isNearListEnd() {
+      const sentinel = this.$refs.loadSentinel;
+      if (!sentinel) return false;
+      const margin = 280;
+      const scroller = this.listScrollParent();
+      if (scroller) {
+        return scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight <= margin;
+      }
+      return sentinel.getBoundingClientRect().top <= window.innerHeight + margin;
+    },
+    maybeLoadMore() {
+      if (this.loading || this.loadingMore || !this.hasMore) return;
+      if (this.isNearListEnd()) this.loadMore();
+    },
+    onOrdersScroll(event) {
+      const list = this.$refs.orderContent;
+      if (!list || this.loading || this.loadingMore || !this.hasMore) return;
+      const target = event.target;
+      const relevant = target === document
+        || target === document.documentElement
+        || target === document.body
+        || (target instanceof Element && (target.contains(list) || list.contains(target)));
+      if (!relevant) return;
+      this.maybeLoadMore();
     },
     async buyAgainEvent(order) {
       let events = [];
@@ -818,6 +988,7 @@ export default {
     },
   },
   async created() {
+    const requestId = ++this.listRequestId;
     try {
       this.loading = true;
       if (!this.$store.getters.hasInited) {
@@ -825,15 +996,35 @@ export default {
 			} else {
         await this.refreshCustomerData();
       }
-      await this.retrieveMyOrders();
-      await this.retrieveMyBookings();
-      this.showAll();
+      if (requestId !== this.listRequestId) return;
+      await this.retrieveMyOrders(false, requestId);
+      await this.retrieveMyBookings(false, requestId);
+      if (requestId !== this.listRequestId) return;
       this.setObjects();
     } catch (error) {
-      this.showNotification("alert", "error_outline", error);
+      if (requestId === this.listRequestId) {
+        this.showNotification("alert", "error_outline", error);
+      }
     } finally {
-      this.loading = false;
+      if (requestId === this.listRequestId) {
+        this.loading = false;
+        this.$nextTick(() => this.maybeLoadMore());
+      }
     }
+  },
+  mounted() {
+    this._onOrdersScroll = (event) => this.onOrdersScroll(event);
+    document.addEventListener("scroll", this._onOrdersScroll, { passive: true, capture: true });
+    this._loadObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) this.loadMore();
+    }, { root: null, rootMargin: "280px" });
+    this.$nextTick(() => {
+      if (this.$refs.loadSentinel) this._loadObserver.observe(this.$refs.loadSentinel);
+    });
+  },
+  beforeUnmount() {
+    document.removeEventListener("scroll", this._onOrdersScroll, { capture: true });
+    if (this._loadObserver) this._loadObserver.disconnect();
   },
 };
 </script>
@@ -941,6 +1132,9 @@ export default {
     min-height: calc(100% - 220px);
     overflow: hidden;
   }
+  &:is(.preloader){
+    pointer-events: none;
+  }
 
   &__nav {
     flex: 1;
@@ -1027,6 +1221,10 @@ export default {
   }
 }
 
+.load-sentinel {
+  width: 100%;
+  height: 1px;
+}
 .content {
   width: 100%;
   display: flex;
