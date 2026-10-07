@@ -63,10 +63,12 @@ export default {
 	methods: {
 		togoBack() {
 			if (this.$route.query.redirect) {
-				return this.$router.replace({
-					path: this.$route.query.redirect,
-					params: this.$route.params
-				});
+				if(this.$route.query.redirect != '/login'){
+					return this.$router.replace({
+						path: this.$route.query.redirect,
+						params: this.$route.params
+					});
+				}
 			}
 			this.goBack();
 		},
