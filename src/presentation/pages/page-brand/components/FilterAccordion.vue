@@ -13,7 +13,7 @@
             <base-accordion v-if="categoriesFilter.length" ref="accordionCategories" accordion-title="Category" accordion-dark-header="true">
                 <div class="checkbox-wrapper">
                     <div class="checkbox" v-for="(b, i) in categoriesFilter" :key="b.id || b.name || i">
-                        <input type="checkbox" :checked="b.clicked" @click.prevent="toggleFilterCategory(i)">
+                        <input type="checkbox" :checked="b.clicked" v-model="b.clicked" @click="toggleFilterCategory(i)">
                         <span class="checkbox-label">{{ b.name }}</span>
                     </div>
                 </div>
@@ -383,29 +383,23 @@ export default {
             let ix = this.selectedBrandIndexes.indexOf(index);
             if (ix >= 0) this.selectedBrandIndexes.splice(ix, 1);
             else this.selectedBrandIndexes.push(index);
-            // this.brandsFilter.map((p, i) => {
-            //     if (i == index) p.clicked = !p.clicked;
-            //     return p;
-            // });
-            // this.emitFiltered();
         },
         toggleFilterCategory(index) {
             let ix = this.selectedCategoryIndexes.indexOf(index);
             if (ix >= 0) this.selectedCategoryIndexes.splice(ix, 1);
             else this.selectedCategoryIndexes.push(index);
-            this.categoriesFilter = this.categoriesFilter.map((p, i) => {
-                if (i == index) return { ...p, clicked: !p.clicked };
-                return p;
-            });
         },
         toggleFilterPrice(index) {
             let ix = this.selectedPriceIndexes.indexOf(index);
             if (ix >= 0) this.selectedPriceIndexes.splice(ix, 1);
             else this.selectedPriceIndexes.push(index);
-            this.priceFilter.map((p, i) => {
-                if (i == index) p.clicked = !p.clicked;
-                return p;
-            });
+            this.$nextTick(() => {
+                this.priceFilter.map((p, i) => {
+                    if (i == index) p.clicked = !p.clicked;
+                    else p.clicked = false;
+                    return p;
+                });
+            })
             // this.emitFiltered();
         },
         transferPayload(payload) {

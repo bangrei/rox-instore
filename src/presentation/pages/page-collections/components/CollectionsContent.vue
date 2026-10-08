@@ -571,11 +571,10 @@ export default {
         if(!isEmpty(priceRanges)){
           let pMin = Math.min(...priceRanges.map((pr) => pr.from));
           let pMax = Math.max(...priceRanges.map((pr) => pr.to));
-          if(pMin == pMax) pMin = 0;
           params = {
             ...params,
             priceFrom: pMin,
-            priceTo: pMax
+            priceTo: pMin == pMax ? null : pMax
           }
         }
         if(availability > 0){
