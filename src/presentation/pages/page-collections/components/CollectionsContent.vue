@@ -292,8 +292,6 @@ export default {
       isFetching: true,
       selectedParentCategory: "",
       showDesktopFilter: false,
-      selectedGenders: [],
-      selectedColors: [],
       colorsList: []
     };
   },
@@ -403,6 +401,18 @@ export default {
     },
     productGridColumns(){
       return this.showDesktopFilter ? 3 : 4;
+    },
+    selectedColors(){
+      return this.filterPayload?.selectedColors || []
+    },
+    selectedGenders(){
+      if(this.selectedParentCategory){
+        let parent = this.parentCategories.find((it) => it.name == this.selectedParentCategory);
+        if(parent?.isGender){
+          return parent.genders;
+        }
+      }
+      return this.filterPayload?.selectedGenders || [];
     }
   },
   methods: {
@@ -465,9 +475,6 @@ export default {
     },
     clickParentCategory(parent){
       this.selectedParentCategory = parent?.name || "";
-      if(parent?.isGender){
-        this.selectedGenders = [];
-      }
       this.fetchProducts(0);
     },
     emitFilterPayload(payload) {
