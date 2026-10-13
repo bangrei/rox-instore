@@ -508,6 +508,13 @@ export default {
         },
         initColors(){
             this.selectedColors = this.colors;
+            this.colorOptions = this.colorsList.map((cname) => {
+                return {
+                    key: cname.split(' ').join('_'),
+                    name: cname,
+                    clicked: this.selectedColors?.includes(cname) ? true : false
+                }
+            })
         },
         transferPayload(payload) {
             if (!payload) return;
