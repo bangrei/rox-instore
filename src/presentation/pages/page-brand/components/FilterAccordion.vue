@@ -31,7 +31,7 @@
             <base-accordion v-if="colorOptions.length" ref="accordionColors" accordion-title="Color" accordion-dark-header="true">
                 <div class="checkbox-wrapper grid">
                     <div class="checkbox" v-for="c in colorOptions" :key="c.key">
-                        <input type="checkbox" :checked="c.clicked" v-model="c.name" @click="toggleFilterColor(c.name)">
+                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked" @click="toggleFilterColor(c.name)">
                         <span class="checkbox-label">{{ c.name }}</span>
                     </div>
                 </div>
