@@ -31,7 +31,7 @@
             <base-accordion v-if="colorOptions.length" ref="accordionColors" accordion-title="Color" accordion-dark-header="true">
                 <div class="checkbox-wrapper grid">
                     <div class="checkbox" v-for="c in colorOptions" :key="c.key">
-                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked" @click="toggleFilterColor(c.name)">
+                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked">
                         <span class="checkbox-label">{{ c.name }}</span>
                     </div>
                 </div>
@@ -509,11 +509,6 @@ export default {
         initColors(){
             this.selectedColors = this.colors;
         },
-        toggleFilterColor(colorName) {
-            let ix = this.selectedColors.findIndex((color) => color == colorName);
-            if(ix >= 0) this.selectedColors.splice(ix, 1);
-            else this.selectedColors.push(colorName);
-        },
         transferPayload(payload) {
             if (!payload) return;
             this.rangeFrom = payload.range.from;
@@ -565,7 +560,7 @@ export default {
                 available: this.available,
                 isMinAndMaxPrice: isMinAndMaxPrice == true,
                 selectedGenders: this.selectedGenders,
-                selectedColors: this.selectedColors
+                selectedColors: this.colorOptions?.filter((c) => c.clicked)?.map((c) => c.name)
             }
             this.$emit('filterProducts', payload, (res) => {
                 this.inStock = res?.inStockCount || 0;

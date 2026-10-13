@@ -554,7 +554,7 @@ export default {
         let selectedBrands = payload?.brands || [];
         let selectedCategories = payload?.categories || [];
         let genders = payload?.selectedGenders || [];
-        let colors = payload?.colors || [];
+        let colors = payload?.selectedColors || [];
         let searchKeyword = this.keySubmitted;
         let onSale = this.saleOnly;
         if(this.selectedParentCategory){
