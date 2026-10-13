@@ -327,7 +327,7 @@ export default {
         },
         colorsList: {
             handler() {
-                let currentColors = Array.from(new Set(...[...this.colors, ...this.selectedColors]));
+                let currentColors = Array.from(new Set([...this.colors, ...this.selectedColors]));
                 this.colorOptions = this.colorsList.map((cname) => {
                     return {
                         key: cname.split(' ').join('_'),
