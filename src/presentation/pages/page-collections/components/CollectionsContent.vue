@@ -40,6 +40,10 @@
           :collectionName="collectionName"
           :stockIn="inStock"
           :stockOut="outStock"
+          :genders="selectedGenders"
+          :colors="selectedColors"
+          :colorsList="colorsList"
+          :hideGenders="hideGenders"
         >
         </filter-accordion>
       </div>
@@ -73,7 +77,7 @@
           ref="productGrid_category"
           :products="productsFiltered"
           :noPadding="true"
-          :gridColumns="showDesktopFilter ? 3 : 4"
+          :gridColumns="productGridColumns"
           :more-button="false"
           :loading="isFetching"
         ></product-grid>
@@ -126,6 +130,10 @@
             :selectedCategories="selectedCategoryIds"
             :collectionType="collectionType"
             :collectionName="collectionName"
+            :genders="selectedGenders"
+            :colors="selectedColors"
+            :colorsList="colorsList"
+            :hideGenders="hideGenders"
           >
           </filter-accordion>
         </div>
@@ -284,6 +292,9 @@ export default {
       isFetching: true,
       selectedParentCategory: "",
       showDesktopFilter: false,
+      selectedGenders: [],
+      selectedColors: [],
+      colorsList: []
     };
   },
   watch: {
@@ -293,19 +304,37 @@ export default {
     },
   },
   computed: {
+    hideGenders(){
+      if(this.selectedParentCategory){
+        let parent = this.parentCategories.find((it) => it.name == this.selectedParentCategory);
+        if(parent?.isGender) return true;
+      }
+      return false;
+    },
     parentArray(){
       if(!this.loading) return [];
       return Array.from({length: 6}).map((_, index) => ({index}));
     },
     parentCategories(){
-      return this.mapProductCategories();
+      // return this.mapProductCategories();
+      return [
+        {name: "Men", isGender: true, onSale: false, genders: ["MEN","BOY"]},
+        {name: "Women", isGender: true, onSale: false, genders: ["WOMEN","GIRL"]},
+        {name: "Hike", isGender: false, onSale: false},
+        {name: "Ride", isGender: false, onSale: false},
+        {name: "Camp", isGender: false, onSale: false},
+        {name: "Travel", isGender: false, onSale: false},
+        {name: "Hydration", isGender: false, onSale: false},
+        {name: "Wellness", isGender: false, onSale: false},
+        {name: "Sale", isGender: false, onSale: true},
+      ]
     },
     selectedCategoryIds() {
       if (isEmpty(this.selectedCategories)) return [];
       let categories = this.categories;
       if (isEmpty(categories)) return [];
       let names = this.selectedCategories.map((c) => c.toLowerCase());
-      return categories.filter((c) => names.includes(c.name.toLowerCase()))?.map((c) => c.id);
+      return categories.filter((c) => names.includes(c.name.toLowerCase()))?.map((c) => c.name);
     },
     sortedByDisplay() {
       let theOne = null;
@@ -372,6 +401,9 @@ export default {
       if(endNumber > len) endNumber = len;
       return `Showing <b>${startNumber}-${endNumber}</b> of ${len} Products`;
     },
+    productGridColumns(){
+      return this.showDesktopFilter ? 3 : 4;
+    }
   },
   methods: {
     setPageIndex(index){
@@ -433,6 +465,9 @@ export default {
     },
     clickParentCategory(parent){
       this.selectedParentCategory = parent?.name || "";
+      if(parent?.isGender){
+        this.selectedGenders = [];
+      }
       this.fetchProducts(0);
     },
     emitFilterPayload(payload) {
@@ -446,6 +481,8 @@ export default {
         selectedCategoryIndexes: payload.selectedCategoryIndexes,
         available: payload.available,
         isMinAndMaxPrice: payload.isMinAndMaxPrice,
+        selectedGenders: payload.selectedGenders,
+        selectedColors: payload.selectedColors
       };
       if (
         !this.isDesktop &&
@@ -516,9 +553,22 @@ export default {
         let availability = payload?.available;
         let selectedBrands = payload?.brands || [];
         let selectedCategories = payload?.categories || [];
+        let genders = payload?.selectedGenders || [];
+        let colors = payload?.colors || [];
+        let searchKeyword = this.keySubmitted;
+        let onSale = this.saleOnly;
         if(this.selectedParentCategory){
           let parent = this.parentCategories.find((it) => it.name == this.selectedParentCategory);
           if(parent){
+            if(parent.isGender){
+              // selectedCategories.push(parent);
+              genders = Array.from(new Set([...genders, ...parent.genders]));
+            } else if(parent.onSale){
+              onSale = true;
+            } else {
+              searchKeyword = parent.name;
+            }
+            /*
             let categories = [];
             categories.push(parent);
             if(parent.subCategories) {
@@ -546,6 +596,7 @@ export default {
               }
             }
             selectedCategories = [...selectedCategories, ...categories];
+            */
           }
         }
 
@@ -553,8 +604,9 @@ export default {
           pageNumber: pageIndex,
           pageSize: this.limit,
           sortBy: this.sortKey,
-          keyword: this.keySubmitted,
-          saleOnly: this.saleOnly
+          keyword: searchKeyword,
+          saleOnly: onSale,
+          brandType: ["RETAIL"]
         }
         if(!isEmpty(selectedBrands)){
           params = {
@@ -586,6 +638,18 @@ export default {
         if(this.collectionType == "brand") {
           params.brands = [...(params.brands || []), ...[this.collectionName]];
         }
+        if(!isEmpty(genders)){
+          params = {
+            ...params,
+            genders
+          }
+        }
+        if(!isEmpty(colors)){
+          params = {
+            ...params,
+            colors
+          }
+        }
         this.isFetching = true;
         const res = await productService.retrieveProductsList(params);
         let productsList = (res?.products || []).map((prd) => {
@@ -610,9 +674,10 @@ export default {
         this.pagesCount = res?.pageCount || 0;
         this.inStock = res?.inStock || 0;
         this.outStock = res?.outStock || 0;
-        this.brands = this.collectionType == 'brand' ? [] : resBrands;
+        this.brands = this.collectionType == 'brand' ? [] : resBrands?.filter((b) => b.type == "RETAIL");
+        this.colorsList = res?.colors || [];
         let cnames = payload?.categories?.map((it) => it.name) || [];
-        this.categories = (res?.categories || []).map((it) => {
+        this.categories = (this.mapProductCategories() || []).map((it) => {
           return {
             ...it,
             clicked: cnames.includes(it.name),
@@ -630,7 +695,7 @@ export default {
       if (!isEmpty(brands)) {
         brands?.map((it) => ({ ...it,filtered: false })).sort((a, b) => a.name.localeCompare(b.name));
 			}
-			this.brands = brands;
+			this.brands = brands?.filter((b) => b.type == "RETAIL");
     },
     searchProducts() {
       this.keySubmitted = this.keywords;
@@ -647,7 +712,8 @@ export default {
           sortBy: this.sortKey,
           saleOnly: this.saleOnly,
           brands: [],
-          categories: []
+          categories: [],
+          brandType: ["RETAIL"]
         }
         let names = this.collectionName ? this.collectionName.split('-') : [];
         let cnames = [];
@@ -684,8 +750,10 @@ export default {
         this.outStock = res?.outStock || 0;
         this.products = productsList;
         this.productsFiltered = productsList;
-        this.brands = this.collectionType == 'brand' ? [] : (res?.brands || []);
-        this.categories = res?.categories || [];
+        this.brands = this.collectionType == 'brand' ? [] : (res?.brands || [])?.filter((b) => b.type == "RETAIL");
+        this.colorsList = res?.colors || [];
+        this.categories = this.mapProductCategories();
+        // this.categories = res?.categories || [];
         let selectedCategories = [];
         switch (this.collectionType) {
           case "brand":
@@ -712,7 +780,7 @@ export default {
         this.isFetching = false;
         this.$emit('initDone', this.selectedCategoryIds);
         this.$emit('init-done', this.selectedCategoryIds);
-        if(this.isDesktop) this.showDesktopFilter = true;
+        if(this.isDesktop) this.toggleShowFilter();
       }
     }
   },
@@ -946,9 +1014,11 @@ export default {
   flex-direction: column;
   padding: 20px;
   .filter-container {
+    flex: 1;
+    width: 100%;
+    max-width: 325px;
     transition: all 0.25s ease-in-out;
     -webkit-transition: all 0.25s ease-in-out;
-    width: 100%;
     .filter-label {
       font-family: 'Berthold Akzidenz Grotesk Medium', sans-serif;
       font-size: 1.5em;
@@ -957,7 +1027,8 @@ export default {
   }
   &:is(.loading){
     .filter-container {
-      width: 0 !important;
+      max-width: 0 !important;
+      max-height: 0 !important;
       overflow: hidden;
     }
     .products-container {
@@ -966,7 +1037,6 @@ export default {
   }
   &:not(.loading){
     .filter-container {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-start;

@@ -12,9 +12,27 @@
             </base-accordion>
             <base-accordion v-if="categoriesFilter.length" ref="accordionCategories" accordion-title="Category" accordion-dark-header="true">
                 <div class="checkbox-wrapper">
-                    <div class="checkbox" v-for="(b, i) in categoriesFilter" :key="b.id || b.name || i">
-                        <input type="checkbox" :checked="b.clicked" v-model="b.clicked" @click="toggleFilterCategory(i)">
-                        <span class="checkbox-label">{{ b.name }}</span>
+                    <div class="checkbox" v-for="(c, i) in categoriesFilter" :key="c.name">
+                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked" @click="toggleFilterCategory(i)">
+                        <span class="checkbox-label">{{ c.name }}</span>
+                    </div>
+                </div>
+                <button v-if="isDesktop" @click="emitFiltered">Find</button>
+            </base-accordion>
+            <base-accordion v-if="showGenders" ref="accordionGender" accordion-title="Gender" accordion-dark-header="true">
+                <div class="checkbox-wrapper grid">
+                    <div class="checkbox" v-for="g in genderFilter" :key="g.key">
+                        <input type="checkbox" :checked="g.clicked" v-model="g.clicked" @click="toggleFilterGender(g.key)">
+                        <span class="checkbox-label">{{ g.label }}</span>
+                    </div>
+                </div>
+                <button v-if="isDesktop" @click="emitFiltered">Find</button>
+            </base-accordion>
+            <base-accordion v-if="colorOptions.length" ref="accordionColors" accordion-title="Color" accordion-dark-header="true">
+                <div class="checkbox-wrapper grid">
+                    <div class="checkbox" v-for="c in colorOptions" :key="c.key">
+                        <input type="checkbox" :checked="c.clicked" v-model="c.name" @click="toggleFilterColor(c.name)">
+                        <span class="checkbox-label">{{ c.name }}</span>
                     </div>
                 </div>
                 <button v-if="isDesktop" @click="emitFiltered">Find</button>
@@ -133,6 +151,22 @@ export default {
             type: Number,
             default: 0
         },
+        genders: {
+            type: Array,
+            default: () => []
+        },
+        colors: {
+            type: Array,
+            default: () => []
+        },
+        colorsList: {
+            type: Array,
+            default: () => []
+        },
+        hideGenders: {
+            type: Boolean,
+            default: false
+        }
 	},
     data() {
         return {
@@ -200,20 +234,39 @@ export default {
             isFetchingInventories: false,
             inStock: 0,
             outStock: 0,
+            genderFilter: [
+                {key: "MEN", label: "Men", clicked: false},
+                {key: "WOMEN", label: "Women", clicked: false},
+                {key: "BOY", label: "Boy", clicked: false},
+                {key: "GIRL", label: "Girl", clicked: false},
+                {key: "UNISEX", label: "Unisex", clicked: false},
+                {key: "UNISEX_KID", label: "Unisex Kid", clicked: false}
+            ],
+            selectedGenders: [],
+            selectedColors: [],
+            colorOptions: []
         };
     },
     computed: {
+        showGenders(){
+            return !this.hideGenders && this.genderFilter.length > 0;
+        },
+        /*
         storeCategories() {
             return this.$store.getters.getCategories || [];
         },
+        */
         categorySource() {
             if (Array.isArray(this.categories) && this.categories.length) {
                 return this.categories;
             }
+            return [];
+            /*
             if (Array.isArray(this.storeCategories) && this.storeCategories.length) {
                 return this.storeCategories;
             }
             return this.categoriesFromProducts();
+            */
         },
     },
     watch: {
@@ -259,6 +312,47 @@ export default {
                 this.outStock = this.stockOut;
             },
             deep: true,
+        },
+        genders: {
+            handler() {
+                this.initGenders();
+            },
+            immediate: true,
+        },
+        colors: {
+            handler() {
+                this.initColors();
+            },
+            immediate: true,
+        },
+        colorsList: {
+            handler() {
+                let currentColors = Array.from(new Set(...[...this.colors, ...this.selectedColors]));
+                this.colorOptions = this.colorsList.map((cname) => {
+                    return {
+                        key: cname.split(' ').join('_'),
+                        name: cname,
+                        clicked: currentColors?.includes(cname) ? true : false
+                    }
+                })
+                this.$nextTick(() => {
+                    if (this.$refs.accordionColors) {
+                        this.$refs.accordionColors.isClosed = true;
+                    }
+                })
+            },
+            immediate: true,
+        },
+        hideGenders: {
+            handler(){
+                this.$nextTick(() => {
+                    if(this.hideGenders) return;
+                    if (this.$refs.accordionGender) {
+                        this.$refs.accordionGender.isClosed = true;
+                    }
+                });
+            },
+            immediate: true,
         }
     },
     methods: {
@@ -309,11 +403,11 @@ export default {
                 const name = it.name || it.categoryName || it.title;
                 if (name == null || seen.has(name)) continue;
                 seen.add(name);
-                const wasClicked = prev.find((c) => c.id == it.id || c.name == name)?.clicked;
+                const wasClicked = prev.find((c) => c.name == name)?.clicked;
                 cats.push({
                     ...it,
                     name,
-                    clicked: wasClicked == true || selectedIds.includes(it.id),
+                    clicked: wasClicked == true || selectedIds.includes(it.name),
                 });
             }
             cats.sort((a, b) => String(a?.name || "").localeCompare(String(b?.name || "")));
@@ -402,6 +496,24 @@ export default {
             })
             // this.emitFiltered();
         },
+        toggleFilterGender(key) {
+            let ix = this.selectedGenders.findIndex((g) => g == key);
+            if(ix >= 0) this.selectedGenders.splice(ix, 1);
+            else this.selectedGenders.push(key);
+        },
+        initGenders(){
+            for(let i = 0; i < this.genderFilter.length; i++){
+                this.genderFilter[i].clicked = this.genders?.length > 0 && this.genders.includes(this.genderFilter[i].key);
+            }
+        },
+        initColors(){
+            this.selectedColors = this.colors;
+        },
+        toggleFilterColor(colorName) {
+            let ix = this.selectedColors.findIndex((color) => color == colorName);
+            if(ix >= 0) this.selectedColors.splice(ix, 1);
+            else this.selectedColors.push(colorName);
+        },
         transferPayload(payload) {
             if (!payload) return;
             this.rangeFrom = payload.range.from;
@@ -410,6 +522,8 @@ export default {
             this.selectedPriceIndexes = payload.selectedPriceIndexes;
             this.selectedBrandIndexes = payload.selectedBrandIndexes;
             this.selectedCategoryIndexes = payload.selectedCategoryIndexes;
+            this.selectedGenders = payload.selectedGenders;
+            this.selectedColors = payload.selectedColors;
             this.priceFilter.map((it, ix) => {
                 it.clicked = this.selectedPriceIndexes.indexOf(ix) > -1;
                 return it;
@@ -444,12 +558,14 @@ export default {
                 },
                 prices: prices,
                 brands: this.brandsFilter.filter((it) => it.clicked),
-                categories: this.categoriesFilter.filter((it) => it.clicked),
+                categories: this.categoriesFilter.filter((it) => it.clicked)?.map((it) => ({name: it.name})),
                 selectedPriceIndexes: this.selectedPriceIndexes,
                 selectedBrandIndexes: this.selectedBrandIndexes,
                 selectedCategoryIndexes: this.selectedCategoryIndexes,
                 available: this.available,
-                isMinAndMaxPrice: isMinAndMaxPrice == true
+                isMinAndMaxPrice: isMinAndMaxPrice == true,
+                selectedGenders: this.selectedGenders,
+                selectedColors: this.selectedColors
             }
             this.$emit('filterProducts', payload, (res) => {
                 this.inStock = res?.inStockCount || 0;
@@ -471,16 +587,19 @@ export default {
         });
         this.initCategories();
         this.initBrands();
-        setTimeout(() => {
+        this.$nextTick(() => {
             if (this.$refs.accordionPrice) this.$refs.accordionPrice.isClosed = true;
             if (this.$refs.accordionRange) this.$refs.accordionRange.isClosed = true;
             if (this.$refs.accordionCategories && this.categoriesFilter.length) {
                 this.$refs.accordionCategories.isClosed = true;
             }
+            if (this.$refs.accordionGender) {
+                this.$refs.accordionGender.isClosed = true;
+            }
             if (!this.hideAvailability && this.$refs.accordionInventory) {
                 this.$refs.accordionInventory.isClosed = true;
             }
-        }, 500);
+        });
     },
     mounted() {
         this.initCategories();
@@ -517,6 +636,11 @@ export default {
             max-height: 250px;
             overflow: hidden;
             overflow-y: auto;
+            &:is(.grid){
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
             &.loading {
                 position: relative;
                 align-items: center;
