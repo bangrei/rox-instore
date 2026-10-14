@@ -30,8 +30,8 @@
             </base-accordion>
             <base-accordion v-if="colorOptions.length" ref="accordionColors" accordion-title="Color" accordion-dark-header="true">
                 <div class="checkbox-wrapper grid">
-                    <div class="checkbox" v-for="c in colorOptions" :key="c.key">
-                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked" @click="toggleFilterColor(c.name)">
+                    <div :class="['checkbox', {'unselectable': c.enabled != true}]" v-for="c in colorOptions" :key="c.key">
+                        <input type="checkbox" :disabled="c.enabled != true" :checked="c.clicked" v-model="c.clicked" @click="toggleFilterColor(c.name)">
                         <span class="checkbox-label">{{ c.name }}</span>
                     </div>
                 </div>
@@ -160,6 +160,10 @@ export default {
             default: () => []
         },
         colorsList: {
+            type: Array,
+            default: () => []
+        },
+        availableColors: {
             type: Array,
             default: () => []
         },
@@ -325,17 +329,28 @@ export default {
             },
             immediate: true,
         },
+        availableColors: {
+            handler() {
+                this.initColors();
+            },
+            immediate: true,
+        },
         colorsList: {
             handler() {
                 let currentColors = Array.from(new Set([...this.colors, ...this.selectedColors]));
+                let hasDisabled = false;
                 this.colorOptions = this.colorsList.map((cname) => {
+                    const enabled = this.availableColors?.map((c) => c?.toLowerCase()).includes(cname?.toLowerCase()) ? true : false;
+                    if(!enabled) hasDisabled = true;
                     return {
                         key: cname.split(' ').join('_'),
                         name: cname,
-                        clicked: currentColors?.map((c) => c.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false
+                        clicked: enabled ? (currentColors?.map((c) => c?.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false) : false,
+                        enabled: enabled
                     }
                 })
                 this.$nextTick(() => {
+                    if(hasDisabled) this.emitSelection();
                     if (this.$refs.accordionColors) {
                         this.$refs.accordionColors.isClosed = true;
                     }
@@ -510,12 +525,19 @@ export default {
         },
         initColors(){
             this.selectedColors = this.colors;
+            let hasDisabled = false;
             this.colorOptions = this.colorsList.map((cname) => {
+                const enabled = this.availableColors?.map((c) => c?.toLowerCase()).includes(cname?.toLowerCase()) ? true : false;
+                if(!enabled) hasDisabled = true;
                 return {
                     key: cname.split(' ').join('_'),
                     name: cname,
-                    clicked: this.selectedColors?.map((c) => c?.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false
+                    clicked: enabled ? (this.selectedColors?.map((c) => c?.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false) : false,
+                    enabled: enabled
                 }
+            })
+            this.$nextTick(() => {
+                if(hasDisabled) this.emitSelection();
             })
         },
         transferPayload(payload) {

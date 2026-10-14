@@ -44,6 +44,7 @@
           :genders="selectedGenders"
           :colors="selectedColors"
           :colorsList="colorsList"
+          :availableColors="availableColors"
           :hideGenders="hideGenders"
         >
         </filter-accordion>
@@ -135,6 +136,7 @@
             :genders="selectedGenders"
             :colors="selectedColors"
             :colorsList="colorsList"
+            :availableColors="availableColors"
             :hideGenders="hideGenders"
           >
           </filter-accordion>
@@ -294,7 +296,8 @@ export default {
       isFetching: true,
       selectedParentCategory: "",
       showDesktopFilter: false,
-      colorsList: []
+      colorsList: [],
+      availableColors: []
     };
   },
   watch: {
@@ -696,6 +699,7 @@ export default {
         this.outStock = res?.outStock || 0;
         this.brands = this.collectionType == 'brand' ? [] : resBrands?.filter((b) => b.type == "RETAIL");
         this.colorsList = res?.colors || [];
+        this.availableColors = res?.availableColors || [];
         let cnames = payload?.categories?.map((it) => it.name) || [];
         this.categories = (this.mapProductCategories() || []).map((it) => {
           return {
@@ -772,6 +776,7 @@ export default {
         this.productsFiltered = productsList;
         this.brands = this.collectionType == 'brand' ? [] : (res?.brands || [])?.filter((b) => b.type == "RETAIL");
         this.colorsList = res?.colors || [];
+        this.availableColors = res?.availableColors || [];
         this.categories = this.mapProductCategories();
         // this.categories = res?.categories || [];
         let selectedCategories = [];
