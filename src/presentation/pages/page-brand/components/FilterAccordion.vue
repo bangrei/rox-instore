@@ -332,7 +332,7 @@ export default {
                     return {
                         key: cname.split(' ').join('_'),
                         name: cname,
-                        clicked: currentColors?.includes(cname) ? true : false
+                        clicked: currentColors?.map((c) => c.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false
                     }
                 })
                 this.$nextTick(() => {
@@ -498,7 +498,7 @@ export default {
             this.emitSelection();
         },
         toggleFilterColor(colorName) {
-            let ix = this.selectedColors.findIndex((color) => color == colorName);
+            let ix = this.selectedColors.findIndex((color) => color.toLowerCase() == colorName?.toLowerCase());
             if(ix >= 0) this.selectedColors.splice(ix, 1);
             else this.selectedColors.push(colorName);
             this.emitSelection();
@@ -514,7 +514,7 @@ export default {
                 return {
                     key: cname.split(' ').join('_'),
                     name: cname,
-                    clicked: this.selectedColors?.includes(cname) ? true : false
+                    clicked: this.selectedColors?.map((c) => c?.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false
                 }
             })
         },
