@@ -32,12 +32,16 @@ export default {
   mixins: [utility],
   data() {
     return {
-      collectionType: "",
-      collectionName: "",
       selectedCategories: [],
     };
   },
   computed: {
+    collectionType(){
+      return this.$route.params.collectionType
+    },
+    collectionName(){
+      return this.$route.params.collectionName
+    },
     brand() {
       let brands = this.collectBrandsList();
       let brand = brands.find((b) => b.apiCode == this.collectionName);
@@ -99,11 +103,7 @@ export default {
     initDone(categories) {
       this.selectedCategories = categories || [];
     }
-  },
-  created() {
-    this.collectionType = this.$route.params.collectionType;
-    this.collectionName = this.$route.params.collectionName;
-  },
+  }
 };
 </script>
 <style scoped lang="scss">

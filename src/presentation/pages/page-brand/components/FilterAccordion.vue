@@ -253,6 +253,9 @@ export default {
         };
     },
     computed: {
+        hideCategories(){
+            return this.collectionType == 'category'
+        },
         colorsAvailability(){
             if(this.colorOptions?.some((s) => s.clicked)) return this.initialAvailableColors;
             return this.availableColors
@@ -266,6 +269,7 @@ export default {
         },
         */
         categorySource() {
+            if(this.hideCategories) return [];
             if (Array.isArray(this.categories) && this.categories.length) {
                 return this.categories;
             }
@@ -415,6 +419,11 @@ export default {
             }
         },
         initCategories(){
+            if(this.hideCategories) {
+                this.categoriesFilter = [];
+                this.selectedCategoryIndexes = [];
+                return;
+            }
             const source = Array.isArray(this.categorySource) ? this.categorySource : [];
             if (!source.length) return;
             const selectedIds = this.selectedCategories || [];

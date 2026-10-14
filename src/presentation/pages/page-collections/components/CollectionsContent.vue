@@ -746,17 +746,19 @@ export default {
           for(let i = 0; i < names.length; i++){
             cnames.push(names[i]);
           }
+        } else {
+          cnames = names;
         }
-        switch (this.collectionType) {
+        switch(this.collectionType){
           case "brand":
-            params.brands = [this.collectionName];
+            params = { ...params, brands: [this.collectionName] }
             break;
           case "category":
-            params.categories = cnames;
+            params = { ...params, categories: cnames }
             break;
         }
         if (this.searchKey) {
-          params.keyword = this.searchKey;
+          params = { ...params, keyword: this.searchKey }
         }
         const res = await productService.retrieveProductsList(params);
         let productsList = [];
