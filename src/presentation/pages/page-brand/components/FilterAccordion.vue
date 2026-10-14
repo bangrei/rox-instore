@@ -31,7 +31,7 @@
             <base-accordion v-if="colorOptions.length" ref="accordionColors" accordion-title="Color" accordion-dark-header="true">
                 <div class="checkbox-wrapper grid">
                     <div class="checkbox" v-for="c in colorOptions" :key="c.key">
-                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked">
+                        <input type="checkbox" :checked="c.clicked" v-model="c.clicked" @click="toggleFilterColor(c.name)">
                         <span class="checkbox-label">{{ c.name }}</span>
                     </div>
                 </div>
@@ -477,29 +477,31 @@ export default {
             let ix = this.selectedBrandIndexes.indexOf(index);
             if (ix >= 0) this.selectedBrandIndexes.splice(ix, 1);
             else this.selectedBrandIndexes.push(index);
+            this.emitSelection();
         },
         toggleFilterCategory(index) {
             let ix = this.selectedCategoryIndexes.indexOf(index);
             if (ix >= 0) this.selectedCategoryIndexes.splice(ix, 1);
             else this.selectedCategoryIndexes.push(index);
+            this.emitSelection();
         },
         toggleFilterPrice(index) {
             let ix = this.selectedPriceIndexes.indexOf(index);
             if (ix >= 0) this.selectedPriceIndexes.splice(ix, 1);
             else this.selectedPriceIndexes.push(index);
-            this.$nextTick(() => {
-                this.priceFilter.map((p, i) => {
-                    if (i == index) p.clicked = !p.clicked;
-                    else p.clicked = false;
-                    return p;
-                });
-            })
-            // this.emitFiltered();
+            this.emitSelection();
         },
         toggleFilterGender(key) {
             let ix = this.selectedGenders.findIndex((g) => g == key);
             if(ix >= 0) this.selectedGenders.splice(ix, 1);
             else this.selectedGenders.push(key);
+            this.emitSelection();
+        },
+        toggleFilterColor(colorName) {
+            let ix = this.selectedColors.findIndex((color) => color == colorName);
+            if(ix >= 0) this.selectedColors.splice(ix, 1);
+            else this.selectedColors.push(colorName);
+            this.emitSelection();
         },
         initGenders(){
             for(let i = 0; i < this.genderFilter.length; i++){
@@ -539,7 +541,11 @@ export default {
                 return it;
             });
         },
-        emitFiltered(isMinAndMaxPrice) {
+        emitSelection(){
+            let payload = this.mapPayload();
+            this.$emit('emitSelection', payload);
+        },
+        mapPayload(isMinAndMaxPrice){
             let prices = [];
             let brands = [];
             if (this.selectedPriceIndexes.length > 0) {
@@ -569,6 +575,10 @@ export default {
                 selectedGenders: this.selectedGenders,
                 selectedColors: this.colorOptions?.filter((c) => c.clicked)?.map((c) => c.name)
             }
+            return payload;
+        },
+        emitFiltered(isMinAndMaxPrice) {
+            let payload = this.mapPayload(isMinAndMaxPrice);
             this.$emit('filterProducts', payload, (res) => {
                 this.inStock = res?.inStockCount || 0;
                 this.outStock = res?.outStockCount || 0;

@@ -34,6 +34,7 @@
           :brands="brands"
           :categories="categories"
           @filterProducts="setProductsFiltered"
+          @emitSelection="emitSelection"
           :hideAvailability="false"
           :selectedCategories="selectedCategoryIds"
           :collectionType="collectionType"
@@ -126,6 +127,7 @@
             :brands="brands"
             :categories="categories"
             @filterProducts="setProductsFiltered"
+            @emitSelection="emitSelection"
             :hideAvailability="false"
             :selectedCategories="selectedCategoryIds"
             :collectionType="collectionType"
@@ -475,7 +477,19 @@ export default {
     },
     clickParentCategory(parent){
       this.selectedParentCategory = parent?.name || "";
+      this.filterPayload = null;
       this.fetchProducts(0);
+    },
+    emitSelection(payload){
+      if(!payload){
+        this.filterPayload = null;
+        return;
+      }
+      if(!this.filterPayload) this.filterPayload = {};
+      this.filterPayload = {
+        ...this.filterPayload,
+        ...payload
+      }
     },
     emitFilterPayload(payload) {
       this.filterPayload = {
