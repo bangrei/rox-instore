@@ -248,10 +248,15 @@ export default {
             ],
             selectedGenders: [],
             selectedColors: [],
-            colorOptions: []
+            colorOptions: [],
+            initialAvailableColors: []
         };
     },
     computed: {
+        colorsAvailability(){
+            if(this.colorOptions?.some((s) => s.clicked)) return this.initialAvailableColors;
+            return this.availableColors
+        },
         showGenders(){
             return !this.hideGenders && this.genderFilter.length > 0;
         },
@@ -331,6 +336,7 @@ export default {
         },
         availableColors: {
             handler() {
+                if(!this.initialAvailableColors?.length) this.initialAvailableColors = this.availableColors;
                 this.initColors();
             },
             immediate: true,
@@ -339,14 +345,17 @@ export default {
             handler() {
                 let currentColors = Array.from(new Set([...this.colors, ...this.selectedColors]));
                 let hasDisabled = false;
+                let hasClicked = false;
                 this.colorOptions = this.colorsList.map((cname) => {
-                    const enabled = this.availableColors?.map((c) => c?.toLowerCase()).includes(cname?.toLowerCase()) ? true : false;
+                    const enabled = this.colorsAvailability?.map((c) => c?.toLowerCase()).includes(cname?.toLowerCase()) ? true : false;
+                    const clicked = currentColors?.map((c) => c?.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false;
+                    if(clicked) hasClicked = true;
                     if(!enabled) hasDisabled = true;
                     return {
                         key: cname.split(' ').join('_'),
                         name: cname,
-                        clicked: enabled ? (currentColors?.map((c) => c?.toLowerCase())?.includes(cname?.toLowerCase()) ? true : false) : false,
-                        enabled: enabled
+                        clicked: enabled ? clicked : false,
+                        enabled: hasClicked ? true : enabled
                     }
                 })
                 this.$nextTick(() => {
@@ -527,7 +536,7 @@ export default {
             this.selectedColors = this.colors;
             let hasDisabled = false;
             this.colorOptions = this.colorsList.map((cname) => {
-                const enabled = this.availableColors?.map((c) => c?.toLowerCase()).includes(cname?.toLowerCase()) ? true : false;
+                const enabled = this.colorsAvailability?.map((c) => c?.toLowerCase()).includes(cname?.toLowerCase()) ? true : false;
                 if(!enabled) hasDisabled = true;
                 return {
                     key: cname.split(' ').join('_'),
