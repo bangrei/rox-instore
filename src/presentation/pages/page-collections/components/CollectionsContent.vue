@@ -477,6 +477,7 @@ export default {
     },
     clickParentCategory(parent){
       this.selectedParentCategory = parent?.name || "";
+      this.filterPayload = null;
       this.fetchProducts(0);
     },
     emitSelection(payload){
