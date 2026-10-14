@@ -573,7 +573,7 @@ export default {
                 available: this.available,
                 isMinAndMaxPrice: isMinAndMaxPrice == true,
                 selectedGenders: this.selectedGenders,
-                selectedColors: this.colorOptions?.filter((c) => c.clicked)?.map((c) => c.name)
+                selectedColors: this.selectedColors
             }
             return payload;
         },
