@@ -37,7 +37,7 @@ export default {
 			body: JSON.stringify(payload)
 		}
 		const { post } = BFM_APIV4_CONNECTOR({
-			target: '/nudge/filterNudges',
+			target: '/nudge/tags',
 			requestMethod: "POST",
 			payload: body
 		});
