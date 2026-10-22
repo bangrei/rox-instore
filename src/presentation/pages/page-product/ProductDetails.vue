@@ -1,7 +1,7 @@
 <template>
-    <layout-variant-two :show-loading-screen="loading" :active-menu-index="0" :open-cart="triggerOpenCart" :footer-red="true">
+    <layout-variant-two :show-loading-screen="false" :active-menu-index="0" :open-cart="triggerOpenCart" :footer-red="true">
         <template v-slot:body>
-            <div :class="['product-page', {'bopis': !isFoodBrand}]">
+            <div :class="['product-page', {'bopis': !isFoodBrand, 'shimmer': loading}]">
                 <div class="product-breadcrumbs" v-show="!loading">
                     <router-link to="/shop" class="breadcrumbs-nav">Home</router-link>
                     <router-link v-if="isFoodBrand" to="/shop/fnb" class="breadcrumbs-nav">Food & Beverage</router-link>

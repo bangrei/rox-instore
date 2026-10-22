@@ -59,8 +59,8 @@
                                 <img :src="nudgeAvatar(ach)" class="modal-trigger" width="60" height="60" :alt="ach.name"/>
                             </div>
                             <div class="tag-title modal-trigger">
-                                <span class="modal-trigger">{{ ach.name }}</span>
-                                <span v-if="ach.description" class="tag-subtitle modal-trigger retain-text" v-html="ach.description"></span>
+                                <span class="clamps modal-trigger">{{ ach.name }}</span>
+                                <span v-if="ach.description" class="tag-subtitle modal-trigger clamps" v-html="ach.description"></span>
                             </div>
                         </div>
                         <!-- <div :class="['tag-item', {'disabled': !nudgesInfo.goodNeighbor}]">
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="tag-title modal-trigger">
                                     <span class="clamps modal-trigger">{{ nudge.name }}</span>
-                                    <div class="tag-subtitle clamps modal-trigger retain-text" v-if="nudge.description" v-html="nudge.description"></div>
+                                    <div class="tag-subtitle clamps modal-trigger" v-if="nudge.description" v-html="nudge.description"></div>
                                 </div>
                             </div>
                         </div>
@@ -862,6 +862,10 @@ export default {
             line-height: 16px;
             color: $secondary-color-50;
             text-transform: none !important;
+            & * { 
+                font-size: small !important; 
+                font-family: 'Berthold Akzidenz Grotesk Regular', sans-serif !important;
+            }
         }
     }
     &:is(.column){
